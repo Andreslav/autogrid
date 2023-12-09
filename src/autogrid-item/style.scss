@@ -1,0 +1,17 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-andreslav-autogrid-item {
+	grid-column: var(--grid-item-column-span, 1) span;
+}
+
+@supports (container-type: inline-size) {
+	.wp-block-andreslav-autogrid {
+		container-type: inline-size;
+		container-name: autogrid;
+	}
+}

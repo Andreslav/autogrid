@@ -1,0 +1,27 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-andreslav-autogrid {
+	--gap-count: calc(var(--grid-column-count) - 1);
+	--total-gap-width: calc(var(--gap-count) * var(--grid-layout-gap));
+	--grid-item-max-width: calc((100% - var(--total-gap-width)) / var(--grid-column-count));
+	--grid-item-min-width-teh: min(calc(100vw - 40px), var(--grid-item-min-width));
+}
+.page .wp-block-andreslav-autogrid {
+	display: grid;
+ 	grid-template-columns: repeat(auto-fill, minmax(max(var(--grid-item-min-width-teh), var(--grid-item-max-width)), 1fr));
+	grid-gap: var(--grid-layout-gap);
+	margin-block: var(--wp--preset--spacing--40);
+	grid-auto-flow: dense;
+
+   & > .wp-block-andreslav-item-autogrid {
+		margin: 0;
+		padding: var(--grid-item-padding-child);
+		box-sizing: border-box;
+		background: aliceblue;
+	}
+}

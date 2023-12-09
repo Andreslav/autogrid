@@ -1,0 +1,20 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-andreslav-autogrid > .block-editor-inner-blocks > .block-editor-block-list__layout {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(max(var(--grid-item-min-width-teh), var(--grid-item-max-width)), 1fr));
+	grid-gap: var(--grid-layout-gap);
+	margin-block: var(--wp--preset--spacing--40);
+	grid-auto-flow: dense;
+
+	& > .wp-block-andreslav-item-autogrid {
+		margin: 0;
+		padding: var(--grid-item-padding-child);
+		box-sizing: border-box;
+		background: aliceblue;
+	}
+}

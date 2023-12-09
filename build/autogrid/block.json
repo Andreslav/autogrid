@@ -1,0 +1,43 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "andreslav/autogrid",
+  "version": "0.1.0",
+  "title": "Autogrid",
+  "category": "widgets",
+  "icon": "smiley",
+  "description": "CSS Autogrid Block.",
+  "example": {},
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "columnCount": {
+      "type": "number",
+      "default": 4
+    },
+    "minWidth": {
+      "type": "number",
+      "default": 300
+    },
+    "gap": {
+      "type": "number",
+      "default": 30
+    },
+    "paddingChild": {
+      "type": "number",
+      "default": 30
+    }
+  },
+  "providesContext": {
+    "autogrid/columnCount": "columnCount",
+    "autogrid/minWidth": "minWidth",
+    "autogrid/gap": "gap"
+  },
+  "textdomain": "autogrid",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php",
+  "viewScript": "file:./view.js"
+}
