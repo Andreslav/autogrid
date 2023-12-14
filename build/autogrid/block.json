@@ -9,7 +9,23 @@
   "description": "CSS Autogrid Block.",
   "example": {},
   "supports": {
-    "html": false
+    "html": false,
+    "color": {
+      "text": true,
+      "background": true
+    },
+    "spacing": {
+      "padding": true,
+      "margin": [
+        "top",
+        "bottom"
+      ]
+    },
+    "anchor": true,
+    "align": [
+      "wide",
+      "full"
+    ]
   },
   "attributes": {
     "columnCount": {

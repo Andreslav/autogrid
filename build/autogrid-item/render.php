@@ -42,10 +42,10 @@ foreach ($sizes as $size) {
 	$style .= autogrid_getCSS($startColumn, $endColumn, $minWidth, $gap, $numberOfTracks, $uniqueSelector);
 }
 $style = $style ? '<style>'.$style.'</style>' : '';
-$inlineStyle = '' // "order:$indexNode"
+$inlineStyle = '' // "order:$indexNode;"
 ?>
 
-<div <?= get_block_wrapper_attributes(['class' => $uniqueSelector, 'style' => $inlineStyle]); ?>>
+<div <?= get_block_wrapper_attributes( ['class' => $uniqueSelector, 'style' => $inlineStyle] ); ?>>
 	<?= $content; ?>
 	<?= $style; ?>
 </div>

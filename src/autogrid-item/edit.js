@@ -4,7 +4,6 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
  */
 import { __ } from '@wordpress/i18n';
-import { useEffect, useState } from 'react';
 
 /**
  * React hook that is used to mark the block wrapper element.
@@ -14,7 +13,8 @@ import { useEffect, useState } from 'react';
  * @see https://wordpress.github.io/gutenberg/?path=/docs/components-anglepickercontrol--default
  */
 import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, RangeControl, Button, Dashicon, Flex, FlexBlock, FlexItem, BaseControl, __experimentalNumberControl as NumberControl } from '@wordpress/components'
+import { PanelBody, Button, Dashicon, Flex, FlexBlock, FlexItem, BaseControl, __experimentalNumberControl as NumberControl } from '@wordpress/components';
+import { useEffect, useState } from '@wordpress/element';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -77,9 +77,9 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 		} else {
 			setStop(0);
 
-			let node = document.body.querySelector('#' + uniqueSelector);
-			let indexNode = [...node.parentElement.children].indexOf(node);
-			setAttributes({indexNode});
+			// let node = document.body.querySelector('#' + uniqueSelector);
+			// let indexNode = [...node.parentElement.children].indexOf(node);
+			// setAttributes({indexNode});
 		}
 	}, [columnCount]);
 
@@ -105,16 +105,23 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 			<PanelBody title="Settings">
 				<BaseControl
 				  __nextHasNoMarginBottom
-				  help="Сколько колонок занимает блок, когда количество колонок больше СТАРТ и (или) меньше КОНЕЦ"
+				  help={
+				  	<span style={ {fontSize: '12px'} }>
+			    		{ __("By default, a block occupies a single column. This option allows you to change this by specifying rules:", "andreslav-autogrid") }<br/>
+						{ __("1. The number of columns the block should occupy.", "andreslav-autogrid") }<br/>
+						{ __("2. The minimum number of columns to be displayed when the rule should start to apply (optional).", "andreslav-autogrid") }<br/>
+						{ __("3. The maximum number of columns to be displayed when the rule should stop applying (not a mandatory parameter).", "andreslav-autogrid") }
+			    	</span>
+				  }
 				>
 				<Flex>
 					<FlexBlock>
-						<BaseControl.VisualLabel>Sizes</BaseControl.VisualLabel>
+						<BaseControl.VisualLabel>{ __("Block size", "andreslav-autogrid") }</BaseControl.VisualLabel>
 					</FlexBlock>
 					<FlexItem>
 						<Button 
 							icon={ <Dashicon icon="plus-alt2"/> } 
-							label="Add" 
+							label={ __("Add a rule", "andreslav-autogrid") } 
 							onClick={() => {
 								setAttributes({sizes: [{startColumn: columnCount - 1, numberOfTracks: 1, endColumn: ''}, ...attributes.sizes]})
 							}}
@@ -124,13 +131,13 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 				{
 					!!attributes.sizes.length && <Flex>
 						<FlexBlock>
-							<BaseControl.VisualLabel>Tracks</BaseControl.VisualLabel>
+							<BaseControl.VisualLabel>{ __("Сolumns", "andreslav-autogrid") }</BaseControl.VisualLabel>
 						</FlexBlock>
 						<FlexBlock>
-							<BaseControl.VisualLabel>Start</BaseControl.VisualLabel>
+							<BaseControl.VisualLabel>{ __("Min", "andreslav-autogrid") }</BaseControl.VisualLabel>
 						</FlexBlock>
 						<FlexBlock>
-							<BaseControl.VisualLabel>End</BaseControl.VisualLabel>
+							<BaseControl.VisualLabel>{ __("Max", "andreslav-autogrid") }</BaseControl.VisualLabel>
 						</FlexBlock>
 						<FlexItem>
 							<Button 
@@ -147,7 +154,7 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 							<Flex key={index}>
 								<FlexBlock>
 									<NumberControl
-										label="Tracks"
+										label={ __("Number of columns", "andreslav-autogrid") }
 										hideLabelFromVision
 										// hideHTMLArrows
 										onChange={(val) => { size.numberOfTracks = val; setAttributes({sizes: [...attributes.sizes]}) }}
@@ -158,7 +165,7 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 								</FlexBlock>
 								<FlexBlock>
 									<NumberControl
-										label="Start"
+										label={ __("Maximum number of columns displayed.", "andreslav-autogrid") }
 										hideLabelFromVision
 										// hideHTMLArrows
 										onChange={(val) => { size.startColumn = val; setAttributes({sizes: [...attributes.sizes]}) }}
@@ -169,7 +176,7 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 								</FlexBlock>
 								<FlexBlock>
 									<NumberControl
-										label="End"
+										label={ __("Minimum number of columns displayed", "andreslav-autogrid") }
 										hideLabelFromVision
 										// hideHTMLArrows
 										onChange={(val) => { size.endColumn = val; setAttributes({sizes: [...attributes.sizes]}) }}
@@ -181,7 +188,7 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 								<FlexItem>
 									<Button 
 										icon={ <Dashicon icon="minus"/> } 
-										label="Remove" 
+										label={ __("Delete a rule", "andreslav-autogrid") } 
 										onClick={() => {
 											setAttributes({sizes: attributes.sizes.filter((size, i) => i != index)})
 										}}

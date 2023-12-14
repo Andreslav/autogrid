@@ -13,7 +13,7 @@ import { __ } from '@wordpress/i18n';
  * @see https://wordpress.github.io/gutenberg/?path=/docs/components-anglepickercontrol--default
  */
 import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, RangeControl, __experimentalNumberControl as NumberControl } from '@wordpress/components';
+import { PanelBody, RangeControl, __experimentalUnitControl as UnitControl } from '@wordpress/components';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -52,31 +52,37 @@ export default function Edit({attributes, setAttributes}) {
 
 		{/* Begin Sidebar Inspector Zone */}
 		<InspectorControls>
-			<PanelBody title="Settings">
+			<PanelBody title={ __("Settings", "andreslav-autogrid") }>
 				<RangeControl
-					label="Column count"
-					help="Select how long each slide of the carousel is shown in seconds"
+					label={ __("Maximum number of columns", "andreslav-autogrid") }
+					help={ __("When the blocks reach this width, they are rearranged.", "andreslav-autogrid") }
 					min={1}
 					value={attributes.columnCount}
-					onChange={(val) => { setAttributes({columnCount: val})}}
+					onChange={(val) => { setAttributes({columnCount: val}) }}
 				/>
-				<NumberControl
-					label="Min width"
-					onChange={(val) => { setAttributes({minWidth: val})}}
+				<UnitControl
+					label={ __("Minimum column width", "andreslav-autogrid") }
+					onChange={(val) => { setAttributes({minWidth: parseInt(val)}) }}
 					value={attributes.minWidth}
 					min={0}
+					units={[]}
+					unit="px"
 				/>
-				<NumberControl
-					label="Layout gap"
-					onChange={(val) => { setAttributes({gap: val})}}
+				<UnitControl
+					label={ __("Spaces between blocks", "andreslav-autogrid") }
+					onChange={(val) => { setAttributes({gap: parseInt(val)}) }}
 					value={attributes.gap}
 					min={0}
+					units={[]}
+					unit="px"
 				/>
-				<NumberControl
-					label="Padding child"
-					onChange={(val) => { setAttributes({paddingChild: val})}}
+				<UnitControl
+					label={ __("Padding of blocks", "andreslav-autogrid") }
+					onChange={(val) => { setAttributes({paddingChild: parseInt(val)}) }}
 					value={attributes.paddingChild}
 					min={0}
+					units={[]}
+					unit="px"
 				/>
 			</PanelBody>
 		</InspectorControls>

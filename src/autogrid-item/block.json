@@ -3,13 +3,21 @@
 	"apiVersion": 3,
 	"name": "andreslav/autogrid-item",
 	"version": "0.1.0",
-	"title": "Item",
+	"title": "Item Autogrid",
 	"category": "widgets",
 	"icon": "smiley",
 	"description": "CSS Autogrid Block Item.",
 	"example": {},
 	"supports": {
-		"html": false
+		"html": false,
+		"color": {
+			"text": true,
+			"background": true
+		},
+		"spacing": {
+			"padding": true,
+			"margin": true
+		}
 	},
 	"attributes": {
 		"indexNode": {

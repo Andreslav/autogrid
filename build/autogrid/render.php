@@ -11,9 +11,9 @@ $minWidth = $attributes["minWidth"];
 $gap = $attributes["gap"];
 $paddingChild = $attributes["paddingChild"];
 $columnCount = $attributes["columnCount"];
-$inlineStyle = "--grid-item-min-width:$minWidth"."px;--grid-layout-gap:$gap"."px;--grid-item-padding-child:$paddingChild"."px;--grid-column-count:$columnCount";
+$inlineStyle = "--grid-item-min-width:$minWidth"."px;--grid-layout-gap:$gap"."px;--grid-item-padding-child:$paddingChild"."px;--grid-column-count:$columnCount;";
 ?>
 
-<div <?php echo get_block_wrapper_attributes(); ?> style="<?= $inlineStyle ?>">
+<div <?php echo get_block_wrapper_attributes( ['style' => $inlineStyle] ); ?>>
 	<?php echo $content; ?>
 </div>

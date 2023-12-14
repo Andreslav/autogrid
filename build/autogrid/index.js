@@ -75,10 +75,10 @@ function Edit({
     template: TEMPLATE,
     orientation: "horizontal"
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
-    title: "Settings"
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Settings", "andreslav-autogrid")
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
-    label: "Column count",
-    help: "Select how long each slide of the carousel is shown in seconds",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Maximum number of columns", "andreslav-autogrid"),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("When the blocks reach this width, they are rearranged.", "andreslav-autogrid"),
     min: 1,
     value: attributes.columnCount,
     onChange: val => {
@@ -86,33 +86,39 @@ function Edit({
         columnCount: val
       });
     }
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalNumberControl, {
-    label: "Min width",
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalUnitControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Minimum column width", "andreslav-autogrid"),
     onChange: val => {
       setAttributes({
-        minWidth: val
+        minWidth: parseInt(val)
       });
     },
     value: attributes.minWidth,
-    min: 0
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalNumberControl, {
-    label: "Layout gap",
+    min: 0,
+    units: [],
+    unit: "px"
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalUnitControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Spaces between blocks", "andreslav-autogrid"),
     onChange: val => {
       setAttributes({
-        gap: val
+        gap: parseInt(val)
       });
     },
     value: attributes.gap,
-    min: 0
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalNumberControl, {
-    label: "Padding child",
+    min: 0,
+    units: [],
+    unit: "px"
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalUnitControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Padding of blocks", "andreslav-autogrid"),
     onChange: val => {
       setAttributes({
-        paddingChild: val
+        paddingChild: parseInt(val)
       });
     },
     value: attributes.paddingChild,
-    min: 0
+    min: 0,
+    units: [],
+    unit: "px"
   }))));
 }
 
@@ -253,7 +259,7 @@ module.exports = window["wp"]["i18n"];
   \*********************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"andreslav/autogrid","version":"0.1.0","title":"Autogrid","category":"widgets","icon":"smiley","description":"CSS Autogrid Block.","example":{},"supports":{"html":false},"attributes":{"columnCount":{"type":"number","default":4},"minWidth":{"type":"number","default":300},"gap":{"type":"number","default":30},"paddingChild":{"type":"number","default":30}},"providesContext":{"autogrid/columnCount":"columnCount","autogrid/minWidth":"minWidth","autogrid/gap":"gap"},"textdomain":"autogrid","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"andreslav/autogrid","version":"0.1.0","title":"Autogrid","category":"widgets","icon":"smiley","description":"CSS Autogrid Block.","example":{},"supports":{"html":false,"color":{"text":true,"background":true},"spacing":{"padding":true,"margin":["top","bottom"]},"anchor":true,"align":["wide","full"]},"attributes":{"columnCount":{"type":"number","default":4},"minWidth":{"type":"number","default":300},"gap":{"type":"number","default":30},"paddingChild":{"type":"number","default":30}},"providesContext":{"autogrid/columnCount":"columnCount","autogrid/minWidth":"minWidth","autogrid/gap":"gap"},"textdomain":"autogrid","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ })
 
