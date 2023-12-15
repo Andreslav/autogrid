@@ -59,8 +59,8 @@ function Edit({
   attributes,
   setAttributes
 }) {
-  const ALLOWED_BLOCKS = ['andreslav/item-autogrid'];
-  const TEMPLATE = [['andreslav/item-autogrid', {}], ['andreslav/item-autogrid', {}]];
+  const ALLOWED_BLOCKS = ['andreslav/autogrid-item'];
+  const TEMPLATE = [['andreslav/autogrid-item', {}], ['andreslav/autogrid-item', {}]];
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)({
       style: {
@@ -75,10 +75,10 @@ function Edit({
     template: TEMPLATE,
     orientation: "horizontal"
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Settings", "andreslav-autogrid")
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Settings", "autogrid-block")
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Maximum number of columns", "andreslav-autogrid"),
-    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("When the blocks reach this width, they are rearranged.", "andreslav-autogrid"),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Maximum number of columns", "autogrid-block"),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("When the blocks reach this width, they are rearranged.", "autogrid-block"),
     min: 1,
     value: attributes.columnCount,
     onChange: val => {
@@ -87,7 +87,7 @@ function Edit({
       });
     }
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalUnitControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Minimum column width", "andreslav-autogrid"),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Minimum column width", "autogrid-block"),
     onChange: val => {
       setAttributes({
         minWidth: parseInt(val)
@@ -98,7 +98,7 @@ function Edit({
     units: [],
     unit: "px"
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalUnitControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Spaces between blocks", "andreslav-autogrid"),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Spaces between blocks", "autogrid-block"),
     onChange: val => {
       setAttributes({
         gap: parseInt(val)
@@ -109,7 +109,7 @@ function Edit({
     units: [],
     unit: "px"
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalUnitControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Padding of blocks", "andreslav-autogrid"),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Padding of blocks", "autogrid-block"),
     onChange: val => {
       setAttributes({
         paddingChild: parseInt(val)
@@ -121,6 +121,34 @@ function Edit({
     unit: "px"
   }))));
 }
+
+/***/ }),
+
+/***/ "./src/autogrid/icon.jsx":
+/*!*******************************!*\
+  !*** ./src/autogrid/icon.jsx ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  svg: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "24",
+    height: "24",
+    fill: "none",
+    viewBox: "0 0 24 24"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    fill: "#000",
+    d: "M4 8.61c0-.57 0-.85.11-1.07a1 1 0 01.43-.43C4.76 7 5.04 7 5.6 7H8v4H4V8.61zM4 13h4v4H5.61c-.57 0-.85 0-1.07-.11a1 1 0 01-.43-.43C4 16.24 4 15.96 4 15.4V13zm6-6h4v4h-4zm0 6h10v2.39c0 .57 0 .85-.11 1.07a1 1 0 01-.43.43c-.22.11-.5.11-1.07.11H10v-4zm6-6h2.39c.57 0 .85 0 1.07.11a1 1 0 01.43.43c.11.22.11.5.11 1.07V11h-4V7z"
+  }))
+});
 
 /***/ }),
 
@@ -140,6 +168,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./style.scss */ "./src/autogrid/style.scss");
 /* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./edit */ "./src/autogrid/edit.js");
 /* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./block.json */ "./src/autogrid/block.json");
+/* harmony import */ var _icon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./icon */ "./src/autogrid/icon.jsx");
 
 /**
  * Registers a new block provided a unique name and an object defining its behavior.
@@ -164,6 +193,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Every block starts by registering a new block type definition.
  *
@@ -173,6 +203,7 @@ __webpack_require__.r(__webpack_exports__);
   /**
    * @see ./edit.js
    */
+  icon: _icon__WEBPACK_IMPORTED_MODULE_6__["default"].svg,
   edit: _edit__WEBPACK_IMPORTED_MODULE_4__["default"],
   save: () => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InnerBlocks.Content, null)
 });
@@ -259,7 +290,7 @@ module.exports = window["wp"]["i18n"];
   \*********************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"andreslav/autogrid","version":"0.1.0","title":"Autogrid","category":"widgets","icon":"smiley","description":"CSS Autogrid Block.","example":{},"supports":{"html":false,"color":{"text":true,"background":true},"spacing":{"padding":true,"margin":["top","bottom"]},"anchor":true,"align":["wide","full"]},"attributes":{"columnCount":{"type":"number","default":4},"minWidth":{"type":"number","default":300},"gap":{"type":"number","default":30},"paddingChild":{"type":"number","default":30}},"providesContext":{"autogrid/columnCount":"columnCount","autogrid/minWidth":"minWidth","autogrid/gap":"gap"},"textdomain":"autogrid","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"andreslav/autogrid","version":"0.1.0","title":"Autogrid","category":"design","icon":"smiley","description":"CSS Autogrid Block.","example":{"attributes":{"columnCount":2,"minWidth":200}},"supports":{"html":false,"color":{"text":true,"background":true},"spacing":{"padding":true,"margin":["top","bottom"]},"anchor":true,"align":["wide","full"]},"attributes":{"columnCount":{"type":"number","default":4},"minWidth":{"type":"number","default":300},"gap":{"type":"number","default":30},"paddingChild":{"type":"number","default":30}},"providesContext":{"autogrid/columnCount":"columnCount","autogrid/minWidth":"minWidth","autogrid/gap":"gap"},"textdomain":"autogrid","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php"}');
 
 /***/ })
 

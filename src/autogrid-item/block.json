@@ -4,7 +4,7 @@
 	"name": "andreslav/autogrid-item",
 	"version": "0.1.0",
 	"title": "Item Autogrid",
-	"category": "widgets",
+	"category": "design",
 	"icon": "smiley",
 	"description": "CSS Autogrid Block Item.",
 	"example": {},
@@ -35,6 +35,5 @@
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
-	"render": "file:./render.php",
-	"viewScript": "file:./view.js"
+	"render": "file:./render.php"
 }

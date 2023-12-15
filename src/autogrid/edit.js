@@ -32,11 +32,11 @@ import './editor.scss';
  * @return {WPElement} Element to render.
  */
 export default function Edit({attributes, setAttributes}) {
-	const ALLOWED_BLOCKS = [ 'andreslav/item-autogrid' ];
+	const ALLOWED_BLOCKS = [ 'andreslav/autogrid-item' ];
 
 	const TEMPLATE = [
-	    [ 'andreslav/item-autogrid', {} ],
-	    [ 'andreslav/item-autogrid', {} ]
+	    [ 'andreslav/autogrid-item', {} ],
+	    [ 'andreslav/autogrid-item', {} ]
 	];
 
 	return (
@@ -52,16 +52,16 @@ export default function Edit({attributes, setAttributes}) {
 
 		{/* Begin Sidebar Inspector Zone */}
 		<InspectorControls>
-			<PanelBody title={ __("Settings", "andreslav-autogrid") }>
+			<PanelBody title={ __("Settings", "autogrid-block") }>
 				<RangeControl
-					label={ __("Maximum number of columns", "andreslav-autogrid") }
-					help={ __("When the blocks reach this width, they are rearranged.", "andreslav-autogrid") }
+					label={ __("Maximum number of columns", "autogrid-block") }
+					help={ __("When the blocks reach this width, they are rearranged.", "autogrid-block") }
 					min={1}
 					value={attributes.columnCount}
 					onChange={(val) => { setAttributes({columnCount: val}) }}
 				/>
 				<UnitControl
-					label={ __("Minimum column width", "andreslav-autogrid") }
+					label={ __("Minimum column width", "autogrid-block") }
 					onChange={(val) => { setAttributes({minWidth: parseInt(val)}) }}
 					value={attributes.minWidth}
 					min={0}
@@ -69,7 +69,7 @@ export default function Edit({attributes, setAttributes}) {
 					unit="px"
 				/>
 				<UnitControl
-					label={ __("Spaces between blocks", "andreslav-autogrid") }
+					label={ __("Spaces between blocks", "autogrid-block") }
 					onChange={(val) => { setAttributes({gap: parseInt(val)}) }}
 					value={attributes.gap}
 					min={0}
@@ -77,7 +77,7 @@ export default function Edit({attributes, setAttributes}) {
 					unit="px"
 				/>
 				<UnitControl
-					label={ __("Padding of blocks", "andreslav-autogrid") }
+					label={ __("Padding of blocks", "autogrid-block") }
 					onChange={(val) => { setAttributes({paddingChild: parseInt(val)}) }}
 					value={attributes.paddingChild}
 					min={0}

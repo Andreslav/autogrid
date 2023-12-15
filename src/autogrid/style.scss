@@ -15,13 +15,17 @@
 	display: grid;
  	grid-template-columns: repeat(auto-fill, minmax(max(var(--grid-item-min-width-teh), var(--grid-item-max-width)), 1fr));
 	grid-gap: var(--grid-layout-gap);
-	margin-block: var(--wp--preset--spacing--40);
 	grid-auto-flow: dense;
 
    & > .wp-block-andreslav-autogrid-item {
 		margin: 0;
 		padding: var(--grid-item-padding-child);
 		box-sizing: border-box;
-		background: aliceblue;
+	}
+}
+
+@supports not( padding: max(0px) ) {
+	.page .wp-block-andreslav-autogrid {
+		grid-template-columns: 1fr;
 	}
 }

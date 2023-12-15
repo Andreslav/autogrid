@@ -107,21 +107,21 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 				  __nextHasNoMarginBottom
 				  help={
 				  	<span style={ {fontSize: '12px'} }>
-			    		{ __("By default, a block occupies a single column. This option allows you to change this by specifying rules:", "andreslav-autogrid") }<br/>
-						{ __("1. The number of columns the block should occupy.", "andreslav-autogrid") }<br/>
-						{ __("2. The minimum number of columns to be displayed when the rule should start to apply (optional).", "andreslav-autogrid") }<br/>
-						{ __("3. The maximum number of columns to be displayed when the rule should stop applying (not a mandatory parameter).", "andreslav-autogrid") }
+			    		{ __("By default, a block occupies a single column. This option allows you to change this by specifying rules:", "autogrid-block") }<br/>
+						{ __("1. The number of columns the block should occupy.", "autogrid-block") }<br/>
+						{ __("2. The minimum number of columns to be displayed when the rule should start to apply (optional).", "autogrid-block") }<br/>
+						{ __("3. The maximum number of columns to be displayed when the rule should stop applying (not a mandatory parameter).", "autogrid-block") }
 			    	</span>
 				  }
 				>
 				<Flex>
 					<FlexBlock>
-						<BaseControl.VisualLabel>{ __("Block size", "andreslav-autogrid") }</BaseControl.VisualLabel>
+						<BaseControl.VisualLabel>{ __("Block size", "autogrid-block") }</BaseControl.VisualLabel>
 					</FlexBlock>
 					<FlexItem>
 						<Button 
 							icon={ <Dashicon icon="plus-alt2"/> } 
-							label={ __("Add a rule", "andreslav-autogrid") } 
+							label={ __("Add a rule", "autogrid-block") } 
 							onClick={() => {
 								setAttributes({sizes: [{startColumn: columnCount - 1, numberOfTracks: 1, endColumn: ''}, ...attributes.sizes]})
 							}}
@@ -131,13 +131,13 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 				{
 					!!attributes.sizes.length && <Flex>
 						<FlexBlock>
-							<BaseControl.VisualLabel>{ __("Сolumns", "andreslav-autogrid") }</BaseControl.VisualLabel>
+							<BaseControl.VisualLabel>{ __("Сolumns", "autogrid-block") }</BaseControl.VisualLabel>
 						</FlexBlock>
 						<FlexBlock>
-							<BaseControl.VisualLabel>{ __("Min", "andreslav-autogrid") }</BaseControl.VisualLabel>
+							<BaseControl.VisualLabel>{ __("Min", "autogrid-block") }</BaseControl.VisualLabel>
 						</FlexBlock>
 						<FlexBlock>
-							<BaseControl.VisualLabel>{ __("Max", "andreslav-autogrid") }</BaseControl.VisualLabel>
+							<BaseControl.VisualLabel>{ __("Max", "autogrid-block") }</BaseControl.VisualLabel>
 						</FlexBlock>
 						<FlexItem>
 							<Button 
@@ -154,7 +154,7 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 							<Flex key={index}>
 								<FlexBlock>
 									<NumberControl
-										label={ __("Number of columns", "andreslav-autogrid") }
+										label={ __("Number of columns", "autogrid-block") }
 										hideLabelFromVision
 										// hideHTMLArrows
 										onChange={(val) => { size.numberOfTracks = val; setAttributes({sizes: [...attributes.sizes]}) }}
@@ -165,7 +165,7 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 								</FlexBlock>
 								<FlexBlock>
 									<NumberControl
-										label={ __("Maximum number of columns displayed.", "andreslav-autogrid") }
+										label={ __("Maximum number of columns displayed.", "autogrid-block") }
 										hideLabelFromVision
 										// hideHTMLArrows
 										onChange={(val) => { size.startColumn = val; setAttributes({sizes: [...attributes.sizes]}) }}
@@ -176,7 +176,7 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 								</FlexBlock>
 								<FlexBlock>
 									<NumberControl
-										label={ __("Minimum number of columns displayed", "andreslav-autogrid") }
+										label={ __("Minimum number of columns displayed", "autogrid-block") }
 										hideLabelFromVision
 										// hideHTMLArrows
 										onChange={(val) => { size.endColumn = val; setAttributes({sizes: [...attributes.sizes]}) }}
@@ -188,7 +188,7 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 								<FlexItem>
 									<Button 
 										icon={ <Dashicon icon="minus"/> } 
-										label={ __("Delete a rule", "andreslav-autogrid") } 
+										label={ __("Delete a rule", "autogrid-block") } 
 										onClick={() => {
 											setAttributes({sizes: attributes.sizes.filter((size, i) => i != index)})
 										}}

@@ -20,7 +20,13 @@ Markdown parsed.
 
 = Какие браузеры поддерживаются? =
 
-Современные.
+Полная поддержка есть у современных браузеров:
+Chrome 79, Firefox 76, Edge 79, Safari 16.
+
+Адаптация начинает работать только у:
+Chrome 106, Firefox 110, Edge 106, Safari 16.
+
+Информация получена на основе сравнения поддержки использованных возможностей CSS: [CSS Grid](https://caniuse.com/css-grid)), [CSS math function min()](https://caniuse.com/?search=min()), [CSS function repeat()](https://caniuse.com/?search=repeat()), [CSS Container Queries](https://caniuse.com/css-container-queries)).
 
 
 == Screenshots ==
@@ -35,9 +41,3 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 = 0.1.0 =
 * Release
-
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above. This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation." Arbitrary sections will be shown below the built-in sections outlined above.

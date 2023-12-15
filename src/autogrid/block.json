@@ -4,10 +4,15 @@
 	"name": "andreslav/autogrid",
 	"version": "0.1.0",
 	"title": "Autogrid",
-	"category": "widgets",
+	"category": "design",
 	"icon": "smiley",
 	"description": "CSS Autogrid Block.",
-	"example": {},
+	"example": {
+		"attributes": {
+			"columnCount": 2,
+			"minWidth": 200
+		}
+	},
 	"supports": {
 		"html": false,
 		"color": {
@@ -48,6 +53,5 @@
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
-	"render": "file:./render.php",
-	"viewScript": "file:./view.js"
+	"render": "file:./render.php"
 }
