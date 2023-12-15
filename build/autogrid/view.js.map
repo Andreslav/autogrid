@@ -1,1 +1,0 @@
-{"version":3,"file":"autogrid/view.js","mappings":";;;;;AAAA;AACAA,OAAO,CAACC,GAAG,CAAC,8CAA8C,CAAC;AAC3D,8B","sources":["webpack://andreslav-block/./src/autogrid/view.js"],"sourcesContent":["/* eslint-disable no-console */\nconsole.log(\"Hello World! (from andreslav-autogrid block)\");\n/* eslint-enable no-console */\n"],"names":["console","log"],"sourceRoot":""}

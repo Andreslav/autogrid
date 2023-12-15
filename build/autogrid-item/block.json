@@ -3,7 +3,7 @@
   "apiVersion": 3,
   "name": "andreslav/autogrid-item",
   "version": "0.1.0",
-  "title": "Item Autogrid",
+  "title": "Autogrid Item",
   "category": "design",
   "icon": "smiley",
   "description": "CSS Autogrid Block Item.",

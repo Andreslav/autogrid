@@ -380,7 +380,7 @@ module.exports = window["wp"]["i18n"];
   \**************************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"andreslav/autogrid-item","version":"0.1.0","title":"Item Autogrid","category":"design","icon":"smiley","description":"CSS Autogrid Block Item.","example":{},"supports":{"html":false,"color":{"text":true,"background":true},"spacing":{"padding":true,"margin":true}},"attributes":{"indexNode":{"type":"number","default":0},"sizes":{"type":"array","default":[]}},"parent":["andreslav/autogrid"],"usesContext":["autogrid/columnCount","autogrid/minWidth","autogrid/gap"],"textdomain":"autogrid-item","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"andreslav/autogrid-item","version":"0.1.0","title":"Autogrid Item","category":"design","icon":"smiley","description":"CSS Autogrid Block Item.","example":{},"supports":{"html":false,"color":{"text":true,"background":true},"spacing":{"padding":true,"margin":true}},"attributes":{"indexNode":{"type":"number","default":0},"sizes":{"type":"array","default":[]}},"parent":["andreslav/autogrid"],"usesContext":["autogrid/columnCount","autogrid/minWidth","autogrid/gap"],"textdomain":"autogrid-item","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php"}');
 
 /***/ })
 
@@ -539,7 +539,7 @@ module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json
 /******/ 			return __webpack_require__.O(result);
 /******/ 		}
 /******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunkandreslav_block"] = self["webpackChunkandreslav_block"] || [];
+/******/ 		var chunkLoadingGlobal = self["webpackChunkautogrid_block"] = self["webpackChunkautogrid_block"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();
