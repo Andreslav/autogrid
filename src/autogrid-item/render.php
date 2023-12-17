@@ -8,17 +8,17 @@
 */
 
 if( !function_exists('autogrid_getCSS') ) {
-	function autogrid_getCSS($startColumn, $endColumn, $minWidth, $gap, $numberOfTracks, $uniqueSelector) {
+	function autogrid_getCSS($startColumn, $endColumn, $minWidth, $numberOfTracks, $uniqueSelector) {
 		$query = '';
 
 		if($startColumn != '') {
-			$width = ($minWidth * ($startColumn + 1) + $gap * $startColumn) . 'px';
+			$width = $minWidth * ($startColumn + 1) . 'px';
 			$min = "(min-width:$width)";
 			$query = $query ? $query . ' and ' . $min : $min;
 		}
 
 		if($endColumn != '') {
-			$width = ($minWidth * ($endColumn + 1) + $gap * $endColumn) . 'px';
+			$width = $minWidth * ($endColumn + 1) . 'px';
 			$max = "(max-width:$width)";
 			$query = $query ? $query . ' and ' . $max : $max;
 		}
@@ -32,20 +32,19 @@ $indexNode      = $attributes['indexNode'];
 $sizes          = $attributes['sizes'];
 $columnCount    = intval($block->context['autogrid/columnCount']);
 $minWidth       = intval($block->context['autogrid/minWidth']);
-$gap            = intval($block->context['autogrid/gap']);
 
 $style = '';
 foreach ($sizes as $size) {
 	$startColumn = $size['startColumn'] == '' ? '' : intval($size['startColumn']);
 	$numberOfTracks = max(intval($size['numberOfTracks']), 1);
 	$endColumn = $size['endColumn'] == '' ? '' : intval($size['endColumn']);
-	$style .= autogrid_getCSS($startColumn, $endColumn, $minWidth, $gap, $numberOfTracks, $uniqueSelector);
+	$style .= autogrid_getCSS($startColumn, $endColumn, $minWidth, $numberOfTracks, $uniqueSelector);
 }
-$style = $style ? '<style>'.$style.'</style>' : '';
+
 $inlineStyle = '' // "order:$indexNode;"
 ?>
 
 <div <?= get_block_wrapper_attributes( ['class' => $uniqueSelector, 'style' => $inlineStyle] ); ?>>
 	<?= $content; ?>
-	<?= $style; ?>
+	<?= $style ? '<style>'.$style.'</style>' : ''; ?>
 </div>

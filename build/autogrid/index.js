@@ -21,6 +21,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./editor.scss */ "./src/autogrid/editor.scss");
+/* harmony import */ var _inc_BaseControlMedia__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../inc/BaseControlMedia */ "./src/inc/BaseControlMedia.jsx");
+/* harmony import */ var _inc_ModalMoreDetailed__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../inc/ModalMoreDetailed */ "./src/inc/ModalMoreDetailed.jsx");
 
 /**
  * Retrieves the translation of text.
@@ -47,6 +49,8 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
+
+
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -57,24 +61,109 @@ __webpack_require__.r(__webpack_exports__);
  */
 function Edit({
   attributes,
-  setAttributes
+  setAttributes,
+  clientId
 }) {
   const ALLOWED_BLOCKS = ['andreslav/autogrid-item'];
   const TEMPLATE = [['andreslav/autogrid-item', {}], ['andreslav/autogrid-item', {}]];
+  const selector = `#${'block-' + clientId}>*>*`;
+  let STYLE_CSS = ''; // для <style>
+  let QUERY_AND_PROPS_CSS = {}; // {query1: [prop, prop, ...], query2: [prop, ...], ...}
+
+  let format = item => {
+    return {
+      value: parseInt(item['value']),
+      min: parseInt(item['min']),
+      max: parseInt(item['max'])
+    };
+  };
+  let checkIsValidItem = item => {
+    return !isNaN(item['value']);
+  };
+  let checkIsBaseItem = item => {
+    return isNaN(item['min']) && isNaN(item['max']);
+  };
+  let getLastBase = items => {
+    return items.filter(checkIsBaseItem).reduce((v, item) => item['value'], NaN);
+  };
+  let getQueryAndPropCSS = (value, min, max, propName) => {
+    let querySize = '',
+      width,
+      minWidth,
+      maxWidth;
+    if (!isNaN(min)) {
+      width = min + 'px';
+      minWidth = `(min-width:${width})`;
+      querySize = querySize ? querySize + ' and ' + minWidth : minWidth;
+    }
+    if (!isNaN(max)) {
+      width = max + 'px';
+      maxWidth = `(max-width:${width})`;
+      querySize = querySize ? querySize + ' and ' + maxWidth : maxWidth;
+    }
+    return {
+      query: querySize ? `@container autogrid ${querySize}` : '',
+      value: `${propName}:${value}px;`
+    };
+  };
+  let dataCollection = (item, propName) => {
+    let {
+      query,
+      value
+    } = getQueryAndPropCSS(item['value'], item['min'], item['max'], propName);
+
+    // заполняем
+    if (!QUERY_AND_PROPS_CSS[query]) QUERY_AND_PROPS_CSS[query] = [];
+    QUERY_AND_PROPS_CSS[query].push(value);
+  };
+  let queryAndProps_toStyleCSS = () => {
+    for (let key in QUERY_AND_PROPS_CSS) {
+      STYLE_CSS += key + `{${selector}{${QUERY_AND_PROPS_CSS[key].join('')}}}`;
+    }
+
+    // очищаем
+    QUERY_AND_PROPS_CSS = {};
+  };
+
+  // валидация и очистка
+  let gaps = attributes.gaps.map(format).filter(checkIsValidItem);
+  let childrenPaddings = attributes.childrenPaddings.map(format).filter(checkIsValidItem);
+
+  // извлекаем правила, в которых не заданы значения min и max
+  let gap = getLastBase(gaps);
+  let childrenPadding = getLastBase(childrenPaddings);
+
+  // оставляем правила, в которых задано хотябы одно из значений: min или max
+  gaps = gaps.filter(item => !checkIsBaseItem(item));
+  childrenPaddings = childrenPaddings.filter(item => !checkIsBaseItem(item));
+
+  // приобразовываем правила в строки CSS, которые помещаются в QUERY_AND_PROPS_CSS и затем объединяем их в STYLE_CSS
+  gaps.forEach(item => {
+    dataCollection(item, '--grid-layout-gap');
+  });
+  queryAndProps_toStyleCSS();
+  childrenPaddings.forEach(item => {
+    dataCollection(item, '--grid-item-padding-child');
+  });
+  queryAndProps_toStyleCSS();
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)({
       style: {
         '--grid-item-min-width': attributes.minWidth + 'px',
-        '--grid-layout-gap': attributes.gap + 'px',
-        '--grid-item-padding-child': attributes.paddingChild + 'px',
+        '--grid-layout-gap': isNaN(gap) ? '' : gap + 'px',
+        '--grid-item-padding-child': isNaN(childrenPadding) ? '' : childrenPadding + 'px',
         '--grid-column-count': attributes.columnCount
       }
     })
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "wp-block-andreslav-autogrid__container"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "wp-block-andreslav-autogrid__content"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InnerBlocks, {
     allowedBlocks: ALLOWED_BLOCKS,
     template: TEMPLATE,
     orientation: "horizontal"
-  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+  }))), STYLE_CSS && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("style", null, STYLE_CSS)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Settings", "autogrid-block")
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Maximum number of columns", "autogrid-block"),
@@ -85,7 +174,8 @@ function Edit({
       setAttributes({
         columnCount: val
       });
-    }
+    },
+    required: true
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalUnitControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Minimum column width", "autogrid-block"),
     onChange: val => {
@@ -96,29 +186,30 @@ function Edit({
     value: attributes.minWidth,
     min: 0,
     units: [],
-    unit: "px"
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalUnitControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Spaces between blocks", "autogrid-block"),
+    unit: "px",
+    required: true
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_inc_BaseControlMedia__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    help: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("This parameter allows you to set the gap between elements.", "autogrid-block"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_inc_ModalMoreDetailed__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Gaps", "autogrid-block")
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("This parameter allows you to set the gap between elements. The MIN and MAX values are optional and can be used to customize the adaptability of the parameter. For example, the rule [VALUE: 10, MAX: 500] means that if the width of the container is less than 500 px, the spacing between elements should be 10 px.", "autogrid-block"))),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Gaps", "autogrid-block"),
+    values: attributes.gaps,
     onChange: val => {
       setAttributes({
-        gap: parseInt(val)
+        gaps: val
       });
-    },
-    value: attributes.gap,
-    min: 0,
-    units: [],
-    unit: "px"
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.__experimentalUnitControl, {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Padding of blocks", "autogrid-block"),
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_inc_BaseControlMedia__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    help: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("This parameter allows you to set the internal indentation of elements.", "autogrid-block"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_inc_ModalMoreDetailed__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Children paddings", "autogrid-block")
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("This parameter allows you to set the internal indentation of elements. The MIN and MAX values are optional and can be used to customize the adaptability of the parameter. For example, the rule [VALUE: 10, MIN: 500] means that if the width of the container is greater than 500 px, the internal indentation of elements should be 10 px.", "autogrid-block"))),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Children paddings", "autogrid-block"),
+    values: attributes.childrenPaddings,
     onChange: val => {
       setAttributes({
-        paddingChild: parseInt(val)
+        childrenPaddings: val
       });
-    },
-    value: attributes.paddingChild,
-    min: 0,
-    units: [],
-    unit: "px"
+    }
   }))));
 }
 
@@ -210,6 +301,202 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/inc/BaseControlMedia.jsx":
+/*!**************************************!*\
+  !*** ./src/inc/BaseControlMedia.jsx ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ BaseControlMedia)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+
+/**
+ * Retrieves the translation of text.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
+ */
+
+
+/**
+ * React hook that is used to mark the block wrapper element.
+ * It provides all the necessary props like the class name.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
+ * @see https://wordpress.github.io/gutenberg/?path=/docs/components-anglepickercontrol--default
+ */
+
+
+/**
+ * The edit function describes the structure of your block in the context of the
+ * editor. This represents what the editor will render when the block is used.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
+ *
+ * @return {WPElement} Element to render.
+ */
+function BaseControlMedia({
+  help,
+  label,
+  values,
+  onChange
+}) {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.BaseControl, {
+    __nextHasNoMarginBottom: true,
+    help: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      style: {
+        fontSize: '12px'
+      }
+    }, help)
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Flex, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexBlock, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.BaseControl.VisualLabel, null, label)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexItem, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+    icon: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
+      icon: "plus-alt2"
+    }),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Add a rule", "autogrid-block"),
+    onClick: () => {
+      onChange([{
+        value: 0,
+        min: '',
+        max: ''
+      }, ...values]);
+    }
+  }))), !!values.length && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Flex, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexBlock, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.BaseControl.VisualLabel, null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Value", "autogrid-block"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexBlock, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.BaseControl.VisualLabel, null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Min", "autogrid-block"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexBlock, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.BaseControl.VisualLabel, null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Max", "autogrid-block"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexItem, null, values.length > 1 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+    icon: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
+      icon: ""
+    }),
+    style: {
+      height: 0
+    },
+    label: "",
+    disabled: true
+  }))), values.map((value, index) => {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Flex, {
+      key: index
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexBlock, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalUnitControl, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Value", "autogrid-block"),
+      hideLabelFromVision: true,
+      onChange: val => {
+        value.value = parseInt(val);
+        onChange([...values]);
+      },
+      value: value.value,
+      min: 0,
+      units: [],
+      unit: "px",
+      required: true
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexBlock, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalUnitControl, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Minimum container width", "autogrid-block"),
+      hideLabelFromVision: true,
+      onChange: val => {
+        value.min = parseInt(val);
+        onChange([...values]);
+      },
+      value: value.min,
+      min: 0,
+      units: [],
+      unit: "px"
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexBlock, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalUnitControl, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Maximum container width", "autogrid-block"),
+      hideLabelFromVision: true,
+      onChange: val => {
+        value.max = parseInt(val);
+        onChange([...values]);
+      },
+      value: value.max,
+      min: 0,
+      units: [],
+      unit: "px"
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexItem, null, values.length > 1 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+      icon: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Dashicon, {
+        icon: "minus"
+      }),
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Delete a rule", "autogrid-block"),
+      onClick: () => {
+        onChange(values.filter((value, i) => i != index));
+      }
+    })));
+  }));
+}
+
+/***/ }),
+
+/***/ "./src/inc/ModalMoreDetailed.jsx":
+/*!***************************************!*\
+  !*** ./src/inc/ModalMoreDetailed.jsx ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ModalMoreDetailed)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+
+/**
+ * Retrieves the translation of text.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
+ */
+
+
+
+/**
+ * React hook that is used to mark the block wrapper element.
+ * It provides all the necessary props like the class name.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
+ * @see https://wordpress.github.io/gutenberg/?path=/docs/components-anglepickercontrol--default
+ */
+
+
+/**
+ * The edit function describes the structure of your block in the context of the
+ * editor. This represents what the editor will render when the block is used.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
+ *
+ * @return {WPElement} Element to render.
+ */
+function ModalMoreDetailed({
+  children,
+  title
+}) {
+  const [isOpen, setOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const openModal = () => setOpen(true);
+  const closeModal = () => setOpen(false);
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, " ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+    variant: "link",
+    onClick: openModal
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("More", "autogrid-block"))), isOpen && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Modal, {
+    title: title,
+    onRequestClose: closeModal
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      maxWidth: "350px"
+    }
+  }, children), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Flex, {
+    direction: "row",
+    justify: "flex-end"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+    variant: "secondary",
+    onClick: closeModal
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Ok", "autogrid-block")))));
+}
+
+/***/ }),
+
 /***/ "./src/autogrid/editor.scss":
 /*!**********************************!*\
   !*** ./src/autogrid/editor.scss ***!
@@ -290,7 +577,7 @@ module.exports = window["wp"]["i18n"];
   \*********************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"andreslav/autogrid","version":"0.1.0","title":"Autogrid","category":"design","icon":"smiley","description":"CSS Autogrid Block.","example":{"attributes":{"columnCount":2,"minWidth":200}},"supports":{"html":false,"color":{"text":true,"background":true},"spacing":{"padding":true,"margin":["top","bottom"]},"anchor":true,"align":["wide","full"]},"attributes":{"columnCount":{"type":"number","default":4},"minWidth":{"type":"number","default":300},"gap":{"type":"number","default":30},"paddingChild":{"type":"number","default":30}},"providesContext":{"autogrid/columnCount":"columnCount","autogrid/minWidth":"minWidth","autogrid/gap":"gap"},"textdomain":"autogrid","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"andreslav/autogrid","version":"0.1.0","title":"Autogrid","category":"design","icon":"smiley","description":"CSS Autogrid Block.","example":{"attributes":{"columnCount":2,"minWidth":200}},"supports":{"html":false,"color":{"text":true,"background":true},"spacing":{"padding":true,"margin":["top","bottom"]},"anchor":true,"align":["wide","full"]},"attributes":{"columnCount":{"type":"number","default":4},"minWidth":{"type":"number","default":300},"gaps":{"type":"array","default":[{"value":30,"min":"","max":""}]},"childrenPaddings":{"type":"array","default":[{"value":30,"min":"","max":""}]}},"providesContext":{"autogrid/columnCount":"columnCount","autogrid/minWidth":"minWidth","autogrid/gap":"gap"},"textdomain":"autogrid","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php"}');
 
 /***/ })
 

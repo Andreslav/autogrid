@@ -11,11 +11,4 @@
   grid-column: var(--grid-item-column-span, 1) span;
 }
 
-@supports (container-type: inline-size) {
-  .wp-block-andreslav-autogrid {
-    container-type: inline-size;
-    container-name: autogrid;
-  }
-}
-
 /*# sourceMappingURL=style-index.css.map*/

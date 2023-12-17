@@ -21,10 +21,10 @@ Markdown parsed.
 = Какие браузеры поддерживаются? =
 
 Полная поддержка есть у современных браузеров:
-Chrome 79, Firefox 76, Edge 79, Safari 16.
+Chrome 79+, Firefox 76+, Edge 79+, Safari 16+.
 
 Адаптация начинает работать только у:
-Chrome 106, Firefox 110, Edge 106, Safari 16.
+Chrome 106+, Firefox 110+, Edge 106+, Safari 16+.
 
 Информация получена на основе сравнения поддержки использованных возможностей CSS: [CSS Grid](https://caniuse.com/css-grid)), [CSS math function min()](https://caniuse.com/?search=min()), [CSS function repeat()](https://caniuse.com/?search=repeat()), [CSS Container Queries](https://caniuse.com/css-container-queries)).
 

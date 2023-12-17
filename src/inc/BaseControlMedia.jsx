@@ -1,0 +1,126 @@
+/**
+ * Retrieves the translation of text.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
+ * React hook that is used to mark the block wrapper element.
+ * It provides all the necessary props like the class name.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
+ * @see https://wordpress.github.io/gutenberg/?path=/docs/components-anglepickercontrol--default
+ */
+import { Button, Dashicon, Flex, FlexBlock, FlexItem, BaseControl, __experimentalUnitControl as UnitControl, Modal } from '@wordpress/components';
+
+/**
+ * The edit function describes the structure of your block in the context of the
+ * editor. This represents what the editor will render when the block is used.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
+ *
+ * @return {WPElement} Element to render.
+ */
+export default function BaseControlMedia({help, label, values, onChange}) {
+
+	return (
+		<BaseControl
+				__nextHasNoMarginBottom
+				help={
+					<span style={ {fontSize: '12px'} }>{ help }</span>
+				}
+			>
+			<Flex>
+				<FlexBlock>
+					<BaseControl.VisualLabel>{ label }</BaseControl.VisualLabel>
+				</FlexBlock>
+				<FlexItem>
+					<Button 
+						icon={ <Dashicon icon="plus-alt2"/> } 
+						label={ __("Add a rule", "autogrid-block") } 
+						onClick={() => {
+							onChange([{value: 0, min: '', max: ''}, ...values])
+						}}
+					/>
+				</FlexItem>
+			</Flex>
+			{
+				!!values.length && <Flex>
+					<FlexBlock>
+						<BaseControl.VisualLabel>{ __("Value", "autogrid-block") }</BaseControl.VisualLabel>
+					</FlexBlock>
+					<FlexBlock>
+						<BaseControl.VisualLabel>{ __("Min", "autogrid-block") }</BaseControl.VisualLabel>
+					</FlexBlock>
+					<FlexBlock>
+						<BaseControl.VisualLabel>{ __("Max", "autogrid-block") }</BaseControl.VisualLabel>
+					</FlexBlock>
+					<FlexItem>
+						{
+							values.length > 1 && <Button 
+								icon={ <Dashicon icon=""/> } 
+								style={ {height: 0} }
+								label=""
+								disabled
+							/>
+						}
+					</FlexItem>
+				</Flex>
+			}
+			{
+				values.map((value, index) => {
+					return (
+						<Flex key={index}>
+							<FlexBlock>
+								<UnitControl
+									label={ __("Value", "autogrid-block") }
+									hideLabelFromVision
+									onChange={(val) => { value.value = parseInt(val); onChange([...values]) }}
+									value={value.value}
+									min={0}
+									units={[]}
+									unit="px"
+									required
+								/>
+							</FlexBlock>
+							<FlexBlock>
+								<UnitControl
+									label={ __("Minimum container width", "autogrid-block") }
+									hideLabelFromVision
+									onChange={(val) => { value.min = parseInt(val); onChange([...values]) }}
+									value={value.min}
+									min={0}
+									units={[]}
+									unit="px"
+								/>
+							</FlexBlock>
+							<FlexBlock>
+								<UnitControl
+									label={ __("Maximum container width", "autogrid-block") }
+									hideLabelFromVision
+									onChange={(val) => { value.max = parseInt(val); onChange([...values]) }}
+									value={value.max}
+									min={0}
+									units={[]}
+									unit="px"
+								/>
+							</FlexBlock>
+							<FlexItem>
+								{
+									values.length > 1 && <Button 
+										icon={ <Dashicon icon="minus"/> } 
+										label={ __("Delete a rule", "autogrid-block") } 
+										onClick={() => {
+											onChange(values.filter((value, i) => i != index))
+										}}
+									/>
+								}
+							</FlexItem>
+						</Flex>
+					)
+				})
+			}
+		</BaseControl>
+	);
+}

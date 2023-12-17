@@ -4,6 +4,7 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
  */
 import { __ } from '@wordpress/i18n';
+import { useEffect, useState } from '@wordpress/element';
 
 /**
  * React hook that is used to mark the block wrapper element.
@@ -14,7 +15,6 @@ import { __ } from '@wordpress/i18n';
  */
 import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, Button, Dashicon, Flex, FlexBlock, FlexItem, BaseControl, __experimentalNumberControl as NumberControl } from '@wordpress/components';
-import { useEffect, useState } from '@wordpress/element';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -23,6 +23,7 @@ import { useEffect, useState } from '@wordpress/element';
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
+import ModalMoreDetailed from '../inc/ModalMoreDetailed';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -37,19 +38,18 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 	const TEMPLATE = [
 	    [ 'core/paragraph', {} ]
 	];
-
-	const minMax = (value, min, max) => Math.min(Math.max(value, min), max);
-	function autogrid_getCSS(startColumn, endColumn, minWidth, gap, numberOfTracks, uniqueSelector) {
+	
+	function autogrid_getCSS(startColumn, endColumn, minWidth, numberOfTracks, uniqueSelector) {
 		let query = '';
 
 		if(	!isNaN(startColumn) ) {
-			let width = (minWidth * (startColumn + 1) + gap * startColumn) + 'px';
+			let width = minWidth * (startColumn + 1) + 'px';
 			let min = `(min-width:${width})`;
 			query = query ? query + ' and ' + min : min;
 		}
 
 		if( !isNaN(endColumn) ) {
-			let width = (minWidth * (endColumn + 1) + gap * endColumn) + 'px';
+			let width = minWidth * (endColumn + 1) + 'px';
 			let max = `(max-width:${width})`;
 			query = query ? query + ' and ' + max : max;
 		}
@@ -60,7 +60,6 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 	const uniqueSelector = 'block-' + clientId;
 	const columnCount = parseInt(context['autogrid/columnCount']);
 	const minWidth = parseInt(context['autogrid/minWidth']);
-	const gap = parseInt(context['autogrid/gap']);
 
 	const [stop, setStop] = useState(1);
 	useEffect(() => {
@@ -88,15 +87,17 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 		let startColumn = parseInt(size['startColumn']);
 		let numberOfTracks = parseInt(size['numberOfTracks']);
 		let endColumn = parseInt(size['endColumn']);
-		style += autogrid_getCSS(startColumn, endColumn, minWidth, gap, numberOfTracks, uniqueSelector);
+		style += autogrid_getCSS(startColumn, endColumn, minWidth, numberOfTracks, uniqueSelector);
 	})
 	
 	return (
 		<>
 		<div { ...useBlockProps({ style: {
-			// 'order': attributes.indexNode
-		} }) }>
-			<InnerBlocks template={TEMPLATE} orientation="horizontal" />
+				// 'order': attributes.indexNode
+			} }) }>
+			<div className='wp-block-andreslav-autogrid-item__content'>
+				<InnerBlocks template={TEMPLATE} orientation="horizontal" />
+			</div>
 			{ style && <style>{style}</style> }
 		</div>
 
@@ -107,10 +108,14 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 				  __nextHasNoMarginBottom
 				  help={
 				  	<span style={ {fontSize: '12px'} }>
-			    		{ __("By default, a block occupies a single column. This option allows you to change this by specifying rules:", "autogrid-block") }<br/>
-						{ __("1. The number of columns the block should occupy.", "autogrid-block") }<br/>
-						{ __("2. The minimum number of columns to be displayed when the rule should start to apply (optional).", "autogrid-block") }<br/>
-						{ __("3. The maximum number of columns to be displayed when the rule should stop applying (not a mandatory parameter).", "autogrid-block") }
+			    		{ __("By default, a block occupies a single column. This option allows you to change this.", "autogrid-block") }
+						<ModalMoreDetailed title={ __("Block size", "autogrid-block") }>
+							{ __("By default, a block occupies a single column. This option allows you to change this by specifying rules:", "autogrid-block") }<br/>
+							{ __("1. The number of columns the block should occupy.", "autogrid-block") }<br/>
+							{ __("2. The minimum number of columns to be displayed when the rule should start to apply (optional).", "autogrid-block") }<br/>
+							{ __("3. The maximum number of columns to be displayed when the rule should stop applying (not a mandatory parameter).", "autogrid-block") }<br/>
+							{ __("If more than one rule is created, the lower one has higher priority.", "autogrid-block") }
+						</ModalMoreDetailed>
 			    	</span>
 				  }
 				>
@@ -156,18 +161,17 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 									<NumberControl
 										label={ __("Number of columns", "autogrid-block") }
 										hideLabelFromVision
-										// hideHTMLArrows
 										onChange={(val) => { size.numberOfTracks = val; setAttributes({sizes: [...attributes.sizes]}) }}
 										value={size.numberOfTracks}
 										min={1}
 										max={columnCount}
+										required
 									/>
 								</FlexBlock>
 								<FlexBlock>
 									<NumberControl
 										label={ __("Maximum number of columns displayed.", "autogrid-block") }
 										hideLabelFromVision
-										// hideHTMLArrows
 										onChange={(val) => { size.startColumn = val; setAttributes({sizes: [...attributes.sizes]}) }}
 										value={size.startColumn}
 										min={0}
@@ -178,7 +182,6 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 									<NumberControl
 										label={ __("Minimum number of columns displayed", "autogrid-block") }
 										hideLabelFromVision
-										// hideHTMLArrows
 										onChange={(val) => { size.endColumn = val; setAttributes({sizes: [...attributes.sizes]}) }}
 										value={size.endColumn}
 										min={0}
