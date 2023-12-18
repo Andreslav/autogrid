@@ -24,6 +24,30 @@ import { PanelBody, Button, Dashicon, Flex, FlexBlock, FlexItem, BaseControl, __
  */
 import './editor.scss';
 import ModalMoreDetailed from '../inc/ModalMoreDetailed';
+import AutogridQuery from '../inc/AutogridQuery';
+
+class AutogridChildQuery extends AutogridQuery {
+	getQueryAndPropCSS(numberOfTracks, startColumn, endColumn, propName, {minWidthBlock}) {
+		let querySize = '', width, minWidth, maxWidth;
+
+		if(	!isNaN(startColumn) ) {
+			width = minWidthBlock * (startColumn + 1) + 'px';
+			minWidth = `(min-width:${ width })`;
+			querySize = querySize ? querySize + ' and ' + minWidth : minWidth;
+		}
+
+		if( !isNaN(endColumn) ) {
+			width = minWidthBlock * (endColumn + 1) + 'px';
+			maxWidth = `(max-width:${ width })`;
+			querySize = querySize ? querySize + ' and ' + maxWidth : maxWidth;
+		}
+
+		return {
+			query: querySize ? `@container autogrid ${ querySize }` : '',
+			value: `${propName}:${numberOfTracks};`
+		};
+	}
+}
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -36,31 +60,32 @@ import ModalMoreDetailed from '../inc/ModalMoreDetailed';
 export default function Edit({attributes, setAttributes, context, clientId}) {
 
 	const TEMPLATE = [
-	    [ 'core/paragraph', {} ]
+		[ 'core/paragraph', {} ]
 	];
-	
-	function autogrid_getCSS(startColumn, endColumn, minWidth, numberOfTracks, uniqueSelector) {
-		let query = '';
-
-		if(	!isNaN(startColumn) ) {
-			let width = minWidth * (startColumn + 1) + 'px';
-			let min = `(min-width:${width})`;
-			query = query ? query + ' and ' + min : min;
-		}
-
-		if( !isNaN(endColumn) ) {
-			let width = minWidth * (endColumn + 1) + 'px';
-			let max = `(max-width:${width})`;
-			query = query ? query + ' and ' + max : max;
-		}
-		
-		return query ? `@container autogrid ${query}{#`+uniqueSelector+`{--grid-item-column-span:${numberOfTracks};}}` : '';
-	}
 
 	const uniqueSelector = 'block-' + clientId;
-	const columnCount = parseInt(context['autogrid/columnCount']);
+	const sizes = attributes.sizes;
 	const minWidth = parseInt(context['autogrid/minWidth']);
 
+	const newAutogridChildQuery = new AutogridChildQuery({
+		selector: `#${uniqueSelector}`,
+		otherData: {minWidthBlock: minWidth}
+	})
+
+	const size = newAutogridChildQuery.apply({
+		sizes: attributes.sizes.map((item) => {
+			return {
+				value: item['numberOfTracks'], 
+				min: item['startColumn'], 
+				max: item['endColumn']
+			}
+		}), 
+		propName: '--grid-item-column-span'
+	})
+
+	const STYLE_CSS = newAutogridChildQuery.getCSS()
+
+	const columnCount = parseInt(context['autogrid/columnCount']);
 	const [stop, setStop] = useState(1);
 	useEffect(() => {
 		if(!stop) {
@@ -81,24 +106,17 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 			// setAttributes({indexNode});
 		}
 	}, [columnCount]);
-
-	let style = '';
-	attributes.sizes.forEach(size => {
-		let startColumn = parseInt(size['startColumn']);
-		let numberOfTracks = parseInt(size['numberOfTracks']);
-		let endColumn = parseInt(size['endColumn']);
-		style += autogrid_getCSS(startColumn, endColumn, minWidth, numberOfTracks, uniqueSelector);
-	})
 	
 	return (
 		<>
 		<div { ...useBlockProps({ style: {
+				'--grid-item-column-span': isNaN(size) ? '' : size,
 				// 'order': attributes.indexNode
 			} }) }>
 			<div className='wp-block-andreslav-autogrid-item__content'>
 				<InnerBlocks template={TEMPLATE} orientation="horizontal" />
 			</div>
-			{ style && <style>{style}</style> }
+			{ STYLE_CSS && <style>{ STYLE_CSS }</style> }
 		</div>
 
 		{/* Begin Sidebar Inspector Zone */}
@@ -107,8 +125,8 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 				<BaseControl
 				  __nextHasNoMarginBottom
 				  help={
-				  	<span style={ {fontSize: '12px'} }>
-			    		{ __("By default, a block occupies a single column. This option allows you to change this.", "autogrid-block") }
+					<span style={ {fontSize: '12px'} }>
+						{ __("By default, a block occupies a single column. This option allows you to change this.", "autogrid-block") }
 						<ModalMoreDetailed title={ __("Block size", "autogrid-block") }>
 							{ __("By default, a block occupies a single column. This option allows you to change this by specifying rules:", "autogrid-block") }<br/>
 							{ __("1. The number of columns the block should occupy.", "autogrid-block") }<br/>
@@ -116,7 +134,7 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 							{ __("3. The maximum number of columns to be displayed when the rule should stop applying (not a mandatory parameter).", "autogrid-block") }<br/>
 							{ __("If more than one rule is created, the lower one has higher priority.", "autogrid-block") }
 						</ModalMoreDetailed>
-			    	</span>
+					</span>
 				  }
 				>
 				<Flex>
@@ -151,7 +169,7 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 								disabled
 							/>
 						</FlexItem>
-				    </Flex>
+					</Flex>
 				}
 				{
 					attributes.sizes.map((size, index) => {
@@ -197,11 +215,11 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 										}}
 									/>
 								</FlexItem>
-						    </Flex>
+							</Flex>
 						)
 					})
 				}
-			    </BaseControl>
+				</BaseControl>
 			</PanelBody>
 		</InspectorControls>
 		{/* End Sidebar Inspector Zone */}

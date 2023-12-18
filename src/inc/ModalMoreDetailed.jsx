@@ -33,8 +33,8 @@ export default function ModalMoreDetailed({children, title}) {
 		<span> <Button variant="link" onClick={ openModal }>{ __("More", "autogrid-block") }</Button></span>
 		{ isOpen && (
 		   <Modal title={ title } onRequestClose={ closeModal }>
-		  		<div style={ {maxWidth: "350px"} }>{ children }</div>
-		  		<Flex direction="row" justify="flex-end">
+				<div style={ {maxWidth: "350px"} }>{ children }</div>
+				<Flex direction="row" justify="flex-end">
 					<Button variant="secondary" onClick={ closeModal }>{ __("Ok", "autogrid-block") }</Button>
 				</Flex>
 		   </Modal>

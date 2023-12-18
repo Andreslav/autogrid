@@ -24,6 +24,7 @@ import { PanelBody, RangeControl, __experimentalUnitControl as UnitControl } fro
 import './editor.scss';
 import BaseControlMedia from '../inc/BaseControlMedia';
 import ModalMoreDetailed from '../inc/ModalMoreDetailed';
+import AutogridQuery from '../inc/AutogridQuery';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -37,84 +38,26 @@ export default function Edit({attributes, setAttributes, clientId}) {
 	const ALLOWED_BLOCKS = [ 'andreslav/autogrid-item' ];
 
 	const TEMPLATE = [
-	    [ 'andreslav/autogrid-item', {} ],
-	    [ 'andreslav/autogrid-item', {} ]
+		 [ 'andreslav/autogrid-item', {} ],
+		 [ 'andreslav/autogrid-item', {} ]
 	];
 
-	const selector = `#${'block-' + clientId}>*>*`;
+	const newAutogridQuery = new AutogridQuery({
+		selector: `#${'block-' + clientId}>*>*`
+	})
 
-	let STYLE_CSS = ''; // для <style>
-	let QUERY_AND_PROPS_CSS = {}; // {query1: [prop, prop, ...], query2: [prop, ...], ...}
+	const gap = newAutogridQuery.apply({
+		sizes: attributes.gaps, 
+		propName: '--grid-layout-gap'
+	})
 
-	let format = (item) => {
-		return {
-			value: parseInt(item['value']), 
-			min: parseInt(item['min']), 
-			max: parseInt(item['max'])
-		}
-	}
-	let checkIsValidItem = (item) => {
-		return !isNaN(item['value']);
-	}
-	let checkIsBaseItem = (item) => {
-		return isNaN(item['min']) && isNaN(item['max']);
-	}
-	let getLastBase = (items) => {
-		return items.filter(checkIsBaseItem).reduce((v, item) => item['value'], NaN);
-	}
-	let getQueryAndPropCSS = (value, min, max, propName) => {
-		let querySize = '', width, minWidth, maxWidth;
+	const childrenPadding = newAutogridQuery.apply({
+		sizes: attributes.childrenPaddings, 
+		propName: '--grid-item-padding-child'
+	})
 
-		if(	!isNaN(min) ) {
-			width = min + 'px';
-			minWidth = `(min-width:${ width })`;
-			querySize = querySize ? querySize + ' and ' + minWidth : minWidth;
-		}
-
-		if( !isNaN(max) ) {
-			width = max + 'px';
-			maxWidth = `(max-width:${ width })`;
-			querySize = querySize ? querySize + ' and ' + maxWidth : maxWidth;
-		}
-
-		return {
-			query: querySize ? `@container autogrid ${ querySize }` : '',
-			value: `${propName}:${value}px;`
-		};
-	}
-	let dataCollection = (item, propName) => {
-		let { query, value } = getQueryAndPropCSS( item['value'], item['min'], item['max'], propName );
-
-		// заполняем
-		if( !QUERY_AND_PROPS_CSS[query] ) QUERY_AND_PROPS_CSS[query] = [];
-		QUERY_AND_PROPS_CSS[query].push(value);
-	}
-	let queryAndProps_toStyleCSS = () => {
-		for( let key in QUERY_AND_PROPS_CSS ) {
-			STYLE_CSS += key + `{${ selector }{${ QUERY_AND_PROPS_CSS[key].join('') }}}`;
-		}
-
-		// очищаем
-		QUERY_AND_PROPS_CSS = {};
-	}
-
-	// валидация и очистка
-	let gaps = attributes.gaps.map(format).filter(checkIsValidItem)
-	let childrenPaddings = attributes.childrenPaddings.map(format).filter(checkIsValidItem)
-
-	// извлекаем правила, в которых не заданы значения min и max
-	let gap = getLastBase(gaps);
-	let childrenPadding = getLastBase(childrenPaddings);
-
-	// оставляем правила, в которых задано хотябы одно из значений: min или max
-	gaps = gaps.filter((item) => !checkIsBaseItem(item))
-	childrenPaddings = childrenPaddings.filter((item) => !checkIsBaseItem(item))
-
-	// приобразовываем правила в строки CSS, которые помещаются в QUERY_AND_PROPS_CSS и затем объединяем их в STYLE_CSS
-	gaps.forEach(item => {dataCollection(item, '--grid-layout-gap')})
-	queryAndProps_toStyleCSS()
-	childrenPaddings.forEach(item => {dataCollection(item, '--grid-item-padding-child')})
-	queryAndProps_toStyleCSS()
+	const STYLE_CSS = newAutogridQuery.getCSS()
+	console.log('CSS', [STYLE_CSS], gap, childrenPadding)
 
 	return (
 		<>
@@ -129,7 +72,7 @@ export default function Edit({attributes, setAttributes, clientId}) {
 					<InnerBlocks allowedBlocks={ALLOWED_BLOCKS} template={TEMPLATE} orientation="horizontal" />
 				</div>
 			</div>
-			{ STYLE_CSS && <style>{STYLE_CSS}</style> }
+			{ STYLE_CSS && <style>{ STYLE_CSS }</style> }
 		</div>
 
 		{/* Begin Sidebar Inspector Zone */}

@@ -7,44 +7,63 @@
  * @see     https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
 */
 
-if( !function_exists('autogrid_getCSS') ) {
-	function autogrid_getCSS($startColumn, $endColumn, $minWidth, $numberOfTracks, $uniqueSelector) {
-		$query = '';
+namespace Andr;
+include __DIR__ . '\..\..\src\inc\AutogridQuery.php';
 
-		if($startColumn != '') {
-			$width = $minWidth * ($startColumn + 1) . 'px';
-			$min = "(min-width:$width)";
-			$query = $query ? $query . ' and ' . $min : $min;
-		}
 
-		if($endColumn != '') {
-			$width = $minWidth * ($endColumn + 1) . 'px';
-			$max = "(max-width:$width)";
-			$query = $query ? $query . ' and ' . $max : $max;
+if( !class_exists(AutogridChildQuery::class) ) {
+	class AutogridChildQuery extends AutogridQuery {
+		public function getQueryAndPropCSS($numberOfTracks, $startColumn, $endColumn, $propName, $otherData) {
+			['minWidthBlock' => $minWidthBlock] = $otherData;
+			$querySize = ''; $width; $minWidth; $maxWidth;
+
+			if(	$startColumn !== '' ) {
+				$width = $minWidthBlock * ($startColumn + 1) . 'px';
+				$minWidth = "(min-width:$width)";
+				$querySize = $querySize ? $querySize . ' and ' . $minWidth : $minWidth;
+			}
+
+			if( $endColumn !== '' ) {
+				$width = $minWidthBlock * ($endColumn + 1) . 'px';
+				$maxWidth = "(max-width:$width)";
+				$querySize = $querySize ? $querySize . ' and ' . $maxWidth : $maxWidth;
+			}
+
+			return [
+				'query' => $querySize ? "@container autogrid $querySize" : '',
+				'value' => $propName . ':' . $numberOfTracks . ';'
+			];
 		}
-		
-		return $query ? "@container autogrid $query{.".$uniqueSelector."{--grid-item-column-span:$numberOfTracks;}}" : '';
 	}
 }
 
 $uniqueSelector = 'wp-block-autogrid-item-' . wp_unique_id();
-$indexNode      = $attributes['indexNode'];
-$sizes          = $attributes['sizes'];
-$columnCount    = intval($block->context['autogrid/columnCount']);
+$sizes          = (array) $attributes['sizes'];
 $minWidth       = intval($block->context['autogrid/minWidth']);
+// $indexNode      = $attributes['indexNode'];
 
-$style = '';
-foreach ($sizes as $size) {
-	$startColumn = $size['startColumn'] == '' ? '' : intval($size['startColumn']);
-	$numberOfTracks = max(intval($size['numberOfTracks']), 1);
-	$endColumn = $size['endColumn'] == '' ? '' : intval($size['endColumn']);
-	$style .= autogrid_getCSS($startColumn, $endColumn, $minWidth, $numberOfTracks, $uniqueSelector);
-}
+$new_AutogridChildQuery = new AutogridChildQuery([
+	'selector'  => '.' . $uniqueSelector,
+	'otherData' => ['minWidthBlock' => $minWidth]
+]);
 
-$inlineStyle = '' // "order:$indexNode;"
+$size = $new_AutogridChildQuery->apply([
+	'sizes'    => array_map(function($item) {
+		return [
+			'value' => $item['numberOfTracks'], 
+			'min'   => $item['startColumn'], 
+			'max'   => $item['endColumn']
+		];
+	}, $sizes),
+	'propName' => '--grid-item-column-span'
+]);
+
+$STYLE_CSS = $new_AutogridChildQuery->getCSS();
+
+$inlineStyle = $size === '' ? '' :  "--grid-item-column-span:$size;";
 ?>
 
 <div <?= get_block_wrapper_attributes( ['class' => $uniqueSelector, 'style' => $inlineStyle] ); ?>>
 	<?= $content; ?>
-	<?= $style ? '<style>'.$style.'</style>' : ''; ?>
+	<?= $STYLE_CSS ? "<style>$STYLE_CSS</style>" : ''; ?>
 </div>
