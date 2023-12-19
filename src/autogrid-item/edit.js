@@ -66,13 +66,7 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 
 	const uniqueSelector = 'block-' + clientId;
 	const minWidth = parseInt(context['autogrid/minWidth']);
-	const sizes = attributes.sizes.map((item) => {
-		return {
-			value: item['numberOfTracks'], 
-			min: item['startColumn'], 
-			max: item['endColumn']
-		}
-	});
+	const sizes = attributes.sizes;
 
 	const newAutogridChildQuery = new AutogridChildQuery({
 		selector: `#${uniqueSelector}`,
@@ -90,12 +84,12 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 	const [stop, setStop] = useState(1);
 	useEffect(() => {
 		if(!stop) {
-			let validSizes = attributes.sizes.map((size, index) => {
-				let startColumn = size['startColumn'];
-				let numberOfTracks = size['numberOfTracks'];
-				let endColumn = size['endColumn'];
+			let validSizes = sizes.map((size, index) => {
+				let value = size['value'];
+				let min = size['min'];
+				let max = size['max'];
 
-				return { startColumn, numberOfTracks: 1, endColumn }
+				return { value, min: 1, max }
 			})
 
 			setAttributes({sizes: validSizes});
@@ -107,18 +101,6 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 			// setAttributes({indexNode});
 		}
 	}, [columnCount]);
-
-	function setSizes(sizes) {
-		setAttributes({
-			sizes: sizes.map((item) => {
-				return {
-					numberOfTracks: item['value'], 
-					startColumn: item['min'], 
-					endColumn: item['max']
-				}
-			})
-		})
-	}
 	
 	return (
 		<>
@@ -165,7 +147,7 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 						label: __("Maximum number of columns displayed.", "autogrid-block")
 					} }
 					values={ sizes }
-					onChange={ setSizes }
+					onChange={(val) => { setAttributes({sizes: val}) }}
 					baseRule={ {value: columnCount - 1, min: 1, max: ''} }
 					unlockLastElement
 					disableUnits

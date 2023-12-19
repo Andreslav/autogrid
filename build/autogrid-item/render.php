@@ -48,13 +48,7 @@ $new_AutogridChildQuery = new AutogridChildQuery([
 ]);
 
 $size = $new_AutogridChildQuery->apply([
-	'sizes'    => array_map(function($item) {
-		return [
-			'value' => $item['numberOfTracks'], 
-			'min'   => $item['startColumn'], 
-			'max'   => $item['endColumn']
-		];
-	}, $sizes),
+	'sizes'    => $sizes,
 	'propName' => '--grid-item-column-span'
 ]);
 
