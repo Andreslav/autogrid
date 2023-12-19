@@ -57,22 +57,21 @@ export default function Edit({attributes, setAttributes, clientId}) {
 	})
 
 	const STYLE_CSS = newAutogridQuery.getCSS()
-	console.log('CSS', [STYLE_CSS], gap, childrenPadding)
 
 	return (
 		<>
 		<div { ...useBlockProps({ style: {
-				'--grid-item-min-width': attributes.minWidth + 'px',
+				'--grid-item-min-width': parseInt(attributes.minWidth) + 'px',
 				'--grid-layout-gap': isNaN(gap) ? '' : gap + 'px',
 				'--grid-item-padding-child': isNaN(childrenPadding) ? '' : childrenPadding + 'px',
-				'--grid-column-count': attributes.columnCount
+				'--grid-column-count': parseInt(attributes.columnCount)
 			} }) }>
 			<div className='wp-block-andreslav-autogrid__container'>
 				<div className='wp-block-andreslav-autogrid__content'>
 					<InnerBlocks allowedBlocks={ALLOWED_BLOCKS} template={TEMPLATE} orientation="horizontal" />
 				</div>
 			</div>
-			{ STYLE_CSS && <style>{ STYLE_CSS }</style> }
+			{ STYLE_CSS && <style dangerouslySetInnerHTML={{__html: STYLE_CSS }}></style> }
 		</div>
 
 		{/* Begin Sidebar Inspector Zone */}

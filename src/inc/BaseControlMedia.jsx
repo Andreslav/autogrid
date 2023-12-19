@@ -12,7 +12,7 @@ import { __ } from '@wordpress/i18n';
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  * @see https://wordpress.github.io/gutenberg/?path=/docs/components-anglepickercontrol--default
  */
-import { Button, Dashicon, Flex, FlexBlock, FlexItem, BaseControl, __experimentalUnitControl as UnitControl, Modal } from '@wordpress/components';
+import { Button, Dashicon, Flex, FlexBlock, FlexItem, BaseControl, __experimentalUnitControl as UnitControl, Modal } from '@wordpress/components'; 
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -22,7 +22,7 @@ import { Button, Dashicon, Flex, FlexBlock, FlexItem, BaseControl, __experimenta
  *
  * @return {WPElement} Element to render.
  */
-export default function BaseControlMedia({help, label, values, onChange}) {
+export default function BaseControlMedia({help, label, values, onChange, disableUnits, baseRule, unlockLastElement, valueProp = {}, minProp = {}, maxProp = {}}) {
 
 	return (
 		<BaseControl
@@ -37,10 +37,10 @@ export default function BaseControlMedia({help, label, values, onChange}) {
 				</FlexBlock>
 				<FlexItem>
 					<Button 
-						icon={ <Dashicon icon="plus-alt2"/> } 
-						label={ __("Add a rule", "autogrid-block") } 
+						icon={ <Dashicon icon="plus-alt2"/> }
+						label={ __("Add a rule", "autogrid-block") }
 						onClick={() => {
-							onChange([{value: 0, min: '', max: ''}, ...values])
+							onChange([baseRule || {value: 0, min: '', max: ''}, ...values])
 						}}
 					/>
 				</FlexItem>
@@ -58,7 +58,7 @@ export default function BaseControlMedia({help, label, values, onChange}) {
 					</FlexBlock>
 					<FlexItem>
 						{
-							values.length > 1 && <Button 
+							(values.length > 1 || unlockLastElement) && <Button 
 								icon={ <Dashicon icon=""/> } 
 								style={ {height: 0} }
 								label=""
@@ -74,41 +74,47 @@ export default function BaseControlMedia({help, label, values, onChange}) {
 						<Flex key={index}>
 							<FlexBlock>
 								<UnitControl
-									label={ __("Value", "autogrid-block") }
+									label={ valueProp.label || __("Value", "autogrid-block") }
 									hideLabelFromVision
 									onChange={(val) => { value.value = parseInt(val); onChange([...values]) }}
-									value={value.value}
-									min={0}
+									value={ value.value }
+									min={ valueProp.min == undefined ? 0 : valueProp.min }
+									max={ valueProp.max == undefined ? Infinity : valueProp.max }
 									units={[]}
 									unit="px"
+									disableUnits={ disableUnits }
 									required
 								/>
 							</FlexBlock>
 							<FlexBlock>
 								<UnitControl
-									label={ __("Minimum container width", "autogrid-block") }
+									label={ minProp.label || __("Minimum container width", "autogrid-block") }
 									hideLabelFromVision
 									onChange={(val) => { value.min = parseInt(val); onChange([...values]) }}
-									value={value.min}
-									min={0}
+									value={ value.min }
+									min={ minProp.min == undefined ? 0 : minProp.min }
+									max={ minProp.max == undefined ? Infinity : minProp.max }
 									units={[]}
 									unit="px"
+									disableUnits={ disableUnits }
 								/>
 							</FlexBlock>
 							<FlexBlock>
 								<UnitControl
-									label={ __("Maximum container width", "autogrid-block") }
+									label={ maxProp.label || __("Maximum container width", "autogrid-block") }
 									hideLabelFromVision
 									onChange={(val) => { value.max = parseInt(val); onChange([...values]) }}
-									value={value.max}
-									min={0}
+									value={ value.max }
+									min={ maxProp.min == undefined ? 0 : maxProp.min }
+									max={ maxProp.max == undefined ? Infinity : maxProp.max }
 									units={[]}
 									unit="px"
+									disableUnits={ disableUnits }
 								/>
 							</FlexBlock>
 							<FlexItem>
 								{
-									values.length > 1 && <Button 
+									(values.length > 1 || unlockLastElement) && <Button 
 										icon={ <Dashicon icon="minus"/> } 
 										label={ __("Delete a rule", "autogrid-block") } 
 										onClick={() => {

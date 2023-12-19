@@ -23,6 +23,7 @@ import { PanelBody, Button, Dashicon, Flex, FlexBlock, FlexItem, BaseControl, __
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
+import BaseControlMedia from '../inc/BaseControlMedia';
 import ModalMoreDetailed from '../inc/ModalMoreDetailed';
 import AutogridQuery from '../inc/AutogridQuery';
 
@@ -64,26 +65,26 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 	];
 
 	const uniqueSelector = 'block-' + clientId;
-	const sizes = attributes.sizes;
 	const minWidth = parseInt(context['autogrid/minWidth']);
+	const sizes = attributes.sizes.map((item) => {
+		return {
+			value: item['numberOfTracks'], 
+			min: item['startColumn'], 
+			max: item['endColumn']
+		}
+	});
 
 	const newAutogridChildQuery = new AutogridChildQuery({
 		selector: `#${uniqueSelector}`,
 		otherData: {minWidthBlock: minWidth}
-	})
+	});
 
 	const size = newAutogridChildQuery.apply({
-		sizes: attributes.sizes.map((item) => {
-			return {
-				value: item['numberOfTracks'], 
-				min: item['startColumn'], 
-				max: item['endColumn']
-			}
-		}), 
+		sizes: sizes, 
 		propName: '--grid-item-column-span'
-	})
+	});
 
-	const STYLE_CSS = newAutogridChildQuery.getCSS()
+	const STYLE_CSS = newAutogridChildQuery.getCSS();
 
 	const columnCount = parseInt(context['autogrid/columnCount']);
 	const [stop, setStop] = useState(1);
@@ -106,6 +107,18 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 			// setAttributes({indexNode});
 		}
 	}, [columnCount]);
+
+	function setSizes(sizes) {
+		setAttributes({
+			sizes: sizes.map((item) => {
+				return {
+					numberOfTracks: item['value'], 
+					startColumn: item['min'], 
+					endColumn: item['max']
+				}
+			})
+		})
+	}
 	
 	return (
 		<>
@@ -116,110 +129,47 @@ export default function Edit({attributes, setAttributes, context, clientId}) {
 			<div className='wp-block-andreslav-autogrid-item__content'>
 				<InnerBlocks template={TEMPLATE} orientation="horizontal" />
 			</div>
-			{ STYLE_CSS && <style>{ STYLE_CSS }</style> }
+			{ STYLE_CSS && <style dangerouslySetInnerHTML={{__html: STYLE_CSS }}></style> }
 		</div>
 
 		{/* Begin Sidebar Inspector Zone */}
 		<InspectorControls>
 			<PanelBody title="Settings">
-				<BaseControl
-				  __nextHasNoMarginBottom
-				  help={
-					<span style={ {fontSize: '12px'} }>
-						{ __("By default, a block occupies a single column. This option allows you to change this.", "autogrid-block") }
-						<ModalMoreDetailed title={ __("Block size", "autogrid-block") }>
-							{ __("By default, a block occupies a single column. This option allows you to change this by specifying rules:", "autogrid-block") }<br/>
-							{ __("1. The number of columns the block should occupy.", "autogrid-block") }<br/>
-							{ __("2. The minimum number of columns to be displayed when the rule should start to apply (optional).", "autogrid-block") }<br/>
-							{ __("3. The maximum number of columns to be displayed when the rule should stop applying (not a mandatory parameter).", "autogrid-block") }<br/>
-							{ __("If more than one rule is created, the lower one has higher priority.", "autogrid-block") }
-						</ModalMoreDetailed>
-					</span>
-				  }
-				>
-				<Flex>
-					<FlexBlock>
-						<BaseControl.VisualLabel>{ __("Block size", "autogrid-block") }</BaseControl.VisualLabel>
-					</FlexBlock>
-					<FlexItem>
-						<Button 
-							icon={ <Dashicon icon="plus-alt2"/> } 
-							label={ __("Add a rule", "autogrid-block") } 
-							onClick={() => {
-								setAttributes({sizes: [{startColumn: columnCount - 1, numberOfTracks: 1, endColumn: ''}, ...attributes.sizes]})
-							}}
-						/>
-					</FlexItem>
-				</Flex>
-				{
-					!!attributes.sizes.length && <Flex>
-						<FlexBlock>
-							<BaseControl.VisualLabel>{ __("Сolumns", "autogrid-block") }</BaseControl.VisualLabel>
-						</FlexBlock>
-						<FlexBlock>
-							<BaseControl.VisualLabel>{ __("Min", "autogrid-block") }</BaseControl.VisualLabel>
-						</FlexBlock>
-						<FlexBlock>
-							<BaseControl.VisualLabel>{ __("Max", "autogrid-block") }</BaseControl.VisualLabel>
-						</FlexBlock>
-						<FlexItem>
-							<Button 
-								icon={ <Dashicon icon=""/> } 
-								label=""
-								disabled
-							/>
-						</FlexItem>
-					</Flex>
-				}
-				{
-					attributes.sizes.map((size, index) => {
-						return (
-							<Flex key={index}>
-								<FlexBlock>
-									<NumberControl
-										label={ __("Number of columns", "autogrid-block") }
-										hideLabelFromVision
-										onChange={(val) => { size.numberOfTracks = val; setAttributes({sizes: [...attributes.sizes]}) }}
-										value={size.numberOfTracks}
-										min={1}
-										max={columnCount}
-										required
-									/>
-								</FlexBlock>
-								<FlexBlock>
-									<NumberControl
-										label={ __("Maximum number of columns displayed.", "autogrid-block") }
-										hideLabelFromVision
-										onChange={(val) => { size.startColumn = val; setAttributes({sizes: [...attributes.sizes]}) }}
-										value={size.startColumn}
-										min={0}
-										max={columnCount}
-									/>
-								</FlexBlock>
-								<FlexBlock>
-									<NumberControl
-										label={ __("Minimum number of columns displayed", "autogrid-block") }
-										hideLabelFromVision
-										onChange={(val) => { size.endColumn = val; setAttributes({sizes: [...attributes.sizes]}) }}
-										value={size.endColumn}
-										min={0}
-										max={columnCount}
-									/>
-								</FlexBlock>
-								<FlexItem>
-									<Button 
-										icon={ <Dashicon icon="minus"/> } 
-										label={ __("Delete a rule", "autogrid-block") } 
-										onClick={() => {
-											setAttributes({sizes: attributes.sizes.filter((size, i) => i != index)})
-										}}
-									/>
-								</FlexItem>
-							</Flex>
-						)
-					})
-				}
-				</BaseControl>
+				<BaseControlMedia
+					help={
+						<>
+							{ __("By default, a block occupies a single column. This option allows you to change this.", "autogrid-block") }
+							<ModalMoreDetailed title={ __("Block size", "autogrid-block") }>
+								{ __("By default, a block occupies a single column. This option allows you to change this by setting rules that include the following parameters:", "autogrid-block") }<br/>
+								<ul>
+									<li dangerouslySetInnerHTML={{__html: __("1. <b>The number of columns</b> the block should occupy.", "autogrid-block") }}></li>
+									<li dangerouslySetInnerHTML={{__html: __("2. <b>The minimum number of columns to be displayed</b> when the rule should start to apply. Optional parameter.", "autogrid-block") }}></li>
+									<li dangerouslySetInnerHTML={{__html: __("3. <b>The maximum number of columns to be displayed</b> when the rule should stop applying. Optional parameter.", "autogrid-block") }}></li>
+								</ul>
+								{ __("If more than one rule is created, the lower one has higher priority.", "autogrid-block") }
+							</ModalMoreDetailed>
+						</>
+					}
+					label={ __("Block size", "autogrid-block") }
+					valueProp={ {
+						min: 1,
+						max: columnCount,
+						label: __("Number of columns", "autogrid-block")
+					} }
+					minProp={ {
+						max: columnCount,
+						label: __("Minimum number of columns displayed", "autogrid-block")
+					} }
+					maxProp={ {
+						max: columnCount,
+						label: __("Maximum number of columns displayed.", "autogrid-block")
+					} }
+					values={ sizes }
+					onChange={ setSizes }
+					baseRule={ {value: columnCount - 1, min: 1, max: ''} }
+					unlockLastElement
+					disableUnits
+				/>
 			</PanelBody>
 		</InspectorControls>
 		{/* End Sidebar Inspector Zone */}

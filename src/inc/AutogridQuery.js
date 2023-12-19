@@ -14,7 +14,7 @@ export default class AutogridQuery {
 
 	apply({sizes, propName}) {
 		// валидация и очистка
-		sizes = sizes.map(this.format).filter(this.checkIsValidItem)
+		sizes = Array.isArray(sizes) ? sizes.map(this.format).filter(this.checkIsValidItem) : []
 
 		// извлекаем правила, в которых не заданы значения min и max и берём 'value' последнего из них
 		let baseSize = this.getLastBase(sizes);
