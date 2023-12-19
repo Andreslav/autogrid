@@ -22,9 +22,9 @@ import { PanelBody, RangeControl, __experimentalUnitControl as UnitControl } fro
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
-import BaseControlMedia from '../inc/BaseControlMedia';
-import ModalMoreDetailed from '../inc/ModalMoreDetailed';
-import AutogridQuery from '../inc/AutogridQuery';
+import BaseControlMedia from '../../includes/BaseControlMedia';
+import ModalMoreDetailed from '../../includes/ModalMoreDetailed';
+import AutogridQuery from '../../includes/AutogridQuery';
 
 /**
  * The edit function describes the structure of your block in the context of the

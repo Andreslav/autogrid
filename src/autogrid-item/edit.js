@@ -23,9 +23,9 @@ import { PanelBody, Button, Dashicon, Flex, FlexBlock, FlexItem, BaseControl, __
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
-import BaseControlMedia from '../inc/BaseControlMedia';
-import ModalMoreDetailed from '../inc/ModalMoreDetailed';
-import AutogridQuery from '../inc/AutogridQuery';
+import BaseControlMedia from '../../includes/BaseControlMedia';
+import ModalMoreDetailed from '../../includes/ModalMoreDetailed';
+import AutogridQuery from '../../includes/AutogridQuery';
 
 class AutogridChildQuery extends AutogridQuery {
 	getQueryAndPropCSS(numberOfTracks, startColumn, endColumn, propName, {minWidthBlock}) {

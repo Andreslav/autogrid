@@ -8,7 +8,7 @@
 */
 
 namespace Andr;
-include __DIR__ . '\..\..\src\inc\AutogridQuery.php';
+include __DIR__ . '\..\..\includes\AutogridQuery.php';
 
 
 if( !class_exists(AutogridChildQuery::class) ) {
