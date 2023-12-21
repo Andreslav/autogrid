@@ -45,7 +45,7 @@
       "type": "array",
       "default": [
         {
-          "value": 30,
+          "value": 10,
           "min": "",
           "max": ""
         }
@@ -55,7 +55,7 @@
       "type": "array",
       "default": [
         {
-          "value": 30,
+          "value": 20,
           "min": "",
           "max": ""
         }
@@ -64,8 +64,7 @@
   },
   "providesContext": {
     "autogrid/columnCount": "columnCount",
-    "autogrid/minWidth": "minWidth",
-    "autogrid/gap": "gap"
+    "autogrid/minWidth": "minWidth"
   },
   "textdomain": "autogrid",
   "editorScript": "file:./index.js",

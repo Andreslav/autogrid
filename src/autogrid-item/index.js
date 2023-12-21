@@ -33,5 +33,5 @@ registerBlockType( metadata.name, {
 	 */
 	icon: icon.svg,
 	edit: Edit,
-	save: () => <InnerBlocks.Content />
+	save: () => <InnerBlocks.Content />,
 } );

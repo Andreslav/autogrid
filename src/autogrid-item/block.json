@@ -29,8 +29,8 @@
 			"default": []
 		}
 	},
-	"parent": ["andreslav/autogrid"],
-	"usesContext": ["autogrid/columnCount", "autogrid/minWidth", "autogrid/gap"],
+	"parent": [ "andreslav/autogrid" ],
+	"usesContext": [ "autogrid/columnCount", "autogrid/minWidth" ],
 	"textdomain": "autogrid-item",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",

@@ -2,7 +2,7 @@
 /**
  * Для генерации CSS
 */
-namespace Andr;
+namespace Andreslav;
 
 if( !class_exists(AutogridQuery::class) ) {
 	class AutogridQuery {

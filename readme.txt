@@ -6,36 +6,35 @@ Stable tag:        1.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Простой блок grid разметки с автоматической перекомпановкой.
+Create a grid with a variable number of columns! Set the number of columns and their minimum width, after which the cells will be redistributed.
 
 == Description ==
 
-This is the long description. No limit, and you can use Markdown (as well as in the following sections).
+Autogrid is a block for the WordPress block editor that allows you to create adaptive columns. The elements inside it are automatically distributed into columns, filling the available space.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+The order of customization
+
+Set the maximum number of columns and their minimum width, after reaching which the cells will be redistributed.
+Specify the size of spacing between cells and their padding. These parameters can be configured adaptively, for example by setting min. the size of the container when the value should be applied.
+If necessary, set the width of certain cells by specifying the number of columns they should occupy. You can specify the minimum and maximum number of columns to be displayed when the value should be applied.
+Done! Test.
 
 
 == Frequently Asked Questions ==
 
-= Какие браузеры поддерживаются? =
+= What browsers are supported? =
 
-Полная поддержка есть у современных браузеров:
+The grid works well in modern browsers:
 Chrome 79+, Firefox 76+, Edge 79+, Safari 16+.
 
-Адаптация начинает работать только у:
+Adaptability starts working only with:
 Chrome 106+, Firefox 110+, Edge 106+, Safari 16+.
 
-Информация получена на основе сравнения поддержки использованных возможностей CSS: [CSS Grid](https://caniuse.com/css-grid)), [CSS math function min()](https://caniuse.com/?search=min()), [CSS function repeat()](https://caniuse.com/?search=repeat()), [CSS Container Queries](https://caniuse.com/css-container-queries)).
-
+The information is obtained based on a comparison of the support of the CSS features used: [CSS Grid](https://caniuse.com/css-grid)), [CSS math function min()](https://caniuse.com/?search=min()), [CSS function repeat()](https://caniuse.com/?search=repeat()), [CSS Container Queries](https://caniuse.com/css-container-queries)).
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. CSS Autogrid Block.
 
 == Changelog ==
 

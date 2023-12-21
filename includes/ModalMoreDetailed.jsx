@@ -23,22 +23,29 @@ import { Button, Flex, Modal } from '@wordpress/components';
  *
  * @return {WPElement} Element to render.
  */
-export default function ModalMoreDetailed({children, title}) {
+export default function ModalMoreDetailed( { children, title } ) {
 	const [ isOpen, setOpen ] = useState( false );
 	const openModal = () => setOpen( true );
 	const closeModal = () => setOpen( false );
 
 	return (
 		<>
-		<span> <Button variant="link" onClick={ openModal }>{ __("More", "autogrid-block") }</Button></span>
-		{ isOpen && (
-		   <Modal title={ title } onRequestClose={ closeModal }>
-				<div style={ {maxWidth: "350px"} }>{ children }</div>
-				<Flex direction="row" justify="flex-end">
-					<Button variant="secondary" onClick={ closeModal }>{ __("Ok", "autogrid-block") }</Button>
-				</Flex>
-		   </Modal>
-		) }
+			<span>
+				{ ' ' }
+				<Button variant="link" onClick={ openModal }>
+					{ __( 'More', 'autogrid-block' ) }
+				</Button>
+			</span>
+			{ isOpen && (
+				<Modal title={ title } onRequestClose={ closeModal }>
+					<div style={ { maxWidth: '350px' } }>{ children }</div>
+					<Flex direction="row" justify="flex-end">
+						<Button variant="secondary" onClick={ closeModal }>
+							{ __( 'Ok', 'autogrid-block' ) }
+						</Button>
+					</Flex>
+				</Modal>
+			) }
 		</>
 	);
 }

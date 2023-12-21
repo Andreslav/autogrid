@@ -13,7 +13,7 @@
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start",
-		"add": "npx @wordpress/create-block --namespace fsd --variant dynamic --no-plugin"
+		"add": "npx @wordpress/create-block --namespace andreslav --variant dynamic --no-plugin"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^26.10.0"

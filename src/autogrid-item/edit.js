@@ -13,8 +13,21 @@ import { useEffect, useState } from '@wordpress/element';
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  * @see https://wordpress.github.io/gutenberg/?path=/docs/components-anglepickercontrol--default
  */
-import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, Button, Dashicon, Flex, FlexBlock, FlexItem, BaseControl, __experimentalNumberControl as NumberControl } from '@wordpress/components';
+import {
+	useBlockProps,
+	InnerBlocks,
+	InspectorControls,
+} from '@wordpress/block-editor';
+import {
+	PanelBody,
+	Button,
+	Dashicon,
+	Flex,
+	FlexBlock,
+	FlexItem,
+	BaseControl,
+	__experimentalNumberControl as NumberControl,
+} from '@wordpress/components';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -28,24 +41,33 @@ import ModalMoreDetailed from '../../includes/ModalMoreDetailed';
 import AutogridQuery from '../../includes/AutogridQuery';
 
 class AutogridChildQuery extends AutogridQuery {
-	getQueryAndPropCSS(numberOfTracks, startColumn, endColumn, propName, {minWidthBlock}) {
-		let querySize = '', width, minWidth, maxWidth;
+	getQueryAndPropCSS(
+		numberOfTracks,
+		startColumn,
+		endColumn,
+		propName,
+		{ minWidthBlock }
+	) {
+		let querySize = '',
+			width,
+			minWidth,
+			maxWidth;
 
-		if(	!isNaN(startColumn) ) {
-			width = minWidthBlock * (startColumn + 1) + 'px';
+		if ( ! isNaN( startColumn ) ) {
+			width = minWidthBlock * ( startColumn + 1 ) + 'px';
 			minWidth = `(min-width:${ width })`;
 			querySize = querySize ? querySize + ' and ' + minWidth : minWidth;
 		}
 
-		if( !isNaN(endColumn) ) {
-			width = minWidthBlock * (endColumn + 1) + 'px';
+		if ( ! isNaN( endColumn ) ) {
+			width = minWidthBlock * ( endColumn + 1 ) + 'px';
 			maxWidth = `(max-width:${ width })`;
 			querySize = querySize ? querySize + ' and ' + maxWidth : maxWidth;
 		}
 
 		return {
 			query: querySize ? `@container autogrid ${ querySize }` : '',
-			value: `${propName}:${numberOfTracks};`
+			value: `${ propName }:${ numberOfTracks };`,
 		};
 	}
 }
@@ -58,103 +80,169 @@ class AutogridChildQuery extends AutogridQuery {
  *
  * @return {WPElement} Element to render.
  */
-export default function Edit({attributes, setAttributes, context, clientId}) {
-
-	const TEMPLATE = [
-		[ 'core/paragraph', {} ]
-	];
+export default function Edit( {
+	attributes,
+	setAttributes,
+	context,
+	clientId,
+} ) {
+	const TEMPLATE = [ [ 'core/paragraph', {} ] ];
 
 	const uniqueSelector = 'block-' + clientId;
-	const minWidth = parseInt(context['autogrid/minWidth']);
+	const minWidth = parseInt( context[ 'autogrid/minWidth' ] );
 	const sizes = attributes.sizes;
 
-	const newAutogridChildQuery = new AutogridChildQuery({
-		selector: `#${uniqueSelector}`,
-		otherData: {minWidthBlock: minWidth}
-	});
+	const newAutogridChildQuery = new AutogridChildQuery( {
+		selector: `#${ uniqueSelector }`,
+		otherData: { minWidthBlock: minWidth },
+	} );
 
-	const size = newAutogridChildQuery.apply({
-		sizes: sizes, 
-		propName: '--grid-item-column-span'
-	});
+	const size = newAutogridChildQuery.apply( {
+		sizes: sizes,
+		propName: '--grid-item-column-span',
+	} );
 
 	const STYLE_CSS = newAutogridChildQuery.getCSS();
 
-	const columnCount = parseInt(context['autogrid/columnCount']);
-	const [stop, setStop] = useState(1);
-	useEffect(() => {
-		if(!stop) {
-			let validSizes = sizes.map((size, index) => {
-				let value = size['value'];
-				let min = size['min'];
-				let max = size['max'];
+	const columnCount = parseInt( context[ 'autogrid/columnCount' ] );
+	const [ stop, setStop ] = useState( 1 );
+	useEffect( () => {
+		if ( ! stop ) {
+			let validSizes = sizes.map( ( size, index ) => {
+				let value = size[ 'value' ];
+				let min = size[ 'min' ];
+				let max = size[ 'max' ];
 
-				return { value, min: 1, max }
-			})
+				return { value, min: 1, max };
+			} );
 
-			setAttributes({sizes: validSizes});
+			setAttributes( { sizes: validSizes } );
 		} else {
-			setStop(0);
+			setStop( 0 );
 
 			// let node = document.body.querySelector('#' + uniqueSelector);
 			// let indexNode = [...node.parentElement.children].indexOf(node);
 			// setAttributes({indexNode});
 		}
-	}, [columnCount]);
-	
+	}, [ columnCount ] );
+	console.log( sizes );
+
 	return (
 		<>
-		<div { ...useBlockProps({ style: {
-				'--grid-item-column-span': isNaN(size) ? '' : size,
-				// 'order': attributes.indexNode
-			} }) }>
-			<div className='wp-block-andreslav-autogrid-item__content'>
-				<InnerBlocks template={TEMPLATE} orientation="horizontal" />
+			<div
+				{ ...useBlockProps( {
+					style: {
+						'--grid-item-column-span': isNaN( size ) ? '' : size,
+						// 'order': attributes.indexNode
+					},
+				} ) }
+			>
+				<div className="wp-block-andreslav-autogrid-item__content">
+					<InnerBlocks
+						template={ TEMPLATE }
+						orientation="horizontal"
+					/>
+				</div>
+				{ STYLE_CSS && (
+					<style
+						dangerouslySetInnerHTML={ { __html: STYLE_CSS } }
+					></style>
+				) }
 			</div>
-			{ STYLE_CSS && <style dangerouslySetInnerHTML={{__html: STYLE_CSS }}></style> }
-		</div>
 
-		{/* Begin Sidebar Inspector Zone */}
-		<InspectorControls>
-			<PanelBody title="Settings">
-				<BaseControlMedia
-					help={
-						<>
-							{ __("By default, a block occupies a single column. This option allows you to change this.", "autogrid-block") }
-							<ModalMoreDetailed title={ __("Block size", "autogrid-block") }>
-								{ __("By default, a block occupies a single column. This option allows you to change this by setting rules that include the following parameters:", "autogrid-block") }<br/>
-								<ul>
-									<li dangerouslySetInnerHTML={{__html: __("1. <b>The number of columns</b> the block should occupy.", "autogrid-block") }}></li>
-									<li dangerouslySetInnerHTML={{__html: __("2. <b>The minimum number of columns to be displayed</b> when the rule should start to apply. Optional parameter.", "autogrid-block") }}></li>
-									<li dangerouslySetInnerHTML={{__html: __("3. <b>The maximum number of columns to be displayed</b> when the rule should stop applying. Optional parameter.", "autogrid-block") }}></li>
-								</ul>
-								{ __("If more than one rule is created, the lower one has higher priority.", "autogrid-block") }
-							</ModalMoreDetailed>
-						</>
-					}
-					label={ __("Block size", "autogrid-block") }
-					valueProp={ {
-						min: 1,
-						max: columnCount,
-						label: __("Number of columns", "autogrid-block")
-					} }
-					minProp={ {
-						max: columnCount,
-						label: __("Minimum number of columns displayed", "autogrid-block")
-					} }
-					maxProp={ {
-						max: columnCount,
-						label: __("Maximum number of columns displayed.", "autogrid-block")
-					} }
-					values={ sizes }
-					onChange={(val) => { setAttributes({sizes: val}) }}
-					baseRule={ {value: columnCount - 1, min: 1, max: ''} }
-					unlockLastElement
-					disableUnits
-				/>
-			</PanelBody>
-		</InspectorControls>
-		{/* End Sidebar Inspector Zone */}
+			{ /* Begin Sidebar Inspector Zone */ }
+			<InspectorControls>
+				<PanelBody title="Settings">
+					<BaseControlMedia
+						help={
+							<>
+								{ __(
+									'By default, a cell occupies one column. This option allows you to change this.',
+									'autogrid-block'
+								) }
+								<ModalMoreDetailed
+									title={ __(
+										'Cell size',
+										'autogrid-block'
+									) }
+								>
+									<p>
+										{ __(
+											'By default, a cell occupies one column. This option allows you to change this by defining rules that include the following parameters:',
+											'autogrid-block'
+										) }
+									</p>
+									<ul>
+										<li
+											dangerouslySetInnerHTML={ {
+												__html: __(
+													'1. The number of columns that the cell should occupy.',
+													'autogrid-block'
+												),
+											} }
+										></li>
+										<li
+											dangerouslySetInnerHTML={ {
+												__html: __(
+													'2. <b>The minimum number of columns to be displayed</b> when the rule should start to apply. Optional parameter.',
+													'autogrid-block'
+												),
+											} }
+										></li>
+										<li
+											dangerouslySetInnerHTML={ {
+												__html: __(
+													'3. <b>The maximum number of columns to be displayed</b> when the rule should stop applying. Optional parameter.',
+													'autogrid-block'
+												),
+											} }
+										></li>
+									</ul>
+									<p>
+										{ __(
+											'If more than one rule is created, the lower one has higher priority.',
+											'autogrid-block'
+										) }
+									</p>
+								</ModalMoreDetailed>
+							</>
+						}
+						label={ __( 'Cell size', 'autogrid-block' ) }
+						valueProp={ {
+							min: 1,
+							max: columnCount,
+							label: __( 'Number of columns', 'autogrid-block' ),
+						} }
+						minProp={ {
+							max: columnCount,
+							label: __(
+								'Minimum number of columns displayed',
+								'autogrid-block'
+							),
+						} }
+						maxProp={ {
+							max: columnCount,
+							label: __(
+								'Maximum number of columns displayed.',
+								'autogrid-block'
+							),
+						} }
+						values={ sizes }
+						onChange={ ( val ) => {
+							setAttributes( { sizes: val } );
+						} }
+						baseRule={ {
+							value: columnCount - 1,
+							min: 1,
+							max: '',
+							dddd: 1,
+						} }
+						unlockLastElement
+						disableUnits
+					/>
+				</PanelBody>
+			</InspectorControls>
+			{ /* End Sidebar Inspector Zone */ }
 		</>
 	);
 }

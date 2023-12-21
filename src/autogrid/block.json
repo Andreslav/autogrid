@@ -21,10 +21,10 @@
 		},
 		"spacing": {
 			"padding": true,
-			"margin": ["top", "bottom"]
+			"margin": [ "top", "bottom" ]
 		},
 		"anchor": true,
-		"align": ["wide", "full"]
+		"align": [ "wide", "full" ]
 	},
 	"attributes": {
 		"columnCount": {
@@ -37,17 +37,16 @@
 		},
 		"gaps": {
 			"type": "array",
-			"default": [{"value": 30, "min": "", "max": ""}]
+			"default": [ { "value": 10, "min": "", "max": "" } ]
 		},
 		"childrenPaddings": {
 			"type": "array",
-			"default": [{"value": 30, "min": "", "max": ""}]
+			"default": [ { "value": 20, "min": "", "max": "" } ]
 		}
 	},
 	"providesContext": {
 		"autogrid/columnCount": "columnCount",
-		"autogrid/minWidth": "minWidth",
-		"autogrid/gap": "gap"
+		"autogrid/minWidth": "minWidth"
 	},
 	"textdomain": "autogrid",
 	"editorScript": "file:./index.js",

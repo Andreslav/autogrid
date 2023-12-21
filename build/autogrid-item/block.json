@@ -34,8 +34,7 @@
   ],
   "usesContext": [
     "autogrid/columnCount",
-    "autogrid/minWidth",
-    "autogrid/gap"
+    "autogrid/minWidth"
   ],
   "textdomain": "autogrid-item",
   "editorScript": "file:./index.js",

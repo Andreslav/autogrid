@@ -7,7 +7,7 @@
  * @see     https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
 */
 
-namespace Andr;
+namespace Andreslav;
 include __DIR__ . '\..\..\includes\AutogridQuery.php';
 
 
