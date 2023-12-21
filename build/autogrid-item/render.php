@@ -59,5 +59,5 @@ $inlineStyle = $size === '' ? '' :  "--grid-item-column-span:$size;";
 
 <div <?= get_block_wrapper_attributes( ['class' => $uniqueSelector, 'style' => $inlineStyle] ); ?>>
 	<?= $content; ?>
-	<?= $STYLE_CSS ? "<style>$STYLE_CSS</style>" : ''; ?>
 </div>
+<?= $STYLE_CSS ? "<style>$STYLE_CSS</style>" : ''; ?>

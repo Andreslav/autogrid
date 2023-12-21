@@ -125,7 +125,6 @@ export default function Edit( {
 			// setAttributes({indexNode});
 		}
 	}, [ columnCount ] );
-	console.log( sizes );
 
 	return (
 		<>
@@ -137,18 +136,14 @@ export default function Edit( {
 					},
 				} ) }
 			>
-				<div className="wp-block-andreslav-autogrid-item__content">
-					<InnerBlocks
-						template={ TEMPLATE }
-						orientation="horizontal"
-					/>
-				</div>
-				{ STYLE_CSS && (
-					<style
-						dangerouslySetInnerHTML={ { __html: STYLE_CSS } }
-					></style>
-				) }
+				<InnerBlocks template={ TEMPLATE } orientation="horizontal" />
 			</div>
+
+			{ STYLE_CSS && (
+				<style
+					dangerouslySetInnerHTML={ { __html: STYLE_CSS } }
+				></style>
+			) }
 
 			{ /* Begin Sidebar Inspector Zone */ }
 			<InspectorControls>
@@ -176,7 +171,7 @@ export default function Edit( {
 										<li
 											dangerouslySetInnerHTML={ {
 												__html: __(
-													'1. The number of columns that the cell should occupy.',
+													'1. <b>The number of columns</b> that the cell should occupy.',
 													'autogrid-block'
 												),
 											} }
@@ -192,7 +187,7 @@ export default function Edit( {
 										<li
 											dangerouslySetInnerHTML={ {
 												__html: __(
-													'3. <b>The maximum number of columns to be displayed</b> when the rule should stop applying. Optional parameter.',
+													'3. <b>The maximum number of displayed columns</b> after which the rule should stop applying. Optional parameter.',
 													'autogrid-block'
 												),
 											} }
