@@ -29,6 +29,7 @@ function andreslav_block_autogrid_block_block_init() {
 
 	foreach ($block_directories as $block) {
 		register_block_type( $block );
+		wp_set_script_translations( 'andreslav-' . basename($block) . '-editor-script', 'autogrid-block' );
 	}
 }
 add_action( 'init', 'andreslav_block_autogrid_block_block_init' );

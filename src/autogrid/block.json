@@ -21,7 +21,23 @@
 		},
 		"spacing": {
 			"padding": true,
-			"margin": [ "top", "bottom" ]
+			"margin": [ "top", "bottom" ],
+			"__experimentalDefaultControls": {
+				"padding": false,
+				"margin": false
+			}
+		},
+		"__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true,
+			"__experimentalDefaultControls": {
+				"color": false,
+				"radius": false,
+				"style": false,
+				"width": false
+			}
 		},
 		"anchor": true,
 		"align": [ "wide", "full" ]
@@ -48,7 +64,7 @@
 		"autogrid/columnCount": "columnCount",
 		"autogrid/minWidth": "minWidth"
 	},
-	"textdomain": "autogrid",
+	"textdomain": "autogrid-block",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
