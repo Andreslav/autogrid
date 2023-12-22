@@ -6,7 +6,7 @@
   "title": "Autogrid Item",
   "category": "design",
   "icon": "smiley",
-  "description": "CSS Autogrid Block Item.",
+  "description": "Autogrid Block Item.",
   "example": {},
   "supports": {
     "html": false,

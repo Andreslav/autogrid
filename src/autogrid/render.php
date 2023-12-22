@@ -39,7 +39,7 @@ $inlineStyle =  "--grid-column-count:$columnCount;".
 				"--grid-item-padding-child:$childrenPadding"."px;";
 ?>
 
-<div <?php echo get_block_wrapper_attributes( ['class' => $uniqueSelector, 'style' => $inlineStyle] ); ?>>
+<div <?php echo get_block_wrapper_attributes( ['class' => $uniqueSelector . ' andreslav-outside-editor', 'style' => $inlineStyle] ); ?>>
 	<div class="wp-block-andreslav-autogrid__container">
 		<div class="wp-block-andreslav-autogrid__content">
 			<?= $content; ?>

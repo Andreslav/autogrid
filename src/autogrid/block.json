@@ -6,7 +6,7 @@
 	"title": "Autogrid",
 	"category": "design",
 	"icon": "smiley",
-	"description": "CSS Autogrid Block.",
+	"description": "Autogrid Block. The elements inside this block are automatically distributed in columns, filling the available space.",
 	"example": {
 		"attributes": {
 			"columnCount": 2,

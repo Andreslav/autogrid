@@ -43,6 +43,8 @@ export default function BaseControlMedia( {
 	minProp = {},
 	maxProp = {},
 } ) {
+	values = values.map( ( item ) => ( { ...item } ) );
+
 	return (
 		<BaseControl
 			__nextHasNoMarginBottom
@@ -63,7 +65,6 @@ export default function BaseControlMedia( {
 									value: 0,
 									min: '',
 									max: '',
-									dddd: 1,
 								},
 							] );
 						} }

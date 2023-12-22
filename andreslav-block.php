@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Autogrid Block
- * Description:       CSS auto grid
+ * Description:       A block for the WordPress block editor that allows you to create responsive columns.
  * Requires at least: 6.4
  * Requires PHP:      7.0
  * Version:           1.0.0
