@@ -1,4 +1,4 @@
-=== Autogrid Block ===
+=== Autogrid ===
 Contributors:      Andreslav
 Tags:              block, grid, layout, auto-fill, columns
 Tested up to:      6.4
@@ -14,10 +14,10 @@ Autogrid is a block for the WordPress block editor that allows you to create 
 
 The order of customization
 
-Set the maximum number of columns and their minimum width, after reaching which the cells will be redistributed.
-Specify the size of spacing between cells and their padding. These parameters can be configured adaptively, for example by setting min. the size of the container when the value should be applied.
-If necessary, set the width of certain cells by specifying the number of columns they should occupy. You can specify the minimum and maximum number of columns to be displayed when the value should be applied.
-Done! Test.
+1. Set the maximum number of columns and their minimum width, after reaching which the cells will be redistributed.
+2. Specify the size of spacing between cells and their padding. These parameters can be configured adaptively, for example by setting min. the size of the container when the value should be applied.
+3. If necessary, set the width of certain cells by specifying the number of columns they should occupy. You can specify the minimum and maximum number of columns to be displayed when the value should be applied.
+4. Done! Test.
 
 
 == Frequently Asked Questions ==

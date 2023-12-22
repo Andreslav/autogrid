@@ -153,18 +153,18 @@ export default function Edit( {
 							<>
 								{ __(
 									'By default, a cell occupies one column. This option allows you to change this.',
-									'autogrid-block'
+									'autogrid'
 								) }
 								<ModalMoreDetailed
 									title={ __(
 										'Cell size',
-										'autogrid-block'
+										'autogrid'
 									) }
 								>
 									<p>
 										{ __(
 											'By default, a cell occupies one column. This option allows you to change this by defining rules that include the following parameters:',
-											'autogrid-block'
+											'autogrid'
 										) }
 									</p>
 									<ul>
@@ -172,7 +172,7 @@ export default function Edit( {
 											dangerouslySetInnerHTML={ {
 												__html: __(
 													'1. <b>The number of columns</b> that the cell should occupy.',
-													'autogrid-block'
+													'autogrid'
 												),
 											} }
 										></li>
@@ -180,7 +180,7 @@ export default function Edit( {
 											dangerouslySetInnerHTML={ {
 												__html: __(
 													'2. <b>The minimum number of columns to be displayed</b> when the rule should start to apply. Optional parameter.',
-													'autogrid-block'
+													'autogrid'
 												),
 											} }
 										></li>
@@ -188,7 +188,7 @@ export default function Edit( {
 											dangerouslySetInnerHTML={ {
 												__html: __(
 													'3. <b>The maximum number of displayed columns</b> after which the rule should stop applying. Optional parameter.',
-													'autogrid-block'
+													'autogrid'
 												),
 											} }
 										></li>
@@ -196,30 +196,30 @@ export default function Edit( {
 									<p>
 										{ __(
 											'If more than one rule is created, the lower one has higher priority.',
-											'autogrid-block'
+											'autogrid'
 										) }
 									</p>
 								</ModalMoreDetailed>
 							</>
 						}
-						label={ __( 'Cell size', 'autogrid-block' ) }
+						label={ __( 'Cell size', 'autogrid' ) }
 						valueProp={ {
 							min: 1,
 							max: columnCount,
-							label: __( 'Number of columns', 'autogrid-block' ),
+							label: __( 'Number of columns', 'autogrid' ),
 						} }
 						minProp={ {
 							max: columnCount,
 							label: __(
 								'Minimum number of columns displayed',
-								'autogrid-block'
+								'autogrid'
 							),
 						} }
 						maxProp={ {
 							max: columnCount,
 							label: __(
 								'Maximum number of columns displayed.',
-								'autogrid-block'
+								'autogrid'
 							),
 						} }
 						values={ sizes }
@@ -229,8 +229,7 @@ export default function Edit( {
 						baseRule={ {
 							value: columnCount - 1,
 							min: 1,
-							max: '',
-							dddd: 1,
+							max: ''
 						} }
 						unlockLastElement
 						disableUnits

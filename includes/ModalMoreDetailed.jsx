@@ -33,7 +33,7 @@ export default function ModalMoreDetailed( { children, title } ) {
 			<span>
 				{ ' ' }
 				<Button variant="link" onClick={ openModal }>
-					{ __( 'More', 'autogrid-block' ) }
+					{ __( 'More', 'autogrid' ) }
 				</Button>
 			</span>
 			{ isOpen && (
@@ -41,7 +41,7 @@ export default function ModalMoreDetailed( { children, title } ) {
 					<div style={ { maxWidth: '350px' } }>{ children }</div>
 					<Flex direction="row" justify="flex-end">
 						<Button variant="secondary" onClick={ closeModal }>
-							{ __( 'Ok', 'autogrid-block' ) }
+							{ __( 'Ok', 'autogrid' ) }
 						</Button>
 					</Flex>
 				</Modal>

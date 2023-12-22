@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Autogrid Block
+ * Plugin Name:       Autogrid
  * Description:       A block for the WordPress block editor that allows you to create responsive columns.
  * Requires at least: 6.4
  * Requires PHP:      7.0
@@ -9,7 +9,7 @@
  * Author URI:        https://profiles.wordpress.org/andreslav
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       autogrid-block
+ * Text Domain:       autogrid
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,13 +23,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
  */
-function andreslav_block_autogrid_block_block_init() {
+function andreslav_autogrid_block_init() {
 	// Generates an array of directory paths based on the build folder
 	$block_directories = glob(__DIR__ . "/build/*", GLOB_ONLYDIR);
 
 	foreach ($block_directories as $block) {
 		register_block_type( $block );
-		wp_set_script_translations( 'andreslav-' . basename($block) . '-editor-script', 'autogrid-block' );
+		wp_set_script_translations( 'andreslav-' . basename($block) . '-editor-script', 'autogrid' );
 	}
 }
-add_action( 'init', 'andreslav_block_autogrid_block_block_init' );
+add_action( 'init', 'andreslav_autogrid_block_init' );

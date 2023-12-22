@@ -51,41 +51,37 @@ export default function BaseControlMedia( {
 			help={ <span style={ { fontSize: '12px' } }>{ help }</span> }
 		>
 			<Flex>
-				<FlexBlock>
-					<BaseControl.VisualLabel>{ label }</BaseControl.VisualLabel>
-				</FlexBlock>
-				<FlexItem>
-					<Button
-						icon={ <Dashicon icon="plus-alt2" /> }
-						label={ __( 'Add a rule', 'autogrid-block' ) }
-						onClick={ () => {
-							onChange( [
-								...values,
-								baseRule || {
-									value: 0,
-									min: '',
-									max: '',
-								},
-							] );
-						} }
-					/>
-				</FlexItem>
+				<BaseControl.VisualLabel style={ {marginBottom: 0} }>{ label }</BaseControl.VisualLabel>
+				<Button
+					icon={ <Dashicon icon="plus-alt2" /> }
+					label={ __( 'Add a rule', 'autogrid' ) }
+					onClick={ () => {
+						onChange( [
+							...values,
+							baseRule || {
+								value: 0,
+								min: '',
+								max: '',
+							},
+						] );
+					} }
+				/>
 			</Flex>
 			{ !! values.length && (
 				<Flex>
 					<FlexBlock>
 						<BaseControl.VisualLabel>
-							{ __( 'Value', 'autogrid-block' ) }
+							{ __( 'Value', 'autogrid' ) }
 						</BaseControl.VisualLabel>
 					</FlexBlock>
 					<FlexBlock>
 						<BaseControl.VisualLabel>
-							{ __( 'Min', 'autogrid-block' ) }
+							{ __( 'Min', 'autogrid' ) }
 						</BaseControl.VisualLabel>
 					</FlexBlock>
 					<FlexBlock>
 						<BaseControl.VisualLabel>
-							{ __( 'Max', 'autogrid-block' ) }
+							{ __( 'Max', 'autogrid' ) }
 						</BaseControl.VisualLabel>
 					</FlexBlock>
 					<FlexItem>
@@ -102,12 +98,12 @@ export default function BaseControlMedia( {
 			) }
 			{ values.map( ( value, index ) => {
 				return (
-					<Flex key={ index }>
+					<Flex key={ index } align="start">
 						<FlexBlock>
 							<UnitControl
 								label={
 									valueProp.label ||
-									__( 'Value', 'autogrid-block' )
+									__( 'Value', 'autogrid' )
 								}
 								hideLabelFromVision
 								onChange={ ( val ) => {
@@ -137,7 +133,7 @@ export default function BaseControlMedia( {
 									minProp.label ||
 									__(
 										'Minimum container width',
-										'autogrid-block'
+										'autogrid'
 									)
 								}
 								hideLabelFromVision
@@ -165,7 +161,7 @@ export default function BaseControlMedia( {
 									maxProp.label ||
 									__(
 										'Maximum container width',
-										'autogrid-block'
+										'autogrid'
 									)
 								}
 								hideLabelFromVision
@@ -193,8 +189,9 @@ export default function BaseControlMedia( {
 									icon={ <Dashicon icon="minus" /> }
 									label={ __(
 										'Delete a rule',
-										'autogrid-block'
+										'autogrid'
 									) }
+									style={ { height: "30px" } }
 									onClick={ () => {
 										onChange(
 											values.filter(

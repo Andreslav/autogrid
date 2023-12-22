@@ -64,7 +64,7 @@
 		"autogrid/columnCount": "columnCount",
 		"autogrid/minWidth": "minWidth"
 	},
-	"textdomain": "autogrid-block",
+	"textdomain": "autogrid",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",

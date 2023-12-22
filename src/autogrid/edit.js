@@ -101,11 +101,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 			{ /* Begin Sidebar Inspector Zone */ }
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings', 'autogrid-block' ) }>
+				<PanelBody title={ __( 'Settings', 'autogrid' ) }>
 					<RangeControl
 						label={ __(
 							'Maximum number of columns',
-							'autogrid-block'
+							'autogrid'
 						) }
 						min={ 1 }
 						value={ attributes.columnCount }
@@ -115,10 +115,10 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						required
 					/>
 					<UnitControl
-						label={ __( 'Minimum column width', 'autogrid-block' ) }
+						label={ __( 'Minimum column width', 'autogrid' ) }
 						help={ __(
 							'When the cells reach this width, they are rearranged.',
-							'autogrid-block'
+							'autogrid'
 						) }
 						onChange={ ( val ) => {
 							setAttributes( { minWidth: parseInt( val ) } );
@@ -134,26 +134,26 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							<>
 								{ __(
 									'This parameter allows you to set the spacing between cells.',
-									'autogrid-block'
+									'autogrid'
 								) }
 								<ModalMoreDetailed
 									title={ __(
 										'Spacing between cells',
-										'autogrid-block'
+										'autogrid'
 									) }
 								>
 									<p
 										dangerouslySetInnerHTML={ {
 											__html: __(
 												'This parameter allows you to set the spacing between cells. The MIN and MAX values are optional and can be used to customize the adaptability of the parameter. For example, the rule [VALUE: 10, MAX: 500] means that if the width of the container is less than 500 px, the spacing between cells should be 10 px.',
-												'autogrid-block'
+												'autogrid'
 											),
 										} }
 									></p>
 									<p>
 										{ __(
 											'If more than one rule is created, the lower one has higher priority.',
-											'autogrid-block'
+											'autogrid'
 										) }
 									</p>
 								</ModalMoreDetailed>
@@ -161,7 +161,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						}
 						label={ __(
 							'Spacing between cells',
-							'autogrid-block'
+							'autogrid'
 						) }
 						values={ attributes.gaps }
 						onChange={ ( val ) => {
@@ -173,32 +173,32 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							<>
 								{ __(
 									'This option allows you to set the padding of cells.',
-									'autogrid-block'
+									'autogrid'
 								) }
 								<ModalMoreDetailed
 									title={ __(
 										'Padding of cells',
-										'autogrid-block'
+										'autogrid'
 									) }
 								>
 									<p
 										dangerouslySetInnerHTML={ {
 											__html: __(
 												'This option allows you to set the padding of cells. The MIN and MAX values are optional and can be used to customize the adaptability of the parameter. For example, the [VALUE: 10, MIN: 500] rule means that when <u>the container width</u> is greater than 500 px, the padding of cells should be 10 px.',
-												'autogrid-block'
+												'autogrid'
 											),
 										} }
 									></p>
 									<p>
 										{ __(
 											'If more than one rule is created, the lower one has higher priority.',
-											'autogrid-block'
+											'autogrid'
 										) }
 									</p>
 								</ModalMoreDetailed>
 							</>
 						}
-						label={ __( 'Padding of cells', 'autogrid-block' ) }
+						label={ __( 'Padding of cells', 'autogrid' ) }
 						values={ attributes.childrenPaddings }
 						onChange={ ( val ) => {
 							setAttributes( { childrenPaddings: val } );

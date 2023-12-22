@@ -1,5 +1,5 @@
 {
-	"name": "autogrid-block",
+	"name": "autogrid",
 	"version": "0.1.0",
 	"description": "A block for the WordPress block editor that allows you to create responsive columns.",
 	"author": "Andreslav",
@@ -8,7 +8,7 @@
 	"files": [
 		"build",
 		"includes",
-		"andreslav-block.php"
+		"autogrid.php"
 	],
 	"scripts": {
 		"build": "wp-scripts build",
