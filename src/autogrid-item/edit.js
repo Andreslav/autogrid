@@ -28,6 +28,9 @@ import {
 	BaseControl,
 	__experimentalNumberControl as NumberControl,
 } from '@wordpress/components';
+import BaseControlMedia from '../../includes/BaseControlMedia';
+import ModalMoreDetailed from '../../includes/ModalMoreDetailed';
+import AutogridQuery from '../../includes/AutogridQuery';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -36,9 +39,6 @@ import {
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
-import BaseControlMedia from '../../includes/BaseControlMedia';
-import ModalMoreDetailed from '../../includes/ModalMoreDetailed';
-import AutogridQuery from '../../includes/AutogridQuery';
 
 class AutogridChildQuery extends AutogridQuery {
 	getQueryAndPropCSS(
@@ -156,10 +156,7 @@ export default function Edit( {
 									'autogrid'
 								) }
 								<ModalMoreDetailed
-									title={ __(
-										'Cell size',
-										'autogrid'
-									) }
+									title={ __( 'Cell size', 'autogrid' ) }
 								>
 									<p>
 										{ __(
@@ -229,7 +226,7 @@ export default function Edit( {
 						baseRule={ {
 							value: columnCount - 1,
 							min: 1,
-							max: ''
+							max: '',
 						} }
 						unlockLastElement
 						disableUnits

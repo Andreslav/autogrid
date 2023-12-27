@@ -22,5 +22,8 @@
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^26.10.0"
+	},
+	"dependencies": {
+		"@wordpress/icons": "^9.39.0"
 	}
 }

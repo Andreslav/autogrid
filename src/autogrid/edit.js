@@ -22,6 +22,9 @@ import {
 	RangeControl,
 	__experimentalUnitControl as UnitControl,
 } from '@wordpress/components';
+import BaseControlMedia from '../../includes/BaseControlMedia';
+import ModalMoreDetailed from '../../includes/ModalMoreDetailed';
+import AutogridQuery from '../../includes/AutogridQuery';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -30,9 +33,6 @@ import {
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
-import BaseControlMedia from '../../includes/BaseControlMedia';
-import ModalMoreDetailed from '../../includes/ModalMoreDetailed';
-import AutogridQuery from '../../includes/AutogridQuery';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -103,10 +103,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			<InspectorControls>
 				<PanelBody title={ __( 'Settings', 'autogrid' ) }>
 					<RangeControl
-						label={ __(
-							'Maximum number of columns',
-							'autogrid'
-						) }
+						label={ __( 'Maximum number of columns', 'autogrid' ) }
 						min={ 1 }
 						value={ attributes.columnCount }
 						onChange={ ( val ) => {
@@ -159,10 +156,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								</ModalMoreDetailed>
 							</>
 						}
-						label={ __(
-							'Spacing between cells',
-							'autogrid'
-						) }
+						label={ __( 'Spacing between cells', 'autogrid' ) }
 						values={ attributes.gaps }
 						onChange={ ( val ) => {
 							setAttributes( { gaps: val } );
