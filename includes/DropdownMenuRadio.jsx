@@ -14,12 +14,8 @@ import { useState } from '@wordpress/element';
  * @see https://wordpress.github.io/gutenberg/?path=/docs/components-anglepickercontrol--default
  */
 import { DropdownMenu, MenuGroup, MenuItem, Icon } from '@wordpress/components';
-import {
-	sidesAll,
-	sidesHorizontal,
-	sidesVertical,
-	check,
-} from '@wordpress/icons';
+
+import { check } from '@wordpress/icons';
 
 const checkIcon = <Icon icon={ check } size={ 24 } />;
 
@@ -38,37 +34,51 @@ export default function DropdownMenuRadio( {
 	icon,
 	onChange,
 } ) {
+	if ( ! icon ) {
+		const selectesControl = controls.find( ( item ) => {
+			return item.slug === selected;
+		} );
+		if ( selectesControl ) {
+			icon = selectesControl.icon;
+		}
+	}
+
 	return (
-		<DropdownMenu
-			label={ label }
-			icon={ icon }
-			toggleProps={ { isSmall: true } }
-		>
+		<DropdownMenu label={ label } icon={ icon }>
 			{ ( { onClose } ) => (
 				<>
 					<MenuGroup>
-						{ controls.map( ( { label, slug, icon, onClick } ) => {
-							const isSelected = selected === slug;
-							return (
-								<MenuItem
-									key={ slug }
-									icon={ icon }
-									iconPosition="left"
-									isSelected={ isSelected }
-									role="menuitemradio"
-									onClick={ ( e ) => {
-										if ( onClick ) onClick();
-										onChange( slug );
-										onClose();
-									} }
-									suffix={
-										isSelected ? checkIcon : undefined
-									}
-								>
-									{ label }
-								</MenuItem>
-							);
-						} ) }
+						{ controls.map(
+							( {
+								label,
+								slug,
+								icon,
+								onClick,
+								isDestructive,
+							} ) => {
+								const isSelected = selected === slug;
+								return (
+									<MenuItem
+										key={ slug }
+										icon={ icon }
+										iconPosition="left"
+										isSelected={ isSelected }
+										isDestructive={ isDestructive }
+										role="menuitemradio"
+										onClick={ ( e ) => {
+											if ( onClick ) onClick();
+											onChange( slug );
+											onClose();
+										} }
+										suffix={
+											isSelected ? checkIcon : undefined
+										}
+									>
+										{ label }
+									</MenuItem>
+								);
+							}
+						) }
 					</MenuGroup>
 				</>
 			) }

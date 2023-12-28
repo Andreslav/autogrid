@@ -26,17 +26,6 @@ import {
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
 
-// https://github.com/WordPress/gutenberg/blob/trunk/packages/block-editor/src/components/spacing-sizes-control/index.js#L18
-// https://github.com/WordPress/gutenberg/blob/trunk/packages/block-library/src/spacer/controls.js
-
-/**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
- * Those files can contain any CSS code that gets applied to the editor.
- *
- * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
- */
-import './OneSpacingSizesControl.scss';
-
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -46,10 +35,11 @@ import './OneSpacingSizesControl.scss';
  * @return {WPElement} Element to render.
  */
 export default function OneSpacingSizesControl( { label, value, onChange } ) {
+	// Вдохновлён
+	// https://github.com/WordPress/gutenberg/blob/trunk/packages/block-library/src/spacer/controls.js
+	// https://github.com/WordPress/gutenberg/blob/trunk/packages/block-editor/src/components/spacing-sizes-control/index.js#L18
 	const spacingSizes = useSetting( 'spacing.spacingSizes' );
 	const spacingUnits = useSetting( 'spacing.units' );
-
-	console.log( { label, value, onChange } );
 
 	// In most contexts the spacer size cannot meaningfully be set to a
 	// percentage, since this is relative to the parent container. This
@@ -62,7 +52,6 @@ export default function OneSpacingSizesControl( { label, value, onChange } ) {
 		availableUnits: availableUnits,
 	} );
 
-	// const formatValues = ( value ) => {
 	// Force the unit to update to `px` when the Spacer is being resized.
 	const [ parsedQuantity, parsedUnit ] =
 		parseQuantityAndUnitFromRawValue( value );
@@ -70,16 +59,7 @@ export default function OneSpacingSizesControl( { label, value, onChange } ) {
 		? value
 		: [ parsedQuantity, parsedUnit ].join( '' );
 
-	// return computedValue;
-	// }
-
-	console.log( { computedValue } );
-
-	// const [ values, setValues ] = useState( { one: 0 } );
-	// values.one = formatValues( values.one );
-
 	const handleOnChange = ( unprocessedValue ) => {
-		console.log( 4, [ unprocessedValue ] );
 		onChange( unprocessedValue.one );
 	};
 

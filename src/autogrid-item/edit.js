@@ -227,8 +227,8 @@ export default function Edit( {
 							value: columnCount - 1,
 							min: 1,
 							max: '',
+							axis: 'all',
 						} }
-						unlockLastElement
 						disableUnits
 					/>
 				</PanelBody>

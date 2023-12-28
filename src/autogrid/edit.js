@@ -158,8 +158,16 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						}
 						label={ __( 'Spacing between cells', 'autogrid' ) }
 						values={ attributes.gaps }
+						isAxis
+						lockLastElement
 						onChange={ ( val ) => {
 							setAttributes( { gaps: val } );
+						} }
+						minProp={ {
+							help: __( 'Min', 'autogrid' ),
+						} }
+						maxProp={ {
+							help: __( 'Max', 'autogrid' ),
 						} }
 					/>
 					<BaseControlMedia
@@ -194,8 +202,16 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						}
 						label={ __( 'Padding of cells', 'autogrid' ) }
 						values={ attributes.childrenPaddings }
+						isAxis
+						lockLastElement
 						onChange={ ( val ) => {
 							setAttributes( { childrenPaddings: val } );
+						} }
+						minProp={ {
+							help: __( 'Min', 'autogrid' ),
+						} }
+						maxProp={ {
+							help: __( 'Max', 'autogrid' ),
 						} }
 					/>
 				</PanelBody>

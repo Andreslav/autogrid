@@ -24,11 +24,8 @@ import {
 	__experimentalUnitControl as UnitControl,
 	__experimentalHStack as HStack,
 	Modal,
+	Dropdown,
 } from '@wordpress/components';
-
-import OneSpacingSizesControl from './OneSpacingSizesControl';
-import DropdownMenuRadio from './DropdownMenuRadio';
-import { Dropdown } from '@wordpress/components';
 
 import {
 	plus,
@@ -38,6 +35,18 @@ import {
 	sidesHorizontal,
 	sidesVertical,
 } from '@wordpress/icons';
+
+import OneSpacingSizesControl from './OneSpacingSizesControl';
+import DropdownMenuRadio from './DropdownMenuRadio';
+import BaseControlMediaItem from './BaseControlMediaItem';
+
+/**
+ * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
+ * Those files can contain any CSS code that gets applied to the editor.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+import './BaseControlMedia.scss';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -54,53 +63,36 @@ export default function BaseControlMedia( {
 	onChange,
 	disableUnits,
 	baseRule,
-	unlockLastElement,
+	isAxis,
+	lockLastElement,
 	valueProp = {},
 	minProp = {},
 	maxProp = {},
 } ) {
-	values = values.map( ( item ) => ( { ...item } ) );
-	console.log( values );
-
 	const controlsAxis = [
 		{
 			slug: 'all',
 			label: 'All',
+			icon: sidesAll,
 		},
 		{
 			slug: 'horizontal',
 			label: 'Horizontal',
+			icon: sidesHorizontal,
 		},
 		{
 			slug: 'vertical',
 			label: 'Vertical',
+			icon: sidesVertical,
 		},
 	];
-	const iconsAxis = {
-		all: sidesAll,
-		horizontal: sidesHorizontal,
-		vertical: sidesVertical,
-	};
-	const controlsRule = [
-		{
-			slug: 'delete',
-			label: __( 'Delete a rule', 'autogrid' ),
-			isDestructive: true,
-		},
-		{
-			slug: 'moveUp',
-			label: 'Move up',
-		},
-		{
-			slug: 'moveDown',
-			label: 'Move down',
-		},
-	];
+	console.log( values );
 
 	return (
 		<BaseControl
 			__nextHasNoMarginBottom
 			help={ <span style={ { fontSize: '12px' } }>{ help }</span> }
+			className="autogrid-base-control-media"
 		>
 			<Flex>
 				<BaseControl.VisualLabel
@@ -120,13 +112,16 @@ export default function BaseControlMedia( {
 								value: 0,
 								min: '',
 								max: '',
+								...( isAxis
+									? { axis: controlsAxis[ 0 ].slug }
+									: {} ),
 							},
 						] );
 					} }
 				/>
 			</Flex>
-			{ !! values.length && (
-				<Flex>
+			{ disableUnits && !! values.length && (
+				<Flex className="autogrid-help-visual-label">
 					<FlexBlock>
 						<BaseControl.VisualLabel>
 							{ __( 'Value', 'autogrid' ) }
@@ -143,333 +138,56 @@ export default function BaseControlMedia( {
 						</BaseControl.VisualLabel>
 					</FlexBlock>
 					<FlexItem>
-						{ ( values.length > 1 || unlockLastElement ) && (
-							<Button
-								icon={ <Dashicon icon="" /> }
-								style={ { height: 0 } }
-								label=""
-								disabled
-							/>
-						) }
+						<Button
+							icon={ <Dashicon icon="" /> }
+							style={ { height: 0 } }
+							label=""
+							disabled
+						/>
 					</FlexItem>
 				</Flex>
 			) }
 			{ values.map( ( value, index ) => {
-				const useMediaRule = value.min !== '' || value.max !== '';
-				const axis = value.axis || 'all';
-
-				const _controlsRule =
-					values.length > 1 || unlockLastElement
-						? controlsRule
-						: controlsRule.filter(
-								( item ) => item.slug !== 'delete'
-						  );
-
 				return (
-					<div key={ index }>
-						<HStack className="one-spacing-sizes-control">
-							<DropdownMenuRadio
-								label={ __( 'Select a direction' ) }
-								controls={ controlsAxis }
-								selected={ axis }
-								icon={ iconsAxis[ axis ] }
-								onChange={ ( val ) => {
-									value.axis = val;
-									onChange( [ ...values ] );
-								} }
-							/>
-							<FlexBlock>
-								{ disableUnits ? (
-									<FlexBlock>
-										<UnitControl
-											label={
-												valueProp.label ||
-												__( 'Value', 'autogrid' )
-											}
-											hideLabelFromVision
-											onChange={ ( val ) => {
-												value.value = parseInt( val );
-												onChange( [ ...values ] );
-											} }
-											value={ value.value }
-											min={
-												valueProp.min == undefined
-													? 0
-													: valueProp.min
-											}
-											max={
-												valueProp.max == undefined
-													? Infinity
-													: valueProp.max
-											}
-											units={ [] }
-											unit="px"
-											disableUnits={ disableUnits }
-											required
-										/>
-									</FlexBlock>
-								) : (
-									<OneSpacingSizesControl
-										onChange={ ( val ) => {
-											value.value = val;
-											// value.value = parseInt( val );
-											onChange( [ ...values ] );
-										} }
-										value={ value.value }
-									/>
-								) }
-							</FlexBlock>
-							<Dropdown
-								popoverProps={ { placement: 'bottom-end' } }
-								renderToggle={ ( { isOpen, onToggle } ) => (
-									<Button
-										onClick={ onToggle }
-										aria-expanded={ isOpen }
-										icon={ mobile }
-										style={ {
-											opacity: useMediaRule ? 1 : 0.5,
-										} }
-									/>
-								) }
-								renderContent={ () => (
-									<Flex
-										align="start"
-										style={ { minWidth: '140px' } }
-									>
-										<FlexBlock>
-											<UnitControl
-												label={
-													minProp.label ||
-													__(
-														'Minimum container width',
-														'autogrid'
-													)
-												}
-												hideLabelFromVision
-												help={ __( 'Min', 'autogrid' ) }
-												onChange={ ( val ) => {
-													val = parseInt( val );
-													value.min = isNaN( val )
-														? ''
-														: val;
-													onChange( [ ...values ] );
-												} }
-												value={ value.min }
-												min={
-													minProp.min == undefined
-														? 0
-														: minProp.min
-												}
-												max={
-													minProp.max == undefined
-														? Infinity
-														: minProp.max
-												}
-												units={ [] }
-												unit="px"
-												disableUnits={ disableUnits }
-											/>
-										</FlexBlock>
-										<FlexBlock>
-											<UnitControl
-												label={
-													maxProp.label ||
-													__(
-														'Maximum container width',
-														'autogrid'
-													)
-												}
-												hideLabelFromVision
-												help={
-													maxProp.label ||
-													__( 'Max', 'autogrid' )
-												}
-												onChange={ ( val ) => {
-													val = parseInt( val );
-													value.max = isNaN( val )
-														? ''
-														: val;
-													onChange( [ ...values ] );
-												} }
-												value={ value.max }
-												min={
-													maxProp.min == undefined
-														? 0
-														: maxProp.min
-												}
-												max={
-													maxProp.max == undefined
-														? Infinity
-														: maxProp.max
-												}
-												units={ [] }
-												unit="px"
-												disableUnits={ disableUnits }
-											/>
-										</FlexBlock>
-									</Flex>
-								) }
-							/>
-							<DropdownMenuRadio
-								label={ __( '...' ) }
-								controls={ _controlsRule }
-								// selected={ axis }
-								// icon={ iconsAxis[axis] }
-								onChange={ ( val ) => {
-									switch ( val ) {
-										case 'delete':
-											onChange(
-												values.filter(
-													( value, i ) => i != index
-												)
-											);
-											break;
-
-										case 'moveUp':
-											break;
-
-										case 'moveDown':
-											break;
-									}
-								} }
-							/>
-							<FlexItem>
-								{ ( values.length > 1 ||
-									unlockLastElement ) && (
-									<Button
-										icon={ reset }
-										label={ __(
-											'Delete a rule',
-											'autogrid'
-										) }
-										iconSize={ 24 }
-										onClick={ () => {
-											onChange(
-												values.filter(
-													( value, i ) => i != index
-												)
-											);
-										} }
-									/>
-								) }
-							</FlexItem>
-						</HStack>
-
-						<Flex
-							key={ index }
-							align="start"
-							style={ { display: 'none' } }
-						>
-							<FlexBlock>
-								<UnitControl
-									label={
-										valueProp.label ||
-										__( 'Value', 'autogrid' )
-									}
-									hideLabelFromVision
-									onChange={ ( val ) => {
-										value.value = parseInt( val );
-										onChange( [ ...values ] );
-									} }
-									value={ value.value }
-									min={
-										valueProp.min == undefined
-											? 0
-											: valueProp.min
-									}
-									max={
-										valueProp.max == undefined
-											? Infinity
-											: valueProp.max
-									}
-									units={ [] }
-									unit="px"
-									disableUnits={ disableUnits }
-									required
-								/>
-							</FlexBlock>
-							<FlexBlock>
-								<UnitControl
-									label={
-										minProp.label ||
-										__(
-											'Minimum container width',
-											'autogrid'
-										)
-									}
-									hideLabelFromVision
-									onChange={ ( val ) => {
-										value.min = parseInt( val );
-										onChange( [ ...values ] );
-									} }
-									value={ value.min }
-									min={
-										minProp.min == undefined
-											? 0
-											: minProp.min
-									}
-									max={
-										minProp.max == undefined
-											? Infinity
-											: minProp.max
-									}
-									units={ [] }
-									unit="px"
-									disableUnits={ disableUnits }
-								/>
-							</FlexBlock>
-							<FlexBlock>
-								<UnitControl
-									label={
-										maxProp.label ||
-										__(
-											'Maximum container width',
-											'autogrid'
-										)
-									}
-									hideLabelFromVision
-									onChange={ ( val ) => {
-										value.max = parseInt( val );
-										onChange( [ ...values ] );
-									} }
-									value={ value.max }
-									min={
-										maxProp.min == undefined
-											? 0
-											: maxProp.min
-									}
-									max={
-										maxProp.max == undefined
-											? Infinity
-											: maxProp.max
-									}
-									units={ [] }
-									unit="px"
-									disableUnits={ disableUnits }
-								/>
-							</FlexBlock>
-							<FlexItem>
-								{ ( values.length > 1 ||
-									unlockLastElement ) && (
-									<Button
-										icon={ reset }
-										label={ __(
-											'Delete a rule',
-											'autogrid'
-										) }
-										style={ { height: '30px' } }
-										onClick={ () => {
-											onChange(
-												values.filter(
-													( value, i ) => i != index
-												)
-											);
-										} }
-									/>
-								) }
-							</FlexItem>
-						</Flex>
-					</div>
+					<BaseControlMediaItem
+						key={ index }
+						value={ value }
+						onChange={ ( val ) => {
+							values = [ ...values ];
+							values.splice( index, 1, val );
+							onChange( values );
+						} }
+						onDelete={ () => {
+							onChange(
+								values.filter( ( value, i ) => i != index )
+							);
+						} }
+						onMoveUp={ () => {
+							values = [ ...values ];
+							[ values[ index - 1 ], values[ index ] ] = [
+								values[ index ],
+								values[ index - 1 ],
+							];
+							onChange( values );
+						} }
+						onMoveDown={ () => {
+							values = [ ...values ];
+							[ values[ index + 1 ], values[ index ] ] = [
+								values[ index ],
+								values[ index + 1 ],
+							];
+							onChange( values );
+						} }
+						controlsAxis={ controlsAxis }
+						disableUnits={ disableUnits }
+						isAxis={ isAxis }
+						isHideDelete={ values.length === 1 && lockLastElement }
+						isHideMoveUp={ index === 0 }
+						isHideMoveDown={ index === values.length - 1 }
+						valueProp={ valueProp }
+						minProp={ minProp }
+						maxProp={ maxProp }
+					/>
 				);
 			} ) }
 		</BaseControl>
