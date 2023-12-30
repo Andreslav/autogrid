@@ -1,22 +1,20 @@
 /**
  * The following styles get applied inside the editor only.
- *
- * Replace them with your own styles or remove the file completely.
  */
 
 .wp-block-andreslav-autogrid__container {
-	margin: calc(var(--grid-layout-gap, 0px) * -0.5);
+	margin: calc(var(--grid-layout-gap-y) * -0.5) calc(var(--grid-layout-gap-x) * -0.5);
 }
 
 .wp-block-andreslav-autogrid__content > .block-editor-inner-blocks > .block-editor-block-list__layout {
 	display: grid;
- 	grid-template-columns: repeat(auto-fill, minmax(max(var(--grid-item-min-width-teh), var(--grid-item-max-width, 100%)), 1fr));
+ 	grid-template-columns: repeat(auto-fill, minmax(max(var(--grid-item-min-width_), var(--grid-item-max-width_)), 1fr));
 	grid-auto-flow: dense;
 }
 
 .wp-block-andreslav-autogrid-item {
-	margin: calc(var(--grid-layout-gap, 0px) * 0.5);
-	padding: var(--grid-item-padding-child, 0px);
+	margin: calc(var(--grid-layout-gap-y) * 0.5) calc(var(--grid-layout-gap-x) * 0.5);
+	padding: var(--grid-item-padding-child-y) var(--grid-item-padding-child-x);
 	box-sizing: border-box;
 }
 

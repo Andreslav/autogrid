@@ -44,17 +44,22 @@ $minWidth       = intval($block->context['autogrid/minWidth']);
 
 $new_AutogridChildQuery = new AutogridChildQuery([
 	'selector'  => '.' . $uniqueSelector,
-	'otherData' => ['minWidthBlock' => $minWidth]
+	'otherData' => [ 'minWidthBlock' => $minWidth ]
 ]);
 
 $size = $new_AutogridChildQuery->apply([
 	'sizes'    => $sizes,
-	'propName' => '--grid-item-column-span'
+	'defaultValueUnit' => '',
+	'propNames' => [
+		'all' => '--grid-item-column-span',
+	],
 ]);
+
+$sizeAll = $size->all ?? '';
 
 $STYLE_CSS = $new_AutogridChildQuery->getCSS();
 
-$inlineStyle = $size === '' ? '' :  "--grid-item-column-span:$size;";
+$inlineStyle = $sizeAll ? "--grid-item-column-span:$sizeAll;" : '';
 ?>
 
 <div <?= get_block_wrapper_attributes( ['class' => $uniqueSelector, 'style' => $inlineStyle] ); ?>>

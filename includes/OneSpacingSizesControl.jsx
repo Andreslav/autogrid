@@ -52,7 +52,6 @@ export default function OneSpacingSizesControl( { label, value, onChange } ) {
 		availableUnits: availableUnits,
 	} );
 
-	// Force the unit to update to `px` when the Spacer is being resized.
 	const [ parsedQuantity, parsedUnit ] =
 		parseQuantityAndUnitFromRawValue( value );
 	const computedValue = isValueSpacingPreset( value )

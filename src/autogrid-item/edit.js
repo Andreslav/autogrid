@@ -99,7 +99,10 @@ export default function Edit( {
 
 	const size = newAutogridChildQuery.apply( {
 		sizes: sizes,
-		propName: '--grid-item-column-span',
+		defaultValueUnit: '',
+		propNames: {
+			all: '--grid-item-column-span',
+		},
 	} );
 
 	const STYLE_CSS = newAutogridChildQuery.getCSS();
@@ -131,7 +134,7 @@ export default function Edit( {
 			<div
 				{ ...useBlockProps( {
 					style: {
-						'--grid-item-column-span': isNaN( size ) ? '' : size,
+						'--grid-item-column-span': size.all,
 						// 'order': attributes.indexNode
 					},
 				} ) }

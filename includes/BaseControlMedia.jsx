@@ -86,7 +86,6 @@ export default function BaseControlMedia( {
 			icon: sidesVertical,
 		},
 	];
-	console.log( values );
 
 	return (
 		<BaseControl
