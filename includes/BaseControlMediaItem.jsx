@@ -4,7 +4,6 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
 
 /**
  * React hook that is used to mark the block wrapper element.
@@ -25,7 +24,6 @@ import {
 } from '@wordpress/components';
 
 import {
-	plus,
 	mobile,
 	trash,
 	chevronDown,
@@ -85,6 +83,17 @@ export default function BaseControlMediaItem( {
 		},
 	].filter( ( item ) => ! item.hide );
 
+	const onChangeMin = ( val ) => {
+		val = parseInt( val );
+		val = isNaN( val ) ? '' : val;
+		onChange( { ...value, min: val } );
+	};
+	const onChangeMax = ( val ) => {
+		val = parseInt( val );
+		val = isNaN( val ) ? '' : val;
+		onChange( { ...value, max: val } );
+	};
+
 	const MinMax = (
 		<>
 			<FlexBlock>
@@ -95,11 +104,7 @@ export default function BaseControlMediaItem( {
 					}
 					hideLabelFromVision
 					help={ minProp.help }
-					onChange={ ( val ) => {
-						val = parseInt( val );
-						val = isNaN( val ) ? '' : val;
-						onChange( { ...value, min: val } );
-					} }
+					onChange={ onChangeMin }
 					value={ value.min }
 					min={ minProp.min == undefined ? 0 : minProp.min }
 					max={ minProp.max == undefined ? Infinity : minProp.max }
@@ -116,11 +121,7 @@ export default function BaseControlMediaItem( {
 					}
 					hideLabelFromVision
 					help={ maxProp.help }
-					onChange={ ( val ) => {
-						val = parseInt( val );
-						val = isNaN( val ) ? '' : val;
-						onChange( { ...value, max: val } );
-					} }
+					onChange={ onChangeMax }
 					value={ value.max }
 					min={ maxProp.min == undefined ? 0 : maxProp.min }
 					max={ maxProp.max == undefined ? Infinity : maxProp.max }
@@ -134,6 +135,9 @@ export default function BaseControlMediaItem( {
 
 	let InsideStack;
 	if ( disableUnits ) {
+		const onChangeValueDisableUnits = ( val ) => {
+			onChange( { ...value, value: parseInt( val ) } );
+		};
 		InsideStack = (
 			<>
 				<FlexBlock>
@@ -141,9 +145,7 @@ export default function BaseControlMediaItem( {
 						label={ valueProp.label || __( 'Value', 'autogrid' ) }
 						hideLabelFromVision
 						help={ valueProp.help }
-						onChange={ ( val ) => {
-							onChange( { ...value, value: parseInt( val ) } );
-						} }
+						onChange={ onChangeValueDisableUnits }
 						value={ value.value }
 						min={ valueProp.min == undefined ? 0 : valueProp.min }
 						max={
@@ -161,13 +163,17 @@ export default function BaseControlMediaItem( {
 			</>
 		);
 	} else {
+		const onChangeValueUnits = ( val ) => {
+			onChange( { ...value, value: val } );
+		};
+		const onClear = () => {
+			onChange( { ...value, min: '', max: '' } );
+		};
 		InsideStack = (
 			<>
 				<FlexBlock>
 					<OneSpacingSizesControl
-						onChange={ ( val ) => {
-							onChange( { ...value, value: val } );
-						} }
+						onChange={ onChangeValueUnits }
 						value={ value.value }
 					/>
 				</FlexBlock>
@@ -177,7 +183,7 @@ export default function BaseControlMediaItem( {
 						<Button
 							onClick={ onToggle }
 							aria-expanded={ isOpen }
-							label={ __( 'Min and max width' ) }
+							label={ __( 'Min and max width', 'autogrid' ) }
 							icon={ mobile }
 							style={ {
 								opacity: useMediaRule ? 1 : 0.5,
@@ -185,18 +191,55 @@ export default function BaseControlMediaItem( {
 						/>
 					) }
 					renderContent={ () => (
-						<Flex
-							align="start"
-							style={ { minWidth: '140px' } }
-							className="autogrid-dropdown-flex"
-						>
-							{ MinMax }
-						</Flex>
+						<>
+							<Flex
+								align="start"
+								style={ { minWidth: '140px' } }
+								className="autogrid-dropdown-flex"
+							>
+								{ MinMax }
+							</Flex>
+							<Flex
+								direction="row"
+								justify="flex-end"
+								style={ {
+									borderTop: '1px solid rgba(0,0,0,.1)',
+									marginTop: '1em',
+								} }
+							>
+								<Button
+									variant="tertiary"
+									onClick={ onClear }
+									disabled={ useMediaRule ? false : true }
+								>
+									{ __( 'Clear', 'autogrid' ) }
+								</Button>
+							</Flex>
+						</>
 					) }
 				/>
 			</>
 		);
 	}
+
+	const onChangeAxis = ( val ) => {
+		onChange( { ...value, axis: val } );
+	};
+	const onQuickActions = ( val ) => {
+		switch ( val ) {
+			case 'delete':
+				onDelete();
+				break;
+
+			case 'moveUp':
+				onMoveUp();
+				break;
+
+			case 'moveDown':
+				onMoveDown();
+				break;
+		}
+	};
 
 	return (
 		<HStack
@@ -204,12 +247,10 @@ export default function BaseControlMediaItem( {
 		>
 			{ isAxis && (
 				<DropdownMenuRadio
-					label={ __( 'Select an axis' ) }
+					label={ __( 'Select an axis', 'autogrid' ) }
 					controls={ controlsAxis }
 					selected={ axis }
-					onChange={ ( val ) => {
-						onChange( { ...value, axis: val } );
-					} }
+					onChange={ onChangeAxis }
 				/>
 			) }
 
@@ -220,21 +261,7 @@ export default function BaseControlMediaItem( {
 					label={ __( 'Quick actions', 'autogrid' ) }
 					controls={ controlsRule }
 					icon={ moreVertical }
-					onChange={ ( val ) => {
-						switch ( val ) {
-							case 'delete':
-								onDelete();
-								break;
-
-							case 'moveUp':
-								onMoveUp();
-								break;
-
-							case 'moveDown':
-								onMoveDown();
-								break;
-						}
-					} }
+					onChange={ onQuickActions }
 				/>
 			) }
 		</HStack>

@@ -4,7 +4,6 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
 
 /**
  * React hook that is used to mark the block wrapper element.
@@ -15,16 +14,9 @@ import { useState } from '@wordpress/element';
  */
 import {
 	__experimentalSpacingSizesControl as SpacingSizesControl,
-	useSetting,
 	isValueSpacingPreset,
 } from '@wordpress/block-editor';
-import {
-	Button,
-	Flex,
-	Modal,
-	__experimentalUseCustomUnits as useCustomUnits,
-	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
-} from '@wordpress/components';
+import { __experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue } from '@wordpress/components';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -38,19 +30,6 @@ export default function OneSpacingSizesControl( { label, value, onChange } ) {
 	// Вдохновлён
 	// https://github.com/WordPress/gutenberg/blob/trunk/packages/block-library/src/spacer/controls.js
 	// https://github.com/WordPress/gutenberg/blob/trunk/packages/block-editor/src/components/spacing-sizes-control/index.js#L18
-	const spacingSizes = useSetting( 'spacing.spacingSizes' );
-	const spacingUnits = useSetting( 'spacing.units' );
-
-	// In most contexts the spacer size cannot meaningfully be set to a
-	// percentage, since this is relative to the parent container. This
-	// unit is disabled from the UI.
-	const availableUnits = spacingUnits
-		? spacingUnits.filter( ( unit ) => unit !== '%' )
-		: [ 'px', 'em', 'rem', 'vw', 'vh' ];
-
-	const units = useCustomUnits( {
-		availableUnits: availableUnits,
-	} );
 
 	const [ parsedQuantity, parsedUnit ] =
 		parseQuantityAndUnitFromRawValue( value );
@@ -68,7 +47,6 @@ export default function OneSpacingSizesControl( { label, value, onChange } ) {
 			onChange={ handleOnChange }
 			label={ label }
 			sides={ [ 'one' ] }
-			units={ units }
 		/>
 	);
 }

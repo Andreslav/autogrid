@@ -21,10 +21,6 @@ import {
 	FlexBlock,
 	FlexItem,
 	BaseControl,
-	__experimentalUnitControl as UnitControl,
-	__experimentalHStack as HStack,
-	Modal,
-	Dropdown,
 } from '@wordpress/components';
 
 import {
@@ -87,6 +83,47 @@ export default function BaseControlMedia( {
 		},
 	];
 
+	const [ forceUpdate, setForceUpdate ] = useState( 0 );
+	const onSetForceUpdate = () => setForceUpdate( ( v ) => ++v );
+
+	const onAddRule = () => {
+		onChange( [
+			...values,
+			baseRule || {
+				value: 0,
+				min: '',
+				max: '',
+				...( isAxis ? { axis: controlsAxis[ 0 ].slug } : {} ),
+			},
+		] );
+	};
+	const onChangeMediaItem = ( index, val ) => {
+		values = [ ...values ];
+		values.splice( index, 1, val );
+		onChange( values );
+	};
+	const onDeleteMediaItem = ( index ) => {
+		onChange( values.filter( ( value, i ) => i != index ) );
+	};
+	const onMoveUpMediaItem = ( index ) => {
+		values = [ ...values ];
+		[ values[ index - 1 ], values[ index ] ] = [
+			values[ index ],
+			values[ index - 1 ],
+		];
+		onChange( values );
+		onSetForceUpdate();
+	};
+	const onMoveDownMediaItem = ( index ) => {
+		values = [ ...values ];
+		[ values[ index + 1 ], values[ index ] ] = [
+			values[ index ],
+			values[ index + 1 ],
+		];
+		onChange( values );
+		onSetForceUpdate();
+	};
+
 	return (
 		<BaseControl
 			__nextHasNoMarginBottom
@@ -104,19 +141,7 @@ export default function BaseControlMedia( {
 					icon={ plus }
 					label={ __( 'Add a rule', 'autogrid' ) }
 					iconSize={ 24 }
-					onClick={ () => {
-						onChange( [
-							...values,
-							baseRule || {
-								value: 0,
-								min: '',
-								max: '',
-								...( isAxis
-									? { axis: controlsAxis[ 0 ].slug }
-									: {} ),
-							},
-						] );
-					} }
+					onClick={ onAddRule }
 				/>
 			</Flex>
 			{ disableUnits && !! values.length && (
@@ -149,34 +174,12 @@ export default function BaseControlMedia( {
 			{ values.map( ( value, index ) => {
 				return (
 					<BaseControlMediaItem
-						key={ index }
+						key={ forceUpdate + '-' + index }
 						value={ value }
-						onChange={ ( val ) => {
-							values = [ ...values ];
-							values.splice( index, 1, val );
-							onChange( values );
-						} }
-						onDelete={ () => {
-							onChange(
-								values.filter( ( value, i ) => i != index )
-							);
-						} }
-						onMoveUp={ () => {
-							values = [ ...values ];
-							[ values[ index - 1 ], values[ index ] ] = [
-								values[ index ],
-								values[ index - 1 ],
-							];
-							onChange( values );
-						} }
-						onMoveDown={ () => {
-							values = [ ...values ];
-							[ values[ index + 1 ], values[ index ] ] = [
-								values[ index ],
-								values[ index + 1 ],
-							];
-							onChange( values );
-						} }
+						onChange={ onChangeMediaItem.bind( null, index ) }
+						onDelete={ onDeleteMediaItem.bind( null, index ) }
+						onMoveUp={ onMoveUpMediaItem.bind( null, index ) }
+						onMoveDown={ onMoveDownMediaItem.bind( null, index ) }
 						controlsAxis={ controlsAxis }
 						disableUnits={ disableUnits }
 						isAxis={ isAxis }

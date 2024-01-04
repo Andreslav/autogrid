@@ -57,7 +57,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const gap = newAutogridQuery.apply( {
 		sizes: attributes.gaps,
 		propNames: {
-			all: '--grid-layout-gap',
 			horizontal: '--grid-layout-gap-x',
 			vertical: '--grid-layout-gap-y',
 		},
@@ -66,7 +65,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const childrenPadding = newAutogridQuery.apply( {
 		sizes: attributes.childrenPaddings,
 		propNames: {
-			all: '--grid-item-padding-child',
 			horizontal: '--grid-item-padding-child-x',
 			vertical: '--grid-item-padding-child-y',
 		},

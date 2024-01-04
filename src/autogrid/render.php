@@ -24,7 +24,6 @@ $new_AutogridQuery = new AutogridQuery([
 $gap = $new_AutogridQuery->apply([
 	'sizes'    => $gaps,
 	'propNames' => [
-		'all' => '--grid-layout-gap',
 		'horizontal' => '--grid-layout-gap-x',
 		'vertical' => '--grid-layout-gap-y',
 	],
@@ -33,7 +32,6 @@ $gap = $new_AutogridQuery->apply([
 $childrenPadding = $new_AutogridQuery->apply([
 	'sizes'    => $childrenPaddings,
 	'propNames' => [
-		'all' => '--grid-item-padding-child',
 		'horizontal' => '--grid-item-padding-child-x',
 		'vertical' => '--grid-item-padding-child-y',
 	],
@@ -55,7 +53,7 @@ $inlineStyle =  "--grid-column-count:$columnCount;" .
 				( $childrenPaddingVertical ? "--grid-item-padding-child-y:$childrenPaddingVertical;" : '' );
 ?>
 
-<div <?php echo get_block_wrapper_attributes( ['class' => $uniqueSelector . ' andreslav-outside-editor', 'style' => $inlineStyle] ); ?>>
+<div <?= get_block_wrapper_attributes( ['class' => $uniqueSelector . ' andreslav-outside-editor', 'style' => $inlineStyle] ); ?>>
 	<div class="wp-block-andreslav-autogrid__container">
 		<div class="wp-block-andreslav-autogrid__content">
 			<?= $content; ?>

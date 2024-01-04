@@ -39,7 +39,16 @@ if( !class_exists(AutogridQuery::class) ) {
 			$sizes = array_filter( $sizes, function( $item ) { return !$this->checkIsBaseItem( $item ); } );
 
 			// приобразовываем правила в строки CSS, которые помещаются в QUERY_AND_PROPS_CSS и затем объединяем их в STYLE_CSS
-			array_walk( $sizes, function( $item ) use( $propNames ) { $this->dataCollection( $item, $propNames ); } );
+			array_walk( $sizes, function( $item ) use( $propNames ) {
+				$axis = $item[ 'axis' ];
+				if( $axis === $this->ALLOWED_AXES[ 0 ] ) {
+					array_walk( $this->ALLOWED_AXES, function( $itemAxis ) use( $propNames, $item ) {
+						$this->dataCollection( $item, $propNames[ $itemAxis ] ?? '' );
+					} );
+				} else {
+					$this->dataCollection( $item, $propNames[ $axis ] ?? '' );
+				}
+			} );
 			$this->queryAndProps_toStyleCSS();
 
 			// возврат базового значения
@@ -84,7 +93,7 @@ if( !class_exists(AutogridQuery::class) ) {
 
 		public function getLastBase( $items ) {
 			$startBase = [];
-			array_walk( $this->ALLOWED_AXES, function( $item ) use( $startBase ) { $startBase[ $item ] = ''; } );
+			array_walk( $this->ALLOWED_AXES, function( $item ) use( &$startBase ) { $startBase[ $item ] = ''; } );
 
 			return array_reduce(
 				array_filter( $items, [ $this, 'checkIsBaseItem' ] ), 
@@ -124,12 +133,14 @@ if( !class_exists(AutogridQuery::class) ) {
 			];
 		}
 
-		public function dataCollection( $item, $propNames ) {
+		public function dataCollection( $item, $propName ) {
+			if( !$propName ) return;
+
 			[ 'query' => $query, 'value' => $value ] = $this->getQueryAndPropCSS(
 				$item[ 'value' ], 
 				$item[ 'min' ], 
 				$item[ 'max' ], 
-				$propNames[ $item[ 'axis' ] ], 
+				$propName, 
 				$this->otherData
 			);
 

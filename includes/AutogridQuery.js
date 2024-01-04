@@ -39,7 +39,16 @@ export default class AutogridQuery {
 		sizes = sizes.filter( ( item ) => ! this.checkIsBaseItem( item ) );
 
 		// приобразовываем правила в строки CSS, которые помещаются в QUERY_AND_PROPS_CSS и затем объединяем их в STYLE_CSS
-		sizes.forEach( ( item ) => this.dataCollection( item, propNames ) );
+		sizes.forEach( ( item ) => {
+			let axis = item[ 'axis' ];
+			if ( axis === this.ALLOWED_AXES[ 0 ] ) {
+				this.ALLOWED_AXES.forEach( ( itemAxis ) => {
+					this.dataCollection( item, propNames[ itemAxis ] );
+				} );
+			} else {
+				this.dataCollection( item, propNames[ axis ] );
+			}
+		} );
 		this.queryAndProps_toStyleCSS();
 
 		// возврат базового значения
@@ -123,12 +132,14 @@ export default class AutogridQuery {
 		};
 	}
 
-	dataCollection( item, propNames ) {
+	dataCollection( item, propName ) {
+		if ( ! propName ) return;
+
 		let { query, value } = this.getQueryAndPropCSS(
 			item[ 'value' ],
 			item[ 'min' ],
 			item[ 'max' ],
-			propNames[ item[ 'axis' ] ],
+			propName,
 			this.otherData
 		);
 

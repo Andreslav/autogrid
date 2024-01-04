@@ -17,7 +17,9 @@
 		"html": false,
 		"color": {
 			"text": true,
-			"background": true
+			"background": true,
+			"gradients": true,
+			"__experimentalDefaultControls": {}
 		},
 		"spacing": {
 			"padding": true,
@@ -32,12 +34,18 @@
 			"radius": true,
 			"style": true,
 			"width": true,
-			"__experimentalDefaultControls": {
-				"color": false,
-				"radius": false,
-				"style": false,
-				"width": false
-			}
+			"__experimentalDefaultControls": {}
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true,
+			"__experimentalFontFamily": true,
+			"__experimentalFontWeight": true,
+			"__experimentalFontStyle": true,
+			"__experimentalTextTransform": true,
+			"__experimentalTextDecoration": true,
+			"__experimentalLetterSpacing": true,
+			"__experimentalDefaultControls": {}
 		},
 		"anchor": true,
 		"align": [ "wide", "full" ]
@@ -53,11 +61,15 @@
 		},
 		"gaps": {
 			"type": "array",
-			"default": [ { "value": 10, "min": "", "max": "" } ]
+			"default": [
+				{ "value": "var:preset|spacing|10", "min": "", "max": "" }
+			]
 		},
 		"childrenPaddings": {
 			"type": "array",
-			"default": [ { "value": 20, "min": "", "max": "" } ]
+			"default": [
+				{ "value": "var:preset|spacing|20", "min": "", "max": "" }
+			]
 		}
 	},
 	"providesContext": {
