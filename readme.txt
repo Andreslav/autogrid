@@ -2,7 +2,7 @@
 Contributors:      Andreslav
 Tags:              block, grid, layout, auto-fill, columns
 Tested up to:      6.4
-Stable tag:        1.0.0
+Stable tag:        2.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,5 +38,5 @@ The information is obtained based on a comparison of the support of the CSS feat
 
 == Changelog ==
 
-= 0.1.0 =
-* Release
+= 2.0.0 =
+* Added a lot of design tweaks and improved adaptability settings.

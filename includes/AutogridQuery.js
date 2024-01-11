@@ -4,6 +4,7 @@
 import { getSpacingPresetCssVar } from '@wordpress/block-editor';
 
 import { __experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue } from '@wordpress/components';
+import { useSetting } from '@wordpress/block-editor';
 
 export default class AutogridQuery {
 	STYLE_CSS = ''; // для <style>
@@ -14,6 +15,7 @@ export default class AutogridQuery {
 	constructor( { selector, otherData } ) {
 		this.selector = selector || '';
 		this.otherData = otherData || {};
+		this.spacingSizes = useSetting( 'spacing.spacingSizes' ) || [];
 	}
 
 	/*
@@ -60,6 +62,14 @@ export default class AutogridQuery {
 		let clearValue;
 
 		if ( value.includes( 'var:preset|spacing|' ) ) {
+			let slug = value.match( /var:preset\|spacing\|(.+)/ );
+			if ( slug && slug[ 1 ] ) {
+				let is = this.spacingSizes.find(
+					( item ) => item.slug == slug[ 1 ]
+				);
+				if ( ! is ) value = '0px';
+			}
+
 			clearValue = getSpacingPresetCssVar( value );
 		} else {
 			let [ parsedQuantity, parsedUnit ] =

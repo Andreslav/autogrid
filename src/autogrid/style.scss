@@ -14,15 +14,19 @@
 }
   
 .wp-block-andreslav-autogrid__container {
+	// это нужно на случай, если в переменной присвоена несуществующая переменная.
+	--grid-layout-gap-x_: var(--grid-layout-gap-x, 0px);
+	--grid-layout-gap-y_: var(--grid-layout-gap-y, 0px);
+
 	--gap-count_: calc(var(--grid-column-count) - 1);
-	--total-gap-width_: calc(var(--gap-count_) * var(--grid-layout-gap-x));
+	--total-gap-width_: calc(var(--gap-count_) * var(--grid-layout-gap-x_));
 	--grid-item-max-width_: calc((100% - var(--total-gap-width_)) / var(--grid-column-count));
 	--grid-item-min-width_: min(calc(100vw - 40px), var(--grid-item-min-width));
 }
 
 .andreslav-outside-editor {
 	.wp-block-andreslav-autogrid__container {
-		margin: calc(var(--grid-layout-gap-y) * -0.5) calc(var(--grid-layout-gap-x) * -0.5);
+		margin: calc(var(--grid-layout-gap-y_) * -0.5) calc(var(--grid-layout-gap-x_) * -0.5);
 	}
 
 	.wp-block-andreslav-autogrid__content {
@@ -36,8 +40,8 @@
 	}
 	
 	.wp-block-andreslav-autogrid-item {
-		margin: calc(var(--grid-layout-gap-y) * 0.5) calc(var(--grid-layout-gap-x) * 0.5);
-		padding: var(--grid-item-padding-child-y) var(--grid-item-padding-child-x);
+		margin: calc(var(--grid-layout-gap-y_) * 0.5) calc(var(--grid-layout-gap-x_) * 0.5);
+		padding: var(--grid-item-padding-child-y, 0px) var(--grid-item-padding-child-x, 0px);
 		box-sizing: border-box;
 	}
 }

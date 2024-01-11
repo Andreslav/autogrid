@@ -8,7 +8,7 @@
 */
 
 namespace Andreslav;
-include __DIR__ . '\..\..\includes\AutogridQuery.php';
+include __DIR__ . '/../../includes/AutogridQuery.php';
 
 
 $uniqueSelector   = 'wp-block-autogrid-' . wp_unique_id();

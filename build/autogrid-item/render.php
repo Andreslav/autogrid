@@ -8,7 +8,7 @@
 */
 
 namespace Andreslav;
-include __DIR__ . '\..\..\includes\AutogridQuery.php';
+include __DIR__ . '/../../includes/AutogridQuery.php';
 
 
 if( !class_exists(AutogridChildQuery::class) ) {
