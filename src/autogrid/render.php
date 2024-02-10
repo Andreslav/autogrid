@@ -44,6 +44,7 @@ $childrenPaddingHorizontal = $childrenPadding->horizontal;
 $childrenPaddingVertical = $childrenPadding->vertical;
 
 $STYLE_CSS = $new_AutogridQuery->getCSS();
+$STYLE_CSS = $STYLE_CSS ? "<style>$STYLE_CSS</style>" : '';
 
 $inlineStyle =  "--grid-column-count:$columnCount;" .
 				"--grid-item-min-width:$minWidth"."px;" .
@@ -53,11 +54,15 @@ $inlineStyle =  "--grid-column-count:$columnCount;" .
 				( $childrenPaddingVertical ? "--grid-item-padding-child-y:$childrenPaddingVertical;" : '' );
 ?>
 
-<div <?= get_block_wrapper_attributes( ['class' => $uniqueSelector . ' andreslav-outside-editor', 'style' => $inlineStyle] ); ?>>
+<div <?php echo get_block_wrapper_attributes( ['class' => "$uniqueSelector andreslav-outside-editor", 'style' => $inlineStyle] ); ?>>
 	<div class="wp-block-andreslav-autogrid__container">
 		<div class="wp-block-andreslav-autogrid__content">
-			<?= $content; ?>
+			<?php echo $content; ?>
 		</div>
 	</div>
-	<?= $STYLE_CSS ? "<style>$STYLE_CSS</style>" : ''; ?>
+	<?php 
+		// @link https://core.trac.wordpress.org/ticket/48873
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo $STYLE_CSS;
+	?>
 </div>

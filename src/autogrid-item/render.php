@@ -40,6 +40,7 @@ if( !class_exists(AutogridChildQuery::class) ) {
 $uniqueSelector = 'wp-block-autogrid-item-' . wp_unique_id();
 $sizes          = (array) $attributes['sizes'];
 $minWidth       = intval($block->context['autogrid/minWidth']);
+// $allowedtags_andStyle = array_merge(['style' => []], wp_kses_allowed_html( 'post' ));
 // $indexNode      = $attributes['indexNode'];
 
 $new_AutogridChildQuery = new AutogridChildQuery([
@@ -58,11 +59,12 @@ $size = $new_AutogridChildQuery->apply([
 $sizeAll = $size->all ?? '';
 
 $STYLE_CSS = $new_AutogridChildQuery->getCSS();
+$STYLE_CSS = $STYLE_CSS ? "<style>$STYLE_CSS</style>" : '';
 
 $inlineStyle = $sizeAll ? "--grid-item-column-span:$sizeAll;" : '';
 ?>
 
-<div <?= get_block_wrapper_attributes( ['class' => $uniqueSelector, 'style' => $inlineStyle] ); ?>>
-	<?= $content; ?>
+<div <?php echo get_block_wrapper_attributes( ['class' => $uniqueSelector, 'style' => $inlineStyle] ); ?>>
+	<?php echo $content; ?>
 </div>
-<?= $STYLE_CSS ? "<style>$STYLE_CSS</style>" : ''; ?>
+<?php echo wp_kses($STYLE_CSS, ['style' => []]); ?>

@@ -13,7 +13,7 @@
 	--grid-item-min-width: 100%;
 }
   
-.wp-block-andreslav-autogrid__container {
+.wp-block-andreslav-autogrid__content {
 	// это нужно на случай, если в переменной присвоена несуществующая переменная.
 	--grid-layout-gap-x_: var(--grid-layout-gap-x, 0px);
 	--grid-layout-gap-y_: var(--grid-layout-gap-y, 0px);

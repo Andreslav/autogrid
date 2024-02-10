@@ -1,6 +1,6 @@
 {
 	"name": "autogrid",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "A block for the WordPress block editor that allows you to create responsive columns.",
 	"author": "Andreslav",
 	"license": "GPL-2.0-or-later",
