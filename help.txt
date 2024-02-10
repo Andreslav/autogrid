@@ -1,0 +1,10 @@
+Как загружать на SVN хостинг
+
+* https://habr.com/ru/articles/687348/
+* https://misha.agency/wordpress/dobavlenie-plagina-v-repozitorij-wordpress.html
+* https://developer.wordpress.org/plugins/wordpress-org/how-to-use-subversion/
+
+Хостинг
+
+* SVN URL: https://plugins.svn.wordpress.org/autogrid
+* Public URL: https://wordpress.org/plugins/autogrid
