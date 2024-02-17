@@ -22,6 +22,9 @@ import {
 	RangeControl,
 	__experimentalUnitControl as UnitControl,
 } from '@wordpress/components';
+import BaseControlMedia from '../../includes/BaseControlMedia';
+import ModalMoreDetailed from '../../includes/ModalMoreDetailed';
+import AutogridQuery from '../../includes/AutogridQuery';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -30,9 +33,6 @@ import {
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
-import BaseControlMedia from '../../includes/BaseControlMedia';
-import ModalMoreDetailed from '../../includes/ModalMoreDetailed';
-import AutogridQuery from '../../includes/AutogridQuery';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -56,12 +56,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 	const gap = newAutogridQuery.apply( {
 		sizes: attributes.gaps,
-		propName: '--grid-layout-gap',
+		propNames: {
+			horizontal: '--grid-layout-gap-x',
+			vertical: '--grid-layout-gap-y',
+		},
 	} );
 
 	const childrenPadding = newAutogridQuery.apply( {
 		sizes: attributes.childrenPaddings,
-		propName: '--grid-item-padding-child',
+		propNames: {
+			horizontal: '--grid-item-padding-child-x',
+			vertical: '--grid-item-padding-child-y',
+		},
 	} );
 
 	const STYLE_CSS = newAutogridQuery.getCSS();
@@ -73,10 +79,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					style: {
 						'--grid-item-min-width':
 							parseInt( attributes.minWidth ) + 'px',
-						'--grid-layout-gap': isNaN( gap ) ? '' : gap + 'px',
-						'--grid-item-padding-child': isNaN( childrenPadding )
-							? ''
-							: childrenPadding + 'px',
+						'--grid-layout-gap-x': gap.horizontal,
+						'--grid-layout-gap-y': gap.vertical,
+						'--grid-item-padding-child-x':
+							childrenPadding.horizontal,
+						'--grid-item-padding-child-y': childrenPadding.vertical,
 						'--grid-column-count': parseInt(
 							attributes.columnCount
 						),
@@ -103,10 +110,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			<InspectorControls>
 				<PanelBody title={ __( 'Settings', 'autogrid' ) }>
 					<RangeControl
-						label={ __(
-							'Maximum number of columns',
-							'autogrid'
-						) }
+						label={ __( 'Maximum number of columns', 'autogrid' ) }
 						min={ 1 }
 						value={ attributes.columnCount }
 						onChange={ ( val ) => {
@@ -159,13 +163,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								</ModalMoreDetailed>
 							</>
 						}
-						label={ __(
-							'Spacing between cells',
-							'autogrid'
-						) }
+						label={ __( 'Spacing between cells', 'autogrid' ) }
 						values={ attributes.gaps }
+						isAxis
+						lockLastElement
 						onChange={ ( val ) => {
 							setAttributes( { gaps: val } );
+						} }
+						minProp={ {
+							help: __( 'Min', 'autogrid' ),
+						} }
+						maxProp={ {
+							help: __( 'Max', 'autogrid' ),
 						} }
 					/>
 					<BaseControlMedia
@@ -200,8 +209,16 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						}
 						label={ __( 'Padding of cells', 'autogrid' ) }
 						values={ attributes.childrenPaddings }
+						isAxis
+						lockLastElement
 						onChange={ ( val ) => {
 							setAttributes( { childrenPaddings: val } );
+						} }
+						minProp={ {
+							help: __( 'Min', 'autogrid' ),
+						} }
+						maxProp={ {
+							help: __( 'Max', 'autogrid' ),
 						} }
 					/>
 				</PanelBody>

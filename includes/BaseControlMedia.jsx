@@ -4,6 +4,7 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
  */
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 
 /**
  * React hook that is used to mark the block wrapper element.
@@ -15,13 +16,33 @@ import { __ } from '@wordpress/i18n';
 import {
 	Button,
 	Dashicon,
+	Icon,
 	Flex,
 	FlexBlock,
 	FlexItem,
 	BaseControl,
-	__experimentalUnitControl as UnitControl,
-	Modal,
 } from '@wordpress/components';
+
+import {
+	plus,
+	reset,
+	mobile,
+	sidesAll,
+	sidesHorizontal,
+	sidesVertical,
+} from '@wordpress/icons';
+
+import OneSpacingSizesControl from './OneSpacingSizesControl';
+import DropdownMenuRadio from './DropdownMenuRadio';
+import BaseControlMediaItem from './BaseControlMediaItem';
+
+/**
+ * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
+ * Those files can contain any CSS code that gets applied to the editor.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+import './BaseControlMedia.scss';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -38,37 +59,93 @@ export default function BaseControlMedia( {
 	onChange,
 	disableUnits,
 	baseRule,
-	unlockLastElement,
+	isAxis,
+	lockLastElement,
 	valueProp = {},
 	minProp = {},
 	maxProp = {},
 } ) {
-	values = values.map( ( item ) => ( { ...item } ) );
+	const controlsAxis = [
+		{
+			slug: 'all',
+			label: 'All',
+			icon: sidesAll,
+		},
+		{
+			slug: 'horizontal',
+			label: 'Horizontal',
+			icon: sidesHorizontal,
+		},
+		{
+			slug: 'vertical',
+			label: 'Vertical',
+			icon: sidesVertical,
+		},
+	];
+
+	const [ forceUpdate, setForceUpdate ] = useState( 0 );
+	const onSetForceUpdate = () => setForceUpdate( ( v ) => ++v );
+
+	const onAddRule = () => {
+		onChange( [
+			...values,
+			baseRule || {
+				value: 0,
+				min: '',
+				max: '',
+				...( isAxis ? { axis: controlsAxis[ 0 ].slug } : {} ),
+			},
+		] );
+	};
+	const onChangeMediaItem = ( index, val ) => {
+		values = [ ...values ];
+		values.splice( index, 1, val );
+		onChange( values );
+	};
+	const onDeleteMediaItem = ( index ) => {
+		onChange( values.filter( ( value, i ) => i != index ) );
+	};
+	const onMoveUpMediaItem = ( index ) => {
+		values = [ ...values ];
+		[ values[ index - 1 ], values[ index ] ] = [
+			values[ index ],
+			values[ index - 1 ],
+		];
+		onChange( values );
+		onSetForceUpdate();
+	};
+	const onMoveDownMediaItem = ( index ) => {
+		values = [ ...values ];
+		[ values[ index + 1 ], values[ index ] ] = [
+			values[ index ],
+			values[ index + 1 ],
+		];
+		onChange( values );
+		onSetForceUpdate();
+	};
 
 	return (
 		<BaseControl
 			__nextHasNoMarginBottom
 			help={ <span style={ { fontSize: '12px' } }>{ help }</span> }
+			className="autogrid-base-control-media"
 		>
 			<Flex>
-				<BaseControl.VisualLabel style={ {marginBottom: 0} }>{ label }</BaseControl.VisualLabel>
+				<BaseControl.VisualLabel
+					as="legend"
+					style={ { marginBottom: 0 } }
+				>
+					{ label }
+				</BaseControl.VisualLabel>
 				<Button
-					icon={ <Dashicon icon="plus-alt2" /> }
+					icon={ plus }
 					label={ __( 'Add a rule', 'autogrid' ) }
-					onClick={ () => {
-						onChange( [
-							...values,
-							baseRule || {
-								value: 0,
-								min: '',
-								max: '',
-							},
-						] );
-					} }
+					iconSize={ 24 }
+					onClick={ onAddRule }
 				/>
 			</Flex>
-			{ !! values.length && (
-				<Flex>
+			{ disableUnits && !! values.length && (
+				<Flex className="autogrid-help-visual-label">
 					<FlexBlock>
 						<BaseControl.VisualLabel>
 							{ __( 'Value', 'autogrid' ) }
@@ -85,124 +162,34 @@ export default function BaseControlMedia( {
 						</BaseControl.VisualLabel>
 					</FlexBlock>
 					<FlexItem>
-						{ ( values.length > 1 || unlockLastElement ) && (
-							<Button
-								icon={ <Dashicon icon="" /> }
-								style={ { height: 0 } }
-								label=""
-								disabled
-							/>
-						) }
+						<Button
+							icon={ <Dashicon icon="" /> }
+							style={ { height: 0 } }
+							label=""
+							disabled
+						/>
 					</FlexItem>
 				</Flex>
 			) }
 			{ values.map( ( value, index ) => {
 				return (
-					<Flex key={ index } align="start">
-						<FlexBlock>
-							<UnitControl
-								label={
-									valueProp.label ||
-									__( 'Value', 'autogrid' )
-								}
-								hideLabelFromVision
-								onChange={ ( val ) => {
-									value.value = parseInt( val );
-									onChange( [ ...values ] );
-								} }
-								value={ value.value }
-								min={
-									valueProp.min == undefined
-										? 0
-										: valueProp.min
-								}
-								max={
-									valueProp.max == undefined
-										? Infinity
-										: valueProp.max
-								}
-								units={ [] }
-								unit="px"
-								disableUnits={ disableUnits }
-								required
-							/>
-						</FlexBlock>
-						<FlexBlock>
-							<UnitControl
-								label={
-									minProp.label ||
-									__(
-										'Minimum container width',
-										'autogrid'
-									)
-								}
-								hideLabelFromVision
-								onChange={ ( val ) => {
-									value.min = parseInt( val );
-									onChange( [ ...values ] );
-								} }
-								value={ value.min }
-								min={
-									minProp.min == undefined ? 0 : minProp.min
-								}
-								max={
-									minProp.max == undefined
-										? Infinity
-										: minProp.max
-								}
-								units={ [] }
-								unit="px"
-								disableUnits={ disableUnits }
-							/>
-						</FlexBlock>
-						<FlexBlock>
-							<UnitControl
-								label={
-									maxProp.label ||
-									__(
-										'Maximum container width',
-										'autogrid'
-									)
-								}
-								hideLabelFromVision
-								onChange={ ( val ) => {
-									value.max = parseInt( val );
-									onChange( [ ...values ] );
-								} }
-								value={ value.max }
-								min={
-									maxProp.min == undefined ? 0 : maxProp.min
-								}
-								max={
-									maxProp.max == undefined
-										? Infinity
-										: maxProp.max
-								}
-								units={ [] }
-								unit="px"
-								disableUnits={ disableUnits }
-							/>
-						</FlexBlock>
-						<FlexItem>
-							{ ( values.length > 1 || unlockLastElement ) && (
-								<Button
-									icon={ <Dashicon icon="minus" /> }
-									label={ __(
-										'Delete a rule',
-										'autogrid'
-									) }
-									style={ { height: "30px" } }
-									onClick={ () => {
-										onChange(
-											values.filter(
-												( value, i ) => i != index
-											)
-										);
-									} }
-								/>
-							) }
-						</FlexItem>
-					</Flex>
+					<BaseControlMediaItem
+						key={ forceUpdate + '-' + index }
+						value={ value }
+						onChange={ onChangeMediaItem.bind( null, index ) }
+						onDelete={ onDeleteMediaItem.bind( null, index ) }
+						onMoveUp={ onMoveUpMediaItem.bind( null, index ) }
+						onMoveDown={ onMoveDownMediaItem.bind( null, index ) }
+						controlsAxis={ controlsAxis }
+						disableUnits={ disableUnits }
+						isAxis={ isAxis }
+						isHideDelete={ values.length === 1 && lockLastElement }
+						isHideMoveUp={ index === 0 }
+						isHideMoveDown={ index === values.length - 1 }
+						valueProp={ valueProp }
+						minProp={ minProp }
+						maxProp={ maxProp }
+					/>
 				);
 			} ) }
 		</BaseControl>

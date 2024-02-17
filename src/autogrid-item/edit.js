@@ -28,6 +28,9 @@ import {
 	BaseControl,
 	__experimentalNumberControl as NumberControl,
 } from '@wordpress/components';
+import BaseControlMedia from '../../includes/BaseControlMedia';
+import ModalMoreDetailed from '../../includes/ModalMoreDetailed';
+import AutogridQuery from '../../includes/AutogridQuery';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -36,9 +39,6 @@ import {
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
-import BaseControlMedia from '../../includes/BaseControlMedia';
-import ModalMoreDetailed from '../../includes/ModalMoreDetailed';
-import AutogridQuery from '../../includes/AutogridQuery';
 
 class AutogridChildQuery extends AutogridQuery {
 	getQueryAndPropCSS(
@@ -99,7 +99,10 @@ export default function Edit( {
 
 	const size = newAutogridChildQuery.apply( {
 		sizes: sizes,
-		propName: '--grid-item-column-span',
+		defaultValueUnit: '',
+		propNames: {
+			all: '--grid-item-column-span',
+		},
 	} );
 
 	const STYLE_CSS = newAutogridChildQuery.getCSS();
@@ -131,7 +134,7 @@ export default function Edit( {
 			<div
 				{ ...useBlockProps( {
 					style: {
-						'--grid-item-column-span': isNaN( size ) ? '' : size,
+						'--grid-item-column-span': size.all,
 						// 'order': attributes.indexNode
 					},
 				} ) }
@@ -156,10 +159,7 @@ export default function Edit( {
 									'autogrid'
 								) }
 								<ModalMoreDetailed
-									title={ __(
-										'Cell size',
-										'autogrid'
-									) }
+									title={ __( 'Cell size', 'autogrid' ) }
 								>
 									<p>
 										{ __(
@@ -229,9 +229,9 @@ export default function Edit( {
 						baseRule={ {
 							value: columnCount - 1,
 							min: 1,
-							max: ''
+							max: '',
+							axis: 'all',
 						} }
-						unlockLastElement
 						disableUnits
 					/>
 				</PanelBody>

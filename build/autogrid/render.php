@@ -8,7 +8,7 @@
 */
 
 namespace Andreslav;
-include __DIR__ . '\..\..\includes\AutogridQuery.php';
+include __DIR__ . '/../../includes/AutogridQuery.php';
 
 
 $uniqueSelector   = 'wp-block-autogrid-' . wp_unique_id();
@@ -22,28 +22,47 @@ $new_AutogridQuery = new AutogridQuery([
 ]);
 
 $gap = $new_AutogridQuery->apply([
-	'sizes'    => $gaps, 
-	'propName' => '--grid-layout-gap'
+	'sizes'    => $gaps,
+	'propNames' => [
+		'horizontal' => '--grid-layout-gap-x',
+		'vertical' => '--grid-layout-gap-y',
+	],
 ]);
 
 $childrenPadding = $new_AutogridQuery->apply([
-	'sizes'    => $childrenPaddings, 
-	'propName' => '--grid-item-padding-child'
+	'sizes'    => $childrenPaddings,
+	'propNames' => [
+		'horizontal' => '--grid-item-padding-child-x',
+		'vertical' => '--grid-item-padding-child-y',
+	],
 ]);
 
-$STYLE_CSS = $new_AutogridQuery->getCSS();
+$gapHorizontal = $gap->horizontal;
+$gapVertical = $gap->vertical;
 
-$inlineStyle =  "--grid-column-count:$columnCount;".
-				"--grid-item-min-width:$minWidth"."px;".
-				"--grid-layout-gap:$gap"."px;".
-				"--grid-item-padding-child:$childrenPadding"."px;";
+$childrenPaddingHorizontal = $childrenPadding->horizontal;
+$childrenPaddingVertical = $childrenPadding->vertical;
+
+$STYLE_CSS = $new_AutogridQuery->getCSS();
+$STYLE_CSS = $STYLE_CSS ? "<style>$STYLE_CSS</style>" : '';
+
+$inlineStyle =  "--grid-column-count:$columnCount;" .
+				"--grid-item-min-width:$minWidth"."px;" .
+				( $gapHorizontal ? "--grid-layout-gap-x:$gapHorizontal;" : '' ) .
+				( $gapVertical ? "--grid-layout-gap-y:$gapVertical;" : '' ) .
+				( $childrenPaddingHorizontal ? "--grid-item-padding-child-x:$childrenPaddingHorizontal;" : '' ) .
+				( $childrenPaddingVertical ? "--grid-item-padding-child-y:$childrenPaddingVertical;" : '' );
 ?>
 
-<div <?php echo get_block_wrapper_attributes( ['class' => $uniqueSelector . ' andreslav-outside-editor', 'style' => $inlineStyle] ); ?>>
+<div <?php echo get_block_wrapper_attributes( ['class' => "$uniqueSelector andreslav-outside-editor", 'style' => $inlineStyle] ); ?>>
 	<div class="wp-block-andreslav-autogrid__container">
 		<div class="wp-block-andreslav-autogrid__content">
-			<?= $content; ?>
+			<?php echo $content; ?>
 		</div>
 	</div>
-	<?= $STYLE_CSS ? "<style>$STYLE_CSS</style>" : ''; ?>
+	<?php 
+		// @link https://core.trac.wordpress.org/ticket/48873
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo $STYLE_CSS;
+	?>
 </div>

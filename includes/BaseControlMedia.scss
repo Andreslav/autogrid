@@ -1,0 +1,32 @@
+.autogrid-base-control-media {
+	.spacing-sizes-control__header,
+	.spacing-sizes-control__custom-value-range {
+		display: none;
+	}
+	.components-button,
+	.components-dropdown {
+		padding: 0;
+		min-width: 24px;
+	    height: 24px;
+	}
+	.spacing-sizes-control__custom-value-input > .components-base-control__field > .components-flex {
+		height: 40px;
+	    padding: 5px 0;
+	}
+	.components-input-control__container > .components-input-control__suffix > .components-unit-control__select  {
+		padding-top: 2px;
+		margin-inline-end: 3px;
+	}
+	 .autogrid-h-stack-disable-units .components-input-control {
+		margin-bottom: 0 !important;
+		padding: 5px 0;
+	}
+	.autogrid-help-visual-label .components-base-control__label {
+		margin-bottom: 3px;
+		margin-top: 6px;
+    	text-transform: none;
+	}
+}
+.autogrid-dropdown-flex .components-base-control__help {
+	margin-top: 4px;
+}

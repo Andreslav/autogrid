@@ -9,60 +9,110 @@ if( !class_exists(AutogridQuery::class) ) {
 
 		private $STYLE_CSS = ''; // для <style>
 		private $QUERY_AND_PROPS_CSS = []; // {query1: [prop, prop, ...], query2: [prop, ...], ...}
+		private $ALLOWED_AXES = ['all', 'horizontal', 'vertical'];
+		private $DEFAULT_VALUE_UNIT = 'px';
 
-		public function __construct($param) {
-			$this->selector = isset($param['selector']) ? $param['selector'] : '';
-			$this->otherData = isset($param['otherData']) ? $param['otherData'] : [];
+		public function __construct( $param ) {
+			$this->selector = isset( $param['selector'] ) ? $param[ 'selector' ] : '';
+			$this->otherData = isset( $param['otherData'] ) ? $param[ 'otherData' ] : [];
 		}
 
-		public function apply($param) {
-			['sizes' => $sizes, 'propName' => $propName] = $param;
+		/*
+			sizes: { value: int | string, min: int, max: int, axis: string }
+			propNames: { all, horizontal?, vertical? }; key as ALLOWED_AXES
+			defaultValueUnit: string
+		*/
+		public function apply( $param ) {
+			[ 'sizes' => $sizes, 'propNames' => $propNames ] = $param;
+			if( isset( $param[ 'defaultValueUnit' ] ) ) $this->DEFAULT_VALUE_UNIT = $param[ 'defaultValueUnit' ];
 
 			// валидация и очистка
 			$sizes = array_filter(
-				array_map( [$this, 'format'], (array) $sizes ), 
-				[$this, 'checkIsValidItem']
+				array_map( [ $this, 'format' ], (array) $sizes ), 
+				[ $this, 'checkIsValidItem' ]
 			);
 
-			// извлекаем правила, в которых не заданы значения min и max и берём 'value' последнего из них
+			// извлекаем правила, в которых не заданы значения min и max и берём 'value' последних из них
 			$baseSize = $this->getLastBase($sizes);
 
 			// оставляем правила, в которых задано хотябы одно из значений: min или max
-			$sizes = array_filter( $sizes, function($item) { return !$this->checkIsBaseItem($item); } );
+			$sizes = array_filter( $sizes, function( $item ) { return !$this->checkIsBaseItem( $item ); } );
 
 			// приобразовываем правила в строки CSS, которые помещаются в QUERY_AND_PROPS_CSS и затем объединяем их в STYLE_CSS
-			array_walk( $sizes, function($item) use($propName) { $this->dataCollection($item, $propName); } );
+			array_walk( $sizes, function( $item ) use( $propNames ) {
+				$axis = $item[ 'axis' ];
+				if( $axis === $this->ALLOWED_AXES[ 0 ] ) {
+					array_walk( $this->ALLOWED_AXES, function( $itemAxis ) use( $propNames, $item ) {
+						$this->dataCollection( $item, $propNames[ $itemAxis ] ?? '' );
+					} );
+				} else {
+					$this->dataCollection( $item, $propNames[ $axis ] ?? '' );
+				}
+			} );
 			$this->queryAndProps_toStyleCSS();
 
 			// возврат базового значения
-			return $baseSize;
+			return (object) $baseSize;
 		}
 
-		public function format($item) {
+		public function format( $item ) {
+			$value = $item['value'];
+			$clearValue = is_string( $value ) || is_numeric( $value ) ? (string) $value : '';
+
+			// Get spacing CSS variable from preset value if provided.
+			if ( str_contains( $clearValue, 'var:preset|spacing|' ) ) {
+				$index_to_splice = strrpos( $clearValue, '|' ) + 1;
+				$slug            = _wp_to_kebab_case( substr( $clearValue, $index_to_splice ) );
+				$clearValue      = "var(--wp--preset--spacing--$slug)";
+			} else {
+				preg_match( '/([\d.\-\+]*)\s*(.*)/', $clearValue, $unitMatch );
+				$parsedQuantity = $unitMatch[ 1 ];
+				$parsedUnit = strtolower( $unitMatch[ 2 ] );
+				if ( $parsedQuantity !== '' && !$parsedUnit ) $parsedUnit = $this->DEFAULT_VALUE_UNIT;
+				$clearValue = $parsedQuantity . $parsedUnit;
+			}
+
+			$axis = $item['axis'] ?? '';
+			if( !$axis || !in_array( $axis, $this->ALLOWED_AXES ) ) $axis = $this->ALLOWED_AXES[0];
+
 			return [
-				'value' => $item['value'] === '' || $item['value'] === null ? '' : intval($item['value']), 
-				'min'   => $item['min']   === '' || $item['min']   === null ? '' : intval($item['min']), 
-				'max'   => $item['max']   === '' || $item['max']   === null ? '' : intval($item['max'])
+				'value' => $clearValue, 
+				'min'   => $item[ 'min' ] === '' || $item[ 'min' ] === null ? '' : intval( $item[ 'min' ] ), 
+				'max'   => $item[ 'max' ] === '' || $item[ 'max' ] === null ? '' : intval( $item[ 'max' ] ),
+				'axis'  => $axis
 			];
 		}
 
-		public function checkIsValidItem($item) {
-			return $item['value'] !== '';
+		public function checkIsValidItem( $item ) {
+			return $item[ 'value' ] !== '';
 		}
 
-		public function checkIsBaseItem($item) {
-			return $item['min'] === '' && $item['max'] === '';
+		public function checkIsBaseItem( $item ) {
+			return $item[ 'min' ] === '' && $item[ 'max' ] === '';
 		}
 
-		public function getLastBase($items) {
-			return array_reduce( 
-				array_filter( $items, [$this, 'checkIsBaseItem'] ), 
-				function($v, $item) { return $item['value']; }, 
-				'' 
+		public function getLastBase( $items ) {
+			$startBase = [];
+			array_walk( $this->ALLOWED_AXES, function( $item ) use( &$startBase ) { $startBase[ $item ] = ''; } );
+
+			return array_reduce(
+				array_filter( $items, [ $this, 'checkIsBaseItem' ] ), 
+				function($rez, $item) {
+					$value = $item[ 'value' ];
+					if( $item[ 'axis' ] === $this->ALLOWED_AXES[ 0 ] ) {
+						array_walk( $this->ALLOWED_AXES, function( $item ) use( &$rez, $value ) {
+							$rez[ $item ] = $value;
+						} );
+					} else {
+						$rez[ $item[ 'axis' ] ] = $value;
+					}
+					return $rez;
+				}, 
+				$startBase
 			);
 		}
 
-		public function getQueryAndPropCSS($value, $min, $max, $propName, $otherData) {
+		public function getQueryAndPropCSS( $value, $min, $max, $propName, $otherData ) {
 			$querySize = ''; $width; $minWidth; $maxWidth;
 
 			if(	$min !== '' ) {
@@ -79,21 +129,29 @@ if( !class_exists(AutogridQuery::class) ) {
 
 			return [
 				'query' => $querySize ? "@container autogrid $querySize" : '',
-				'value' => $propName . ':' . $value . 'px;'
+				'value' => $propName . ':' . $value . ';'
 			];
 		}
 
-		public function dataCollection($item, $propName) {
-			['query' => $query, 'value' => $value] = $this->getQueryAndPropCSS( $item['value'], $item['min'], $item['max'], $propName, $this->otherData );
+		public function dataCollection( $item, $propName ) {
+			if( !$propName ) return;
+
+			[ 'query' => $query, 'value' => $value ] = $this->getQueryAndPropCSS(
+				$item[ 'value' ], 
+				$item[ 'min' ], 
+				$item[ 'max' ], 
+				$propName, 
+				$this->otherData
+			);
 
 			// заполняем
-			if( !isset($this->QUERY_AND_PROPS_CSS[$query]) ) $this->QUERY_AND_PROPS_CSS[$query] = [];
-			$this->QUERY_AND_PROPS_CSS[$query][] = $value;
+			if( !isset( $this->QUERY_AND_PROPS_CSS[$query] ) ) $this->QUERY_AND_PROPS_CSS[$query] = [];
+			$this->QUERY_AND_PROPS_CSS[ $query ][] = $value;
 		}
 
 		public function queryAndProps_toStyleCSS() {
 			foreach( $this->QUERY_AND_PROPS_CSS as $key => $value ) {
-				$this->STYLE_CSS .= $key . '{' . $this->selector . '{' . join('', $value) . '}}';
+				$this->STYLE_CSS .= $key . '{' . $this->selector . '{' . join( '', $value ) . '}}';
 			}
 
 			// очищаем

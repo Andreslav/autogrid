@@ -8,7 +8,7 @@
 */
 
 namespace Andreslav;
-include __DIR__ . '\..\..\includes\AutogridQuery.php';
+include __DIR__ . '/../../includes/AutogridQuery.php';
 
 
 if( !class_exists(AutogridChildQuery::class) ) {
@@ -40,24 +40,31 @@ if( !class_exists(AutogridChildQuery::class) ) {
 $uniqueSelector = 'wp-block-autogrid-item-' . wp_unique_id();
 $sizes          = (array) $attributes['sizes'];
 $minWidth       = intval($block->context['autogrid/minWidth']);
+// $allowedtags_andStyle = array_merge(['style' => []], wp_kses_allowed_html( 'post' ));
 // $indexNode      = $attributes['indexNode'];
 
 $new_AutogridChildQuery = new AutogridChildQuery([
 	'selector'  => '.' . $uniqueSelector,
-	'otherData' => ['minWidthBlock' => $minWidth]
+	'otherData' => [ 'minWidthBlock' => $minWidth ]
 ]);
 
 $size = $new_AutogridChildQuery->apply([
 	'sizes'    => $sizes,
-	'propName' => '--grid-item-column-span'
+	'defaultValueUnit' => '',
+	'propNames' => [
+		'all' => '--grid-item-column-span',
+	],
 ]);
 
-$STYLE_CSS = $new_AutogridChildQuery->getCSS();
+$sizeAll = $size->all ?? '';
 
-$inlineStyle = $size === '' ? '' :  "--grid-item-column-span:$size;";
+$STYLE_CSS = $new_AutogridChildQuery->getCSS();
+$STYLE_CSS = $STYLE_CSS ? "<style>$STYLE_CSS</style>" : '';
+
+$inlineStyle = $sizeAll ? "--grid-item-column-span:$sizeAll;" : '';
 ?>
 
-<div <?= get_block_wrapper_attributes( ['class' => $uniqueSelector, 'style' => $inlineStyle] ); ?>>
-	<?= $content; ?>
+<div <?php echo get_block_wrapper_attributes( ['class' => $uniqueSelector, 'style' => $inlineStyle] ); ?>>
+	<?php echo $content; ?>
 </div>
-<?= $STYLE_CSS ? "<style>$STYLE_CSS</style>" : ''; ?>
+<?php echo wp_kses($STYLE_CSS, ['style' => []]); ?>
