@@ -2,10 +2,10 @@
 /**
  * Для генерации CSS
 */
-namespace Andreslav;
+namespace Andreslav\Autogrid;
 
-if( !class_exists(AutogridQuery::class) ) {
-	class AutogridQuery {
+if( !class_exists(CSSQuery::class) ) { // переименовать файл в следующей фиксации
+	class CSSQuery {
 
 		private $STYLE_CSS = ''; // для <style>
 		private $QUERY_AND_PROPS_CSS = []; // {query1: [prop, prop, ...], query2: [prop, ...], ...}

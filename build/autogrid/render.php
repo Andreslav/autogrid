@@ -7,7 +7,7 @@
  * @see     https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
 */
 
-namespace Andreslav;
+namespace Andreslav\Autogrid;
 include __DIR__ . '/../../includes/AutogridQuery.php';
 
 
@@ -17,11 +17,11 @@ $childrenPaddings = $attributes["childrenPaddings"];
 $columnCount      = intval($attributes["columnCount"]);
 $minWidth         = intval($attributes["minWidth"]);
 
-$new_AutogridQuery = new AutogridQuery([
+$new_CSSQuery = new CSSQuery([
 	'selector' => '.' . $uniqueSelector . '>*>*'
 ]);
 
-$gap = $new_AutogridQuery->apply([
+$gap = $new_CSSQuery->apply([
 	'sizes'    => $gaps,
 	'propNames' => [
 		'horizontal' => '--grid-layout-gap-x',
@@ -29,7 +29,7 @@ $gap = $new_AutogridQuery->apply([
 	],
 ]);
 
-$childrenPadding = $new_AutogridQuery->apply([
+$childrenPadding = $new_CSSQuery->apply([
 	'sizes'    => $childrenPaddings,
 	'propNames' => [
 		'horizontal' => '--grid-item-padding-child-x',
@@ -43,7 +43,7 @@ $gapVertical = $gap->vertical;
 $childrenPaddingHorizontal = $childrenPadding->horizontal;
 $childrenPaddingVertical = $childrenPadding->vertical;
 
-$STYLE_CSS = $new_AutogridQuery->getCSS();
+$STYLE_CSS = $new_CSSQuery->getCSS();
 $STYLE_CSS = $STYLE_CSS ? "<style>$STYLE_CSS</style>" : '';
 
 $inlineStyle =  "--grid-column-count:$columnCount;" .
@@ -57,10 +57,14 @@ $inlineStyle =  "--grid-column-count:$columnCount;" .
 <div <?php echo get_block_wrapper_attributes( ['class' => "$uniqueSelector andreslav-outside-editor", 'style' => $inlineStyle] ); ?>>
 	<div class="wp-block-andreslav-autogrid__container">
 		<div class="wp-block-andreslav-autogrid__content">
-			<?php echo $content; ?>
+			<?php
+				// Нет подходящей функции очистки
+				echo $content;
+			?>
 		</div>
 	</div>
 	<?php 
+		// Нет подходящей функции очистки
 		// @link https://core.trac.wordpress.org/ticket/48873
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $STYLE_CSS;

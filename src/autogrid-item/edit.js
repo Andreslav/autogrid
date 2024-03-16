@@ -60,7 +60,7 @@ class AutogridChildQuery extends AutogridQuery {
 		}
 
 		if ( ! isNaN( endColumn ) ) {
-			width = minWidthBlock * ( endColumn + 1 ) + 'px';
+			width = (minWidthBlock * ( endColumn + 1 ) - 1) + 'px';
 			maxWidth = `(max-width:${ width })`;
 			querySize = querySize ? querySize + ' and ' + maxWidth : maxWidth;
 		}
