@@ -24,7 +24,7 @@ import {
 } from '@wordpress/components';
 import BaseControlMedia from '../../includes/BaseControlMedia';
 import ModalMoreDetailed from '../../includes/ModalMoreDetailed';
-import AutogridQuery from '../../includes/AutogridQuery';
+import CSSQuery from '../../includes/CSSQuery';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -50,11 +50,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		[ 'andreslav/autogrid-item', {} ],
 	];
 
-	const newAutogridQuery = new AutogridQuery( {
+	const newCSSQuery = new CSSQuery( {
 		selector: `#${ 'block-' + clientId }>*>*`,
 	} );
 
-	const gap = newAutogridQuery.apply( {
+	const gap = newCSSQuery.apply( {
 		sizes: attributes.gaps,
 		propNames: {
 			horizontal: '--grid-layout-gap-x',
@@ -62,7 +62,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		},
 	} );
 
-	const childrenPadding = newAutogridQuery.apply( {
+	const childrenPadding = newCSSQuery.apply( {
 		sizes: attributes.childrenPaddings,
 		propNames: {
 			horizontal: '--grid-item-padding-child-x',
@@ -70,7 +70,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		},
 	} );
 
-	const STYLE_CSS = newAutogridQuery.getCSS();
+	const STYLE_CSS = newCSSQuery.getCSS();
 
 	return (
 		<>

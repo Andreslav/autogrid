@@ -4,7 +4,7 @@
 */
 namespace Andreslav\Autogrid;
 
-if( !class_exists(CSSQuery::class) ) { // переименовать файл в следующей фиксации
+if( !class_exists(CSSQuery::class) ) {
 	class CSSQuery {
 
 		private $STYLE_CSS = ''; // для <style>

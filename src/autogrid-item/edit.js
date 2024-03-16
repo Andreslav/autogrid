@@ -30,7 +30,7 @@ import {
 } from '@wordpress/components';
 import BaseControlMedia from '../../includes/BaseControlMedia';
 import ModalMoreDetailed from '../../includes/ModalMoreDetailed';
-import AutogridQuery from '../../includes/AutogridQuery';
+import CSSQuery from '../../includes/CSSQuery';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -40,7 +40,7 @@ import AutogridQuery from '../../includes/AutogridQuery';
  */
 import './editor.scss';
 
-class AutogridChildQuery extends AutogridQuery {
+class AutogridChildQuery extends CSSQuery {
 	getQueryAndPropCSS(
 		numberOfTracks,
 		startColumn,
