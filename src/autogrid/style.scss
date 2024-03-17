@@ -11,6 +11,7 @@
 	--grid-item-padding-child-y: 0px;
 	--grid-column-count: 1;
 	--grid-item-min-width: 100%;
+	--grid-item-column-span: 1;
 }
   
 .wp-block-andreslav-autogrid__content {
@@ -21,7 +22,7 @@
 	--gap-count_: calc(var(--grid-column-count) - 1);
 	--total-gap-width_: calc(var(--gap-count_) * var(--grid-layout-gap-x_));
 	--grid-item-max-width_: calc((100% - var(--total-gap-width_)) / var(--grid-column-count));
-	--grid-item-min-width_: min(calc(100vw - 40px), var(--grid-item-min-width));
+	--grid-item-min-width_: min(100%, var(--grid-item-min-width));
 }
 
 .andreslav-outside-editor {

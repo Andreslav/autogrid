@@ -1,0 +1,11 @@
+*** WordPress Plugin Autogrid Changelog ***
+
+= 2.0.2 =
+* Improved adaptability of cell size. Max value was interpreted incorrectly in some cases.
+* Fixed a problem when the Autogrid block nested in the extended cell was displayed incorrectly.
+
+= 2.0.0 =
+* Added a lot of design tweaks and improved adaptability settings.
+
+= 1.0.0 =
+* Initial release

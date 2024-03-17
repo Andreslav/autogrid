@@ -40,8 +40,6 @@ if( !class_exists(CSSQueryChild::class) ) {
 $uniqueSelector = 'wp-block-autogrid-item-' . wp_unique_id();
 $sizes          = (array) $attributes['sizes'];
 $minWidth       = intval($block->context['autogrid/minWidth']);
-// $allowedtags_andStyle = array_merge(['style' => []], wp_kses_allowed_html( 'post' ));
-// $indexNode      = $attributes['indexNode'];
 
 $new_CSSQueryChild = new CSSQueryChild([
 	'selector'  => '.' . $uniqueSelector,
