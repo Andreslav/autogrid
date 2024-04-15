@@ -3,7 +3,7 @@ Contributors:      Andreslav
 Tags:              block, grid, layout, auto-fill, columns
 Requires PHP:      7.0
 Tested up to:      6.5
-Stable tag:        2.0.2
+Stable tag:        2.0.3
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,12 @@ Chrome 106+, Firefox 110+, Edge 106+, Safari 16+.
 
 The information is obtained based on a comparison of the support of the CSS features used: [CSS Grid](https://caniuse.com/css-grid), [CSS math function min()](https://caniuse.com/?search=min()), [CSS function repeat()](https://caniuse.com/?search=repeat()), [CSS Container Queries](https://caniuse.com/css-container-queries).
 
+= Are the adaptability settings working strangely? =
+
+The Min and Max values in the adaptivity settings "Spacing between cells" and "Padding of cells" are set in px and indicate the width of the Autogrid container, not the width of the viewport.
+
+The Min and Max values in the adaptability settings of the "Cell Size" are set in integers and literally indicate the number of columns displayed when the rule should be applied.
+
 == Screenshots ==
 
 1. Example of Autogrid block
@@ -42,6 +48,10 @@ The information is obtained based on a comparison of the support of the CSS feat
 5. How the Autogrid block looks on the site
 
 == Changelog ==
+
+= 2.0.3 =
+* Updated the supported settings (supports).
+* Autogrid is now displayed correctly inside the "Group" blocks.
 
 = 2.0.2 =
 * Improved adaptability of cell size. Max value was interpreted incorrectly in some cases.

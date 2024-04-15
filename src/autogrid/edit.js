@@ -111,6 +111,10 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				<PanelBody title={ __( 'Settings', 'autogrid' ) }>
 					<RangeControl
 						label={ __( 'Maximum number of columns', 'autogrid' ) }
+						help={ __(
+							'This value also includes the spacing between cells.',
+							'autogrid'
+						) }
 						min={ 1 }
 						value={ attributes.columnCount }
 						onChange={ ( val ) => {

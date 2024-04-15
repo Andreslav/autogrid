@@ -4,7 +4,7 @@
  * Description:       A block for the WordPress block editor that allows you to create responsive columns.
  * Requires at least: 6.4
  * Requires PHP:      7.0
- * Version:           2.0.2
+ * Version:           2.0.3
  * Author:            Andreslav
  * Author URI:        https://profiles.wordpress.org/andreslav
  * License:           GPL-2.0-or-later

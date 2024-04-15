@@ -2,7 +2,7 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
   "name": "andreslav/autogrid",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "title": "Autogrid",
   "category": "design",
   "icon": "smiley",
@@ -19,17 +19,20 @@
       "text": true,
       "background": true,
       "gradients": true,
+      "heading": true,
+      "button": true,
+      "link": true,
       "__experimentalDefaultControls": {}
     },
     "spacing": {
-      "padding": true,
       "margin": [
         "top",
         "bottom"
       ],
+      "padding": true,
       "__experimentalDefaultControls": {
-        "padding": false,
-        "margin": false
+        "margin": false,
+        "padding": false
       }
     },
     "__experimentalBorder": {
@@ -38,6 +41,9 @@
       "style": true,
       "width": true,
       "__experimentalDefaultControls": {}
+    },
+    "position": {
+      "sticky": true
     },
     "typography": {
       "fontSize": true,
@@ -54,7 +60,11 @@
     "align": [
       "wide",
       "full"
-    ]
+    ],
+    "interactivity": {
+      "clientNavigation": true
+    },
+    "shadow": true
   },
   "attributes": {
     "columnCount": {

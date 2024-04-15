@@ -18,6 +18,26 @@ $columnCount      = intval($attributes["columnCount"]);
 $minWidth         = intval($attributes["minWidth"]);
 
 $new_CSSQuery = new CSSQuery([
+	/*
+		Нацеливание на второго потомка нужно для корректной работы адаптивности, так как свойства "container-name: autogrid;" прописано первому потомку.
+		
+		Причина
+		selector {
+			container-name: autogrid;
+		}
+		@container autogrid (...) {
+			selector {
+				// Стили не применяются!
+			}
+		}
+		
+		Но
+		@container autogrid (...) {
+			selector > * {
+				// Применяются
+			}
+		}
+	*/
 	'selector' => '.' . $uniqueSelector . '>*>*'
 ]);
 

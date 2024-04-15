@@ -4,21 +4,29 @@
  */
 
 .wp-block-andreslav-autogrid {
-	// сброс и предустановка значений
+	// сброс и предустановка значений (для корректной работы вложенных Autogrid)
 	--grid-layout-gap-x: 0px;
 	--grid-layout-gap-y: 0px;
+	--grid-layout-gap-x_: 0px;
+  	--grid-layout-gap-y_: 0px;
 	--grid-item-padding-child-x: 0px;
 	--grid-item-padding-child-y: 0px;
 	--grid-column-count: 1;
 	--grid-item-min-width: 100%;
 	--grid-item-column-span: 1;
+
+	// для корректного отображения Autogrid внутри flex-блока "Группа" ("Строка" и "Друг под другом")
+	width: 100%;
 }
-  
+
 .wp-block-andreslav-autogrid__content {
-	// это нужно на случай, если в переменной присвоена несуществующая переменная.
+	// запасное значение нужно на случай, если переменной присвоено невалидное значение, например несуществующая переменная
 	--grid-layout-gap-x_: var(--grid-layout-gap-x, 0px);
 	--grid-layout-gap-y_: var(--grid-layout-gap-y, 0px);
+	--grid-item-padding-child-x_: var(--grid-item-padding-child-x, 0px);
+	--grid-item-padding-child-y_: var(--grid-item-padding-child-y, 0px);
 
+	// математика
 	--gap-count_: calc(var(--grid-column-count) - 1);
 	--total-gap-width_: calc(var(--gap-count_) * var(--grid-layout-gap-x_));
 	--grid-item-max-width_: calc((100% - var(--total-gap-width_)) / var(--grid-column-count));
@@ -42,7 +50,7 @@
 	
 	.wp-block-andreslav-autogrid-item {
 		margin: calc(var(--grid-layout-gap-y_) * 0.5) calc(var(--grid-layout-gap-x_) * 0.5);
-		padding: var(--grid-item-padding-child-y, 0px) var(--grid-item-padding-child-x, 0px);
+		padding: var(--grid-item-padding-child-y_) var(--grid-item-padding-child-x_);
 		box-sizing: border-box;
 	}
 }
