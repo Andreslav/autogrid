@@ -111,10 +111,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				<PanelBody title={ __( 'Settings', 'autogrid' ) }>
 					<RangeControl
 						label={ __( 'Maximum number of columns', 'autogrid' ) }
-						help={ __(
-							'This value also includes the spacing between cells.',
-							'autogrid'
-						) }
 						min={ 1 }
 						value={ attributes.columnCount }
 						onChange={ ( val ) => {
@@ -124,10 +120,27 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					/>
 					<UnitControl
 						label={ __( 'Minimum column width', 'autogrid' ) }
-						help={ __(
-							'When the cells reach this width, they are rearranged.',
-							'autogrid'
-						) }
+						help={
+							<>
+								{ __(
+									'When the cells reach this width, they are rearranged.',
+									'autogrid'
+								) }
+								<ModalMoreDetailed
+									title={ __(
+										'Minimum column width',
+										'autogrid'
+									) }
+								>
+									<p>
+										{ __(
+											'The minimum column width also includes cell spacing.',
+											'autogrid'
+										) }
+									</p>
+								</ModalMoreDetailed>
+							</>
+						}
 						onChange={ ( val ) => {
 							setAttributes( { minWidth: parseInt( val ) } );
 						} }
