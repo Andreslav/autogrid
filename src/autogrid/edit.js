@@ -53,7 +53,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const newCSSQuery = new CSSQuery( {
 		// Нацеливание на потомка необходимо для корректной работы адаптивности.
 		selector: `#${ 'block-' + clientId }>*`,
-		containerName: 'autogrid-root'
+		containerName: 'autogrid-root',
 	} );
 
 	const gap = newCSSQuery.apply( {

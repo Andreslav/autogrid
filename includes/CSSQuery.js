@@ -27,8 +27,7 @@ export default class AutogridQuery {
 	apply( { sizes, propNames, defaultValueUnit, containerName } ) {
 		if ( defaultValueUnit !== undefined )
 			this.DEFAULT_VALUE_UNIT = defaultValueUnit;
-		if ( containerName !== undefined )
-			this.containerName = containerName;
+		if ( containerName !== undefined ) this.containerName = containerName;
 
 		// валидация и очистка
 		sizes = Array.isArray( sizes )
@@ -140,7 +139,9 @@ export default class AutogridQuery {
 		}
 
 		return {
-			query: querySize ? `@container ${ containerName } ${ querySize }` : '',
+			query: querySize
+				? `@container ${ containerName } ${ querySize }`
+				: '',
 			value: `${ propName }:${ value };`,
 		};
 	}

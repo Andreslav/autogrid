@@ -61,13 +61,15 @@ class AutogridChildQuery extends CSSQuery {
 		}
 
 		if ( ! isNaN( endColumn ) ) {
-			width = (minWidthBlock * ( endColumn + 1 ) - 1) + 'px';
+			width = minWidthBlock * ( endColumn + 1 ) - 1 + 'px';
 			maxWidth = `(max-width:${ width })`;
 			querySize = querySize ? querySize + ' and ' + maxWidth : maxWidth;
 		}
 
 		return {
-			query: querySize ? `@container ${ containerName } ${ querySize }` : '',
+			query: querySize
+				? `@container ${ containerName } ${ querySize }`
+				: '',
 			value: `${ propName }:${ numberOfTracks };`,
 		};
 	}
@@ -96,7 +98,7 @@ export default function Edit( {
 	const newAutogridChildQuery = new AutogridChildQuery( {
 		selector: `#${ uniqueSelector }`,
 		otherData: { minWidthBlock: minWidth },
-		containerName: 'autogrid'
+		containerName: 'autogrid',
 	} );
 
 	const size = newAutogridChildQuery.apply( {
