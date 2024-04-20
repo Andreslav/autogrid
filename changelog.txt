@@ -1,6 +1,6 @@
 *** WordPress Plugin Autogrid Changelog ***
 
-= 2.0.3 =
+= 2.0.4 =
 * Fixed an issue where increasing the cell spacing increases the outer margins as well.
 * Updated the supported settings (supports).
 * Autogrid is now displayed correctly inside the "Group" blocks.

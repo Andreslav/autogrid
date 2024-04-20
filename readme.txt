@@ -3,7 +3,7 @@ Contributors:      Andreslav
 Tags:              block, grid, layout, auto-fill, columns
 Requires PHP:      7.0
 Tested up to:      6.5
-Stable tag:        2.0.3
+Stable tag:        2.0.4
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,7 +44,7 @@ The Min and Max values in the adaptability settings of the "Cell Size" are set i
 1. Example of Autogrid block
 2. Autogrid Block Settings
 3. Autogrid block cell Settings
-4. Autogrid block cell settings
+4. Autogrid block cell Settings
 5. How the Autogrid block looks on the site
 
 == Changelog ==
