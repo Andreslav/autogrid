@@ -15,6 +15,7 @@ if( !class_exists(CSSQuery::class) ) {
 		public function __construct( $param ) {
 			$this->selector = isset( $param['selector'] ) ? $param[ 'selector' ] : '';
 			$this->otherData = isset( $param['otherData'] ) ? $param[ 'otherData' ] : [];
+			$this->containerName = isset( $param['containerName'] ) ? $param[ 'containerName' ] : '';
 		}
 
 		/*
@@ -25,6 +26,7 @@ if( !class_exists(CSSQuery::class) ) {
 		public function apply( $param ) {
 			[ 'sizes' => $sizes, 'propNames' => $propNames ] = $param;
 			if( isset( $param[ 'defaultValueUnit' ] ) ) $this->DEFAULT_VALUE_UNIT = $param[ 'defaultValueUnit' ];
+			if( isset( $param[ 'containerName' ] ) ) $this->containerName = $param[ 'containerName' ];
 
 			// валидация и очистка
 			$sizes = array_filter(
@@ -112,7 +114,7 @@ if( !class_exists(CSSQuery::class) ) {
 			);
 		}
 
-		public function getQueryAndPropCSS( $value, $min, $max, $propName, $otherData ) {
+		public function getQueryAndPropCSS( $value, $min, $max, $propName, $containerName, $otherData ) {
 			$querySize = ''; $width; $minWidth; $maxWidth;
 
 			if(	$min !== '' ) {
@@ -128,7 +130,7 @@ if( !class_exists(CSSQuery::class) ) {
 			}
 
 			return [
-				'query' => $querySize ? "@container autogrid $querySize" : '',
+				'query' => $querySize ? "@container $containerName $querySize" : '',
 				'value' => $propName . ':' . $value . ';'
 			];
 		}
@@ -141,6 +143,7 @@ if( !class_exists(CSSQuery::class) ) {
 				$item[ 'min' ], 
 				$item[ 'max' ], 
 				$propName, 
+				$this->containerName, 
 				$this->otherData
 			);
 

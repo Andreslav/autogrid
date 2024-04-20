@@ -46,6 +46,7 @@ class AutogridChildQuery extends CSSQuery {
 		startColumn,
 		endColumn,
 		propName,
+		containerName,
 		{ minWidthBlock }
 	) {
 		let querySize = '',
@@ -66,7 +67,7 @@ class AutogridChildQuery extends CSSQuery {
 		}
 
 		return {
-			query: querySize ? `@container autogrid ${ querySize }` : '',
+			query: querySize ? `@container ${ containerName } ${ querySize }` : '',
 			value: `${ propName }:${ numberOfTracks };`,
 		};
 	}
@@ -95,6 +96,7 @@ export default function Edit( {
 	const newAutogridChildQuery = new AutogridChildQuery( {
 		selector: `#${ uniqueSelector }`,
 		otherData: { minWidthBlock: minWidth },
+		containerName: 'autogrid'
 	} );
 
 	const size = newAutogridChildQuery.apply( {

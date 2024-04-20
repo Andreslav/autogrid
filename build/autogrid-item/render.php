@@ -13,7 +13,7 @@ include __DIR__ . '/../../includes/CSSQuery.php';
 
 if( !class_exists(CSSQueryChild::class) ) {
 	class CSSQueryChild extends CSSQuery {
-		public function getQueryAndPropCSS($numberOfTracks, $startColumn, $endColumn, $propName, $otherData) {
+		public function getQueryAndPropCSS($numberOfTracks, $startColumn, $endColumn, $propName, $containerName, $otherData) {
 			['minWidthBlock' => $minWidthBlock] = $otherData;
 			$querySize = ''; $width; $minWidth; $maxWidth;
 
@@ -30,7 +30,7 @@ if( !class_exists(CSSQueryChild::class) ) {
 			}
 
 			return [
-				'query' => $querySize ? "@container autogrid $querySize" : '',
+				'query' => $querySize ? "@container $containerName $querySize" : '',
 				'value' => $propName . ':' . $numberOfTracks . ';'
 			];
 		}
@@ -43,7 +43,8 @@ $minWidth       = intval($block->context['autogrid/minWidth']);
 
 $new_CSSQueryChild = new CSSQueryChild([
 	'selector'  => '.' . $uniqueSelector,
-	'otherData' => [ 'minWidthBlock' => $minWidth ]
+	'otherData' => [ 'minWidthBlock' => $minWidth ],
+	'containerName' => 'autogrid'
 ]);
 
 $size = $new_CSSQueryChild->apply([

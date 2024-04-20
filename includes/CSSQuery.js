@@ -12,10 +12,11 @@ export default class AutogridQuery {
 	ALLOWED_AXES = [ 'all', 'horizontal', 'vertical' ];
 	DEFAULT_VALUE_UNIT = 'px';
 
-	constructor( { selector, otherData } ) {
+	constructor( { selector, containerName, otherData } ) {
 		this.selector = selector || '';
 		this.otherData = otherData || {};
 		this.spacingSizes = useSetting( 'spacing.spacingSizes' ) || [];
+		this.containerName = containerName || '';
 	}
 
 	/*
@@ -23,9 +24,11 @@ export default class AutogridQuery {
 		propNames: { all, horizontal?, vertical? }; key as ALLOWED_AXES
 		defaultValueUnit: string
 	*/
-	apply( { sizes, propNames, defaultValueUnit } ) {
+	apply( { sizes, propNames, defaultValueUnit, containerName } ) {
 		if ( defaultValueUnit !== undefined )
 			this.DEFAULT_VALUE_UNIT = defaultValueUnit;
+		if ( containerName !== undefined )
+			this.containerName = containerName;
 
 		// валидация и очистка
 		sizes = Array.isArray( sizes )
@@ -118,7 +121,7 @@ export default class AutogridQuery {
 		}, startBase );
 	}
 
-	getQueryAndPropCSS( value, min, max, propName, otherData ) {
+	getQueryAndPropCSS( value, min, max, propName, containerName, otherData ) {
 		let querySize = '',
 			width,
 			minWidth,
@@ -137,7 +140,7 @@ export default class AutogridQuery {
 		}
 
 		return {
-			query: querySize ? `@container autogrid ${ querySize }` : '',
+			query: querySize ? `@container ${ containerName } ${ querySize }` : '',
 			value: `${ propName }:${ value };`,
 		};
 	}
@@ -150,6 +153,7 @@ export default class AutogridQuery {
 			item[ 'min' ],
 			item[ 'max' ],
 			propName,
+			this.containerName,
 			this.otherData
 		);
 

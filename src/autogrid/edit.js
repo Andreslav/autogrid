@@ -51,7 +51,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	];
 
 	const newCSSQuery = new CSSQuery( {
-		selector: `#${ 'block-' + clientId }>*>*`,
+		// Нацеливание на потомка необходимо для корректной работы адаптивности.
+		selector: `#${ 'block-' + clientId }>*`,
+		containerName: 'autogrid-root'
 	} );
 
 	const gap = newCSSQuery.apply( {
@@ -90,14 +92,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					},
 				} ) }
 			>
-				<div className="wp-block-andreslav-autogrid__container">
-					<div className="wp-block-andreslav-autogrid__content">
-						<InnerBlocks
-							allowedBlocks={ ALLOWED_BLOCKS }
-							template={ TEMPLATE }
-							orientation="horizontal"
-						/>
-					</div>
+				<div className="wp-block-andreslav-autogrid__content">
+					<InnerBlocks
+						allowedBlocks={ ALLOWED_BLOCKS }
+						template={ TEMPLATE }
+						orientation="horizontal"
+					/>
 				</div>
 				{ STYLE_CSS && (
 					<style

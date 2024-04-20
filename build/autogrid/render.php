@@ -19,7 +19,7 @@ $minWidth         = intval($attributes["minWidth"]);
 
 $new_CSSQuery = new CSSQuery([
 	/*
-		Нацеливание на второго потомка нужно для корректной работы адаптивности, так как свойства "container-name: autogrid;" прописано первому потомку.
+		Нацеливание на потомка необходимо для корректной работы адаптивности.
 		
 		Причина
 		selector {
@@ -38,7 +38,8 @@ $new_CSSQuery = new CSSQuery([
 			}
 		}
 	*/
-	'selector' => '.' . $uniqueSelector . '>*>*'
+	'selector' => '.' . $uniqueSelector . '>*',
+	'containerName' => 'autogrid-root'
 ]);
 
 $gap = $new_CSSQuery->apply([
@@ -75,13 +76,11 @@ $inlineStyle =  "--grid-column-count:$columnCount;" .
 ?>
 
 <div <?php echo get_block_wrapper_attributes( ['class' => "$uniqueSelector andreslav-outside-editor", 'style' => $inlineStyle] ); ?>>
-	<div class="wp-block-andreslav-autogrid__container">
-		<div class="wp-block-andreslav-autogrid__content">
-			<?php
-				// Нет подходящей функции очистки
-				echo $content;
-			?>
-		</div>
+	<div class="wp-block-andreslav-autogrid__content">
+		<?php
+			// Нет подходящей функции очистки
+			echo $content;
+		?>
 	</div>
 	<?php 
 		// Нет подходящей функции очистки

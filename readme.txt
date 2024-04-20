@@ -50,6 +50,7 @@ The Min and Max values in the adaptability settings of the "Cell Size" are set i
 == Changelog ==
 
 = 2.0.3 =
+* Fixed an issue where increasing the cell spacing increases the outer margins as well.
 * Updated the supported settings (supports).
 * Autogrid is now displayed correctly inside the "Group" blocks.
 

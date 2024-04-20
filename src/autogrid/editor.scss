@@ -2,24 +2,18 @@
  * The following styles get applied inside the editor only.
  */
 
-.wp-block-andreslav-autogrid__container {
-	margin: calc(var(--grid-layout-gap-y_) * -0.5) calc(var(--grid-layout-gap-x_) * -0.5);
-}
-
 .wp-block-andreslav-autogrid__content > .block-editor-inner-blocks > .block-editor-block-list__layout {
 	display: grid;
  	grid-template-columns: repeat(auto-fit, minmax(max(var(--grid-item-min-width_), var(--grid-item-max-width_)), 1fr));
 	grid-auto-flow: dense;
-}
+	margin: calc(var(--grid-layout-gap-y_) * -0.5) calc(var(--grid-layout-gap-x_) * -0.5);
 
-.wp-block-andreslav-autogrid-item {
-	margin: calc(var(--grid-layout-gap-y_) * 0.5) calc(var(--grid-layout-gap-x_) * 0.5);
-	padding: var(--grid-item-padding-child-y_) var(--grid-item-padding-child-x_);
-	box-sizing: border-box;
-}
-
-@supports not( padding: max(0px) ) {
-	.wp-block-andreslav-autogrid__content > .block-editor-inner-blocks > .block-editor-block-list__layout {
+	@supports not( padding: max(0px) ) {
 		grid-template-columns: 1fr;
+	}
+
+	@supports (container-type: inline-size) {
+		container-name: autogrid;
+		container-type: inline-size;
 	}
 }
