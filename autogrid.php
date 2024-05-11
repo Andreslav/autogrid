@@ -25,11 +25,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function andreslav_autogrid_block_init() {
 	// Generates an array of directory paths based on the build folder
-	$block_directories = glob(__DIR__ . "/build/*", GLOB_ONLYDIR);
+	$block_directories = glob( __DIR__ . '/build/*', GLOB_ONLYDIR );
 
-	foreach ($block_directories as $block) {
+	foreach ( $block_directories as $block ) {
 		register_block_type( $block );
-		wp_set_script_translations( 'andreslav-' . basename($block) . '-editor-script', 'autogrid' );
+		wp_set_script_translations( 'andreslav-' . basename( $block ) . '-editor-script', 'autogrid' );
 	}
 }
 add_action( 'init', 'andreslav_autogrid_block_init' );

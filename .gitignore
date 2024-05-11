@@ -32,3 +32,8 @@ node_modules/
 
 # map
 *.css.map
+
+# Other
+/composer.lock
+/.phpcs.cache
+vendor/

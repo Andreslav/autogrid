@@ -1,72 +1,86 @@
 <?php
 /**
  * Dynamic Block Template.
+ *
  * @param   array $attributes - A clean associative array of block attributes.
  * @param   array $block - All the block settings and attributes.
  * @param   string $content - The block inner HTML (usually empty unless using inner blocks).
  * @see     https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
-*/
+ */
 
 namespace Andreslav\Autogrid;
-include __DIR__ . '/../../includes/CSSQuery.php';
+
+require __DIR__ . '/../../includes/CSSQuery.php';
 
 
-if( !class_exists(CSSQueryChild::class) ) {
+if ( ! class_exists( CSSQueryChild::class ) ) {
 	class CSSQueryChild extends CSSQuery {
-		public function getQueryAndPropCSS($numberOfTracks, $startColumn, $endColumn, $propName, $containerName, $otherData) {
-			['minWidthBlock' => $minWidthBlock] = $otherData;
-			$querySize = ''; $width; $minWidth; $maxWidth;
+		public function get_query_and_prop_css( $number_of_tracks, $start_column, $end_column, $prop_name, $container_name, $other_data ) {
+			$min_width_block = $other_data['min_width_block'];
+			$query_size      = '';
+			$width;
+			$min_width;
+			$max_width;
 
-			if(	$startColumn !== '' ) {
-				$width = $minWidthBlock * ($startColumn + 1) . 'px';
-				$minWidth = "(min-width:$width)";
-				$querySize = $querySize ? $querySize . ' and ' . $minWidth : $minWidth;
+			if ( $start_column !== '' ) {
+				$width      = $min_width_block * ( $start_column + 1 ) . 'px';
+				$min_width  = "(min-width:$width)";
+				$query_size = $query_size ? $query_size . ' and ' . $min_width : $min_width;
 			}
 
-			if( $endColumn !== '' ) {
-				$width = ($minWidthBlock * ($endColumn + 1) - 1) . 'px';
-				$maxWidth = "(max-width:$width)";
-				$querySize = $querySize ? $querySize . ' and ' . $maxWidth : $maxWidth;
+			if ( $end_column !== '' ) {
+				$width      = ( $min_width_block * ( $end_column + 1 ) - 1 ) . 'px';
+				$max_width  = "(max-width:$width)";
+				$query_size = $query_size ? $query_size . ' and ' . $max_width : $max_width;
 			}
 
 			return [
-				'query' => $querySize ? "@container $containerName $querySize" : '',
-				'value' => $propName . ':' . $numberOfTracks . ';'
+				'query' => $query_size ? "@container $container_name $query_size" : '',
+				'value' => $prop_name . ':' . $number_of_tracks . ';',
 			];
 		}
 	}
 }
 
-$uniqueSelector = 'wp-block-autogrid-item-' . wp_unique_id();
-$sizes          = (array) $attributes['sizes'];
-$minWidth       = intval($block->context['autogrid/minWidth']);
+$unique_selector = 'wp-block-autogrid-item-' . wp_unique_id();
+$sizes           = (array) $attributes['sizes'];
+$min_width       = intval( $block->context['autogrid/minWidth'] );
 
-$new_CSSQueryChild = new CSSQueryChild([
-	'selector'  => '.' . $uniqueSelector,
-	'otherData' => [ 'minWidthBlock' => $minWidth ],
-	'containerName' => 'autogrid'
-]);
+$new_css_query_child = new CSSQueryChild(
+	[
+		'selector'       => '.' . $unique_selector,
+		'other_data'     => [ 'min_width_block' => $min_width ],
+		'container_name' => 'autogrid',
+	]
+);
 
-$size = $new_CSSQueryChild->apply([
-	'sizes'    => $sizes,
-	'defaultValueUnit' => '',
-	'propNames' => [
-		'all' => '--grid-item-column-span',
-	],
-]);
+$size = $new_css_query_child->apply(
+	[
+		'sizes'              => $sizes,
+		'default_value_unit' => '',
+		'prop_names'         => [
+			'all' => '--grid-item-column-span',
+		],
+	]
+);
 
-$sizeAll = $size->all ?? '';
+$size_all = $size->all ?? '';
 
-$STYLE_CSS = $new_CSSQueryChild->getCSS();
-$STYLE_CSS = $STYLE_CSS ? "<style>$STYLE_CSS</style>" : '';
+$style_css = $new_css_query_child->get_css();
+$style_css = $style_css ? "<style>$style_css</style>" : '';
 
-$inlineStyle = $sizeAll ? "--grid-item-column-span:$sizeAll;" : '';
-?>
+$inline_style = $size_all ? "--grid-item-column-span:$size_all;" : '';
 
-<div <?php echo get_block_wrapper_attributes( ['class' => $uniqueSelector, 'style' => $inlineStyle] ); ?>>
+$block_attributes = [
+	'class' => $unique_selector,
+	'style' => $inline_style,
+]; ?>
+
+<div <?php echo get_block_wrapper_attributes( $block_attributes ); ?>>
 	<?php
 		// Нет подходящей функции очистки
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $content;
 	?>
 </div>
-<?php echo wp_kses($STYLE_CSS, ['style' => []]); ?>
+<?php echo wp_kses( $style_css, [ 'style' => [] ] ); ?>
