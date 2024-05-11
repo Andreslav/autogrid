@@ -39,6 +39,11 @@ The Min and Max values in the adaptivity settings "Spacing between cells" and "P
 
 The Min and Max values in the adaptability settings of the "Cell Size" are set in integers and literally indicate the number of columns displayed when the rule should be applied.
 
+= Where can I see the source code? =
+
+Yes, you can check out the source files on [Github](https://github.com/Andreslav/autogrid).
+
+
 == Screenshots ==
 
 1. Example of Autogrid block

@@ -11,6 +11,9 @@ if( !class_exists(CSSQuery::class) ) {
 		private $QUERY_AND_PROPS_CSS = []; // {query1: [prop, prop, ...], query2: [prop, ...], ...}
 		private $ALLOWED_AXES = ['all', 'horizontal', 'vertical'];
 		private $DEFAULT_VALUE_UNIT = 'px';
+		private $selector;
+		private $otherData;
+		private $containerName;
 
 		public function __construct( $param ) {
 			$this->selector = isset( $param['selector'] ) ? $param[ 'selector' ] : '';
