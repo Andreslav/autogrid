@@ -3,7 +3,7 @@ Contributors:      Andreslav
 Tags:              block, grid, layout, auto-fill, columns
 Requires PHP:      7.0
 Tested up to:      6.5
-Stable tag:        2.0.4
+Stable tag:        2.0.5
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,9 @@ Yes, you can check out the source files on [Github](https://github.com/Andreslav
 
 == Changelog ==
 
+= 2.0.5 =
+* Fixed PHP warning and formatted .php
+
 = 2.0.3 =
 * Fixed an issue where increasing the cell spacing increases the outer margins as well.
 * Updated the supported settings (supports).
@@ -62,6 +65,3 @@ Yes, you can check out the source files on [Github](https://github.com/Andreslav
 = 2.0.2 =
 * Improved adaptability of cell size. Max value was interpreted incorrectly in some cases.
 * Fixed a problem when the Autogrid block nested in the extended cell was displayed incorrectly.
-
-= 2.0.0 =
-* Added a lot of design tweaks and improved adaptability settings.

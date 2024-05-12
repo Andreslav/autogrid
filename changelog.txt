@@ -1,5 +1,8 @@
 *** WordPress Plugin Autogrid Changelog ***
 
+= 2.0.5 =
+* Fixed PHP warning and formatted .php
+
 = 2.0.4 =
 * Fixed an issue where increasing the cell spacing increases the outer margins as well.
 * Updated the supported settings (supports).

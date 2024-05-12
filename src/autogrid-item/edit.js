@@ -154,7 +154,7 @@ export default function Edit( {
 
 			{ /* Begin Sidebar Inspector Zone */ }
 			<InspectorControls>
-				<PanelBody title="Settings">
+				<PanelBody title={ __( 'Settings', 'autogrid' ) }>
 					<BaseControlMedia
 						help={
 							<>
