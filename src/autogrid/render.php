@@ -88,12 +88,14 @@ $block_attributes = [
 ]; ?>
 
 <div <?php echo get_block_wrapper_attributes( $block_attributes ); ?>>
-	<div class="wp-block-andreslav-autogrid__content">
-		<?php
-			// Нет подходящей функции очистки
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			echo $content;
-		?>
+	<div class="wp-block-andreslav-autogrid__content-wraper"><?php // дополнительная обёртка для исправления бага в Safari ?>
+		<div class="wp-block-andreslav-autogrid__content">
+			<?php
+				// Нет подходящей функции очистки
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo $content;
+			?>
+		</div>
 	</div>
 	<?php
 		// Нет подходящей функции очистки

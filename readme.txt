@@ -3,7 +3,7 @@ Contributors:      Andreslav
 Tags:              block, grid, layout, auto-fill, columns
 Requires PHP:      7.0
 Tested up to:      6.5
-Stable tag:        2.0.5
+Stable tag:        2.0.6
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,9 @@ You can check out the source files on [Github](https://github.com/Andreslav/auto
 5. How the Autogrid block looks on the site
 
 == Changelog ==
+
+= 2.0.6 =
+* Fixed a bug in Safari.
 
 = 2.0.5 =
 * Fixed PHP warning and formatted .php

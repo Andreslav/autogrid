@@ -1,5 +1,8 @@
 *** WordPress Plugin Autogrid Changelog ***
 
+= 2.0.6 =
+* Fixed a bug in Safari.
+
 = 2.0.5 =
 * Fixed PHP warning and formatted .php
 

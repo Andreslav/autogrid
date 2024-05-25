@@ -92,12 +92,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					},
 				} ) }
 			>
-				<div className="wp-block-andreslav-autogrid__content">
-					<InnerBlocks
-						allowedBlocks={ ALLOWED_BLOCKS }
-						template={ TEMPLATE }
-						orientation="horizontal"
-					/>
+				<div className="wp-block-andreslav-autogrid__content-wraper">{/* дополнительная обёртка для исправления бага в Safari */}
+					<div className="wp-block-andreslav-autogrid__content">
+						<InnerBlocks
+							allowedBlocks={ ALLOWED_BLOCKS }
+							template={ TEMPLATE }
+							orientation="horizontal"
+						/>
+					</div>
 				</div>
 				{ STYLE_CSS && (
 					<style
