@@ -2,8 +2,8 @@
 Contributors:      Andreslav
 Tags:              block, grid, layout, auto-fill, columns
 Requires PHP:      7.0
-Tested up to:      6.5
-Stable tag:        2.0.6
+Tested up to:      6.6
+Stable tag:        2.0.7
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,6 +43,10 @@ The Min and Max values in the adaptability settings of the "Cell Size" are set i
 
 You can check out the source files on [Github](https://github.com/Andreslav/autogrid).
 
+= Where can I test the plugin without installing it on my site? =
+
+The plugin can be tried on a free dummy site from TasteWP. To create a fictitious website with the Autogrid plug-in installed, follow the link: [https://tastewp.org/plugins/autogrid](https://tastewp.org/plugins/autogrid)
+
 
 == Screenshots ==
 
@@ -54,6 +58,9 @@ You can check out the source files on [Github](https://github.com/Andreslav/auto
 
 == Changelog ==
 
+= 2.0.7 =
+* Added possibility to set color for all autogrid child items at once.
+
 = 2.0.6 =
 * Fixed a bug in Safari.
 
@@ -64,7 +71,3 @@ You can check out the source files on [Github](https://github.com/Andreslav/auto
 * Fixed an issue where increasing the cell spacing increases the outer margins as well.
 * Updated the supported settings (supports).
 * Autogrid is now displayed correctly inside the "Group" blocks.
-
-= 2.0.2 =
-* Improved adaptability of cell size. Max value was interpreted incorrectly in some cases.
-* Fixed a problem when the Autogrid block nested in the extended cell was displayed incorrectly.

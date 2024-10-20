@@ -16,6 +16,9 @@ import {
 	useBlockProps,
 	InnerBlocks,
 	InspectorControls,
+	withColors,
+	__experimentalColorGradientSettingsDropdown as ColorGradientSettingsDropdown,
+	__experimentalUseMultipleOriginColorsAndGradients as useMultipleOriginColorsAndGradients,
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
@@ -42,7 +45,14 @@ import './editor.scss';
  *
  * @return {WPElement} Element to render.
  */
-export default function Edit( { attributes, setAttributes, clientId } ) {
+function Edit( {
+	attributes,
+	childItemColor,
+	setChildItemColor,
+	setAttributes,
+	style,
+	clientId,
+} ) {
 	const ALLOWED_BLOCKS = [ 'andreslav/autogrid-item' ];
 
 	const TEMPLATE = [
@@ -73,12 +83,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	} );
 
 	const STYLE_CSS = newCSSQuery.getCSS();
+	const colorGradientSettings = useMultipleOriginColorsAndGradients();
 
 	return (
 		<>
 			<div
 				{ ...useBlockProps( {
 					style: {
+						...style,
 						'--grid-item-min-width':
 							parseInt( attributes.minWidth ) + 'px',
 						'--grid-layout-gap-x': gap.horizontal,
@@ -89,10 +101,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						'--grid-column-count': parseInt(
 							attributes.columnCount
 						),
+						'--grid-item-background-color': childItemColor.slug
+							? `var( --wp--preset--color--${ childItemColor.slug } )`
+							: attributes.customChildItemColor,
 					},
 				} ) }
 			>
-				<div className="wp-block-andreslav-autogrid__content-wraper">{/* дополнительная обёртка для исправления бага в Safari */}
+				<div className="wp-block-andreslav-autogrid__content-wraper">
+					{ /* дополнительная обёртка для исправления бага в Safari */ }
 					<div className="wp-block-andreslav-autogrid__content">
 						<InnerBlocks
 							allowedBlocks={ ALLOWED_BLOCKS }
@@ -109,6 +125,32 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			</div>
 
 			{ /* Begin Sidebar Inspector Zone */ }
+			<InspectorControls group="color">
+				{ /* https://developer.wordpress.org/news/2023/11/01/how-to-add-custom-color-options-to-blocks/ */ }
+				<ColorGradientSettingsDropdown
+					settings={ [
+						{
+							label: __( 'Autogrid Item', 'autogrid' ),
+							colorValue:
+								childItemColor.color ||
+								attributes.customChildItemColor,
+							onColorChange: ( value ) => {
+								setChildItemColor( value );
+
+								setAttributes( {
+									customChildItemColor: value,
+								} );
+							},
+						},
+					] }
+					panelId={ clientId }
+					hasColorsOrGradients={ false }
+					disableCustomColors={ false }
+					isShownByDefault={ false }
+					__experimentalIsRenderedInSidebar
+					{ ...colorGradientSettings }
+				/>
+			</InspectorControls>
 			<InspectorControls>
 				<PanelBody title={ __( 'Settings', 'autogrid' ) }>
 					<RangeControl
@@ -246,3 +288,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		</>
 	);
 }
+
+export default withColors( {
+	childItemColor: 'child-items-color',
+} )( Edit );

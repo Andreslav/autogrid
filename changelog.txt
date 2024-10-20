@@ -1,5 +1,8 @@
 *** WordPress Plugin Autogrid Changelog ***
 
+= 2.0.7 =
+* Added possibility to set color for all autogrid child items at once.
+
 = 2.0.6 =
 * Fixed a bug in Safari.
 

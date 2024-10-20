@@ -60,6 +60,7 @@
 .wp-block-andreslav-autogrid-item {
 	margin: calc(var(--grid-layout-gap-y_) * 0.5) calc(var(--grid-layout-gap-x_) * 0.5);
 	padding: var(--grid-item-padding-child-y_) var(--grid-item-padding-child-x_);
+	background-color: var(--grid-item-background-color);
 	box-sizing: border-box;
 }
 

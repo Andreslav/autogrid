@@ -7,6 +7,9 @@
 	grid-column: var(--grid-item-column-span, 1) span;
 }
 .andreslav-outside-editor .wp-block-andreslav-autogrid-item {
+	& > * {
+		width: 100%;
+	}
 	& > *:first-child {
 		margin-top: 0;
 	}
